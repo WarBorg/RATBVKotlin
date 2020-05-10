@@ -48,6 +48,7 @@ class BusLineFragment : Fragment() {
                 adapter = BusLineRecyclerViewAdapter(DummyContent.ITEMS, listener)
             }
         }
+
         return view
     }
 

@@ -13,7 +13,7 @@ interface BusStationsDao {
     suspend fun countBusStationsByBusLineIdAndDirection(busLineId: Int, direction: String): Int
 
     @Query("SELECT * FROM BusStations WHERE busLineId = :busLineId AND direction = :direction")
-    suspend fun getBusStationsByBusLineIdAndDirection(busLineId: Int, direction: String): LiveData<List<BusStationModel>>
+    fun getBusStationsByBusLineIdAndDirection(busLineId: Int, direction: String): LiveData<List<BusStationModel>>
 
     @Insert
     suspend fun saveBusStations(list: List<BusStationModel>)

@@ -13,7 +13,7 @@ interface BusTimetablesDao {
     suspend fun countBusTimetablesByBusStationId(busStationId: Int): Int
 
     @Query("SELECT * FROM BusTimetables WHERE busStationId = :busStationId")
-    suspend fun getBusTimetablesByBusStationId(busStationId: Int): LiveData<List<BusTimetableModel>>
+    fun getBusTimetablesByBusStationId(busStationId: Int): LiveData<List<BusTimetableModel>>
 
     @Insert
     suspend fun saveBusStations(list: List<BusTimetableModel>)
