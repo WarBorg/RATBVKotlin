@@ -44,5 +44,5 @@ data class BusLineModel(
     val linkReverseWay: String,
 
     @ColumnInfo(name = "LastUpdateDate")
-    val lastUpdateDate: String
+    var lastUpdateDate: String
 )

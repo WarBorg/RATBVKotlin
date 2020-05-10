@@ -29,7 +29,6 @@ class App : Application() {
         single { get<BusDatabase>().busLinesDao() }
         single { get<BusDatabase>().busStationsDao() }
         single { get<BusDatabase>().busTimetablesDao() }
-        //single { ForecastSharedPreferences(get()) }
         single { BusWebService() }
         single { BusRepository(get(), get(), get(), get()) }
         //viewModel { DaysViewModel(get()) }

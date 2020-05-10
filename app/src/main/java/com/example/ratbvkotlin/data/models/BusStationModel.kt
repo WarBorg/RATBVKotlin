@@ -24,7 +24,7 @@ data class BusStationModel(
     val id: Int,
 
     @ColumnInfo(name = "BusLineId", index = true)
-    val busLineId: Int,
+    var busLineId: Int,
 
     @Expose
     @SerializedName("name")
@@ -34,7 +34,7 @@ data class BusStationModel(
     @Expose
     @SerializedName("direction")
     @ColumnInfo(name = "Direction")
-    val direction: String,
+    var direction: String,
 
     @Expose
     @SerializedName("schedualLink")
@@ -42,5 +42,5 @@ data class BusStationModel(
     val scheduleLink: String,
 
     @ColumnInfo(name = "LastUpdateDate")
-    val lastUpdateDate: String
+    var lastUpdateDate: String
 )

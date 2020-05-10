@@ -23,7 +23,7 @@ data class BusTimetableModel(
     val id: Int,
 
     @ColumnInfo(name = "BusStationId", index = true)
-    val busStationId: Int,
+    var busStationId: Int,
 
     @Expose
     @SerializedName("hour")
@@ -41,5 +41,5 @@ data class BusTimetableModel(
     val timeOfWeek: String,
 
     @ColumnInfo(name = "LastUpdateDate")
-    val lastUpdateDate: String
+    var lastUpdateDate: String
 )

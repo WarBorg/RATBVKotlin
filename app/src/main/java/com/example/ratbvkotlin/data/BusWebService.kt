@@ -27,6 +27,8 @@ class BusWebService {
     }
 
     suspend fun getBusLines(): List<BusLineModel> = api.getBusLines()
+    suspend fun getBusStations(lineNumberLink: String): List<BusStationModel> = api.getBusStations(lineNumberLink)
+    suspend fun getBusTimetables(scheduleLink: String): List<BusTimetableModel> = api.getBusTimetables(scheduleLink)
 
     /**
      * Retrofit instance which holds details about the API calls.
