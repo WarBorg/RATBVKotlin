@@ -16,6 +16,7 @@ import com.example.ratbvkotlin.ui.busline.dummy.DummyContent.DummyItem
 class BusLinesAdapter(private val mListener: OnListFragmentInteractionListener?)
     : ListAdapter<BusLineViewModel, BusLinesAdapter.BusLineViewHolder>(DiffCallback()) {
 
+    // TODO resolve the click event issues (MVVM says to not place it in the ViewModel)
     private val mOnClickListener: View.OnClickListener
 
     init {

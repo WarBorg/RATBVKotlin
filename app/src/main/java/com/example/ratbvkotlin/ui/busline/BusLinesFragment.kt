@@ -33,8 +33,6 @@ class BusLinesFragment : Fragment() {
 
     private var listener: OnListFragmentInteractionListener? = null
 
-    //private val busLinesAdapter = BusLinesAdapter()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,25 +42,6 @@ class BusLinesFragment : Fragment() {
 
         val busLinesAdapter = BusLinesAdapter(listener)
         binding.busLineList.adapter = busLinesAdapter
-
-        /*val busLines = listOf(
-            BusLinesViewModel.BusLineViewModel(BusLineModel(1, "test1", "route 1", "", "", "", "")),
-            BusLinesViewModel.BusLineViewModel(BusLineModel(2, "test2", "route 2", "", "", "", ""))
-        )
-
-        busLinesAdapter.submitList(busLines)*/
-
-        /*lifecycleScope.launch {
-            busLinesAdapter.submitList(busLinesViewModel.getBusLines())
-        }*/
-
-        /*if (binding.root is RecyclerView) {
-            with(binding.root as RecyclerView) {
-                layoutManager = LinearLayoutManager(context)
-
-                adapter = busLinesAdapter
-            }
-        }*/
 
         lifecycleScope.launch {
             busLinesViewModel.busLines.observe(viewLifecycleOwner,  Observer { busLines ->
@@ -101,20 +80,5 @@ class BusLinesFragment : Fragment() {
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onListFragmentInteraction(item: DummyItem?)
-    }
-
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            BusLinesFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
     }
 }
