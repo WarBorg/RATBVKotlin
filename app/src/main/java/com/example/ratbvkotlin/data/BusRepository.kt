@@ -16,18 +16,14 @@ class BusRepository(
 
     suspend fun getBusLines(isForcedRefresh: Boolean): List<BusLineModel> {
 
-        return listOf(
-            BusLineModel(1, "test1", "route 1", "", "", "", ""),
-            BusLineModel(2, "test2", "route 2", "", "", "", "")
-        )
-
-        /*val busLinesCount = busLinesDao.countBusLines()
+        val busLinesCount = busLinesDao.countBusLines()
 
         if (isForcedRefresh || busLinesCount == 0) {
 
             val busLinesMock = listOf(
                 BusLineModel(1, "test1", "route 1", "", "", "", ""),
-                BusLineModel(2, "test2", "route 2", "", "", "", "")
+                BusLineModel(2, "test2", "route 2", "", "", "", ""),
+                BusLineModel(3, "test3", "route 3", "", "", "", "")
             )
 
             val busLines = busLinesMock //busWebService.getBusLines()
@@ -38,7 +34,7 @@ class BusRepository(
             insertBusLinesInDatabase(busLines, lastUpdated)
         }
 
-        return busLinesDao.getBusLines()*/
+        return busLinesDao.getBusLines()
     }
 
     suspend fun getBusStations(directionLink: String,
@@ -117,6 +113,7 @@ class BusRepository(
             b.lastUpdateDate = lastUpdated
         }
 
+        busLinesDao.clearBusLines()
         busLinesDao.saveBusLines(busLines)
     }
 
@@ -135,6 +132,12 @@ class BusRepository(
             }
         }
 
+        when (direction) {
+            // Used from the [downloadAllStationsTimetables()] function is called
+            null -> busStationsDao.clearBusStationsByBusLineId(busLineId)
+            else -> busStationsDao.clearBusStationsByBusLineIdAndDirection(busLineId, direction)
+        }
+
         busStationsDao.saveBusStations(busStations)
     }
 
@@ -146,6 +149,7 @@ class BusRepository(
             b.lastUpdateDate = lastUpdated
         }
 
-        busTimetablesDao.saveBusStations(busTimetables)
+        busTimetablesDao.clearBusTimetablesByBusStationId(busStationId)
+        busTimetablesDao.saveBusTimetables(busTimetables)
     }
 }

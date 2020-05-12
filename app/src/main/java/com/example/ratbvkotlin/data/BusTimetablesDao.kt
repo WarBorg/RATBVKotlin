@@ -16,8 +16,8 @@ interface BusTimetablesDao {
     fun getBusTimetablesByBusStationId(busStationId: Int): LiveData<List<BusTimetableModel>>
 
     @Insert
-    suspend fun saveBusStations(list: List<BusTimetableModel>)
+    suspend fun saveBusTimetables(list: List<BusTimetableModel>)
 
-    @Query("DELETE FROM BusTimetables")
-    suspend fun clearBusTimetables()
+    @Query("DELETE FROM BusTimetables WHERE busStationId = :busStationId")
+    suspend fun clearBusTimetablesByBusStationId(busStationId: Int)
 }

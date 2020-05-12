@@ -18,6 +18,9 @@ interface BusStationsDao {
     @Insert
     suspend fun saveBusStations(list: List<BusStationModel>)
 
-    @Query("DELETE FROM BusStations")
-    suspend fun clearBusLines()
+    @Query("DELETE FROM BusStations WHERE busLineId = :busLineId")
+    suspend fun clearBusStationsByBusLineId(busLineId: Int)
+
+    @Query("DELETE FROM BusStations WHERE busLineId = :busLineId AND direction = :direction")
+    suspend fun clearBusStationsByBusLineIdAndDirection(busLineId: Int, direction: String)
 }
