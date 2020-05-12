@@ -6,6 +6,7 @@ import com.example.ratbvkotlin.data.BusDatabase
 import com.example.ratbvkotlin.data.BusDatabase.Companion.DATABASE_NAME
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.BusWebService
+import com.example.ratbvkotlin.ui.busline.BusLinesViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -30,8 +31,7 @@ class App : Application() {
         single { get<BusDatabase>().busStationsDao() }
         single { get<BusDatabase>().busTimetablesDao() }
         single { BusWebService() }
-        single { BusRepository(get(), get(), get(), get()) }
-        //viewModel { DaysViewModel(get()) }
-        //viewModel { DayDetailsViewModel(get()) }
+        single { BusRepository(get(), get(), get() , get()) }
+        viewModel { BusLinesViewModel(get()) }
     }
 }

@@ -13,7 +13,7 @@ interface BusLinesDao {
     suspend fun countBusLines(): Int
 
     @Query("SELECT * FROM BusLines")
-    fun getBusLines(): LiveData<List<BusLineModel>>
+    suspend fun getBusLines(): List<BusLineModel>
 
     @Insert
     suspend fun saveBusLines(list: List<BusLineModel>)

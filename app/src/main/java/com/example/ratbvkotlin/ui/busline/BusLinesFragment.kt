@@ -1,55 +1,76 @@
 package com.example.ratbvkotlin.ui.busline
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.ratbvkotlin.R
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.ratbvkotlin.data.BusWebService
+import com.example.ratbvkotlin.data.models.BusLineModel
+import com.example.ratbvkotlin.databinding.FragmentBusLineListBinding
 
 import com.example.ratbvkotlin.ui.busline.dummy.DummyContent
 import com.example.ratbvkotlin.ui.busline.dummy.DummyContent.DummyItem
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the
- * [BusLineFragment.OnListFragmentInteractionListener] interface.
+ * [BusLinesFragment.OnListFragmentInteractionListener] interface.
  */
-class BusLineFragment : Fragment() {
+class BusLinesFragment : Fragment() {
 
-    // TODO: Customize parameters
-    private var columnCount = 1
+    private lateinit var binding: FragmentBusLineListBinding
+
+    private val busLinesViewModel: BusLinesViewModel by viewModel()
 
     private var listener: OnListFragmentInteractionListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
+    //private val busLinesAdapter = BusLinesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_bus_line_list, container, false)
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
+        binding = FragmentBusLineListBinding.inflate(layoutInflater)
+
+        val busLinesAdapter = BusLinesAdapter(listener)
+        binding.busLineList.adapter = busLinesAdapter
+
+        /*val busLines = listOf(
+            BusLinesViewModel.BusLineViewModel(BusLineModel(1, "test1", "route 1", "", "", "", "")),
+            BusLinesViewModel.BusLineViewModel(BusLineModel(2, "test2", "route 2", "", "", "", ""))
+        )
+
+        busLinesAdapter.submitList(busLines)*/
+
+        /*lifecycleScope.launch {
+            busLinesAdapter.submitList(busLinesViewModel.getBusLines())
+        }*/
+
+        /*if (binding.root is RecyclerView) {
+            with(binding.root as RecyclerView) {
                 layoutManager = LinearLayoutManager(context)
 
-                adapter = BusLineRecyclerViewAdapter(DummyContent.ITEMS, listener)
+                adapter = busLinesAdapter
             }
+        }*/
+
+        lifecycleScope.launch {
+            busLinesViewModel.busLines.observe(viewLifecycleOwner,  Observer { busLines ->
+                busLinesAdapter.submitList(busLines)
+            })
         }
 
-        return view
+        return binding.root
     }
 
 //    override fun onAttach(context: Context) {
@@ -90,7 +111,7 @@ class BusLineFragment : Fragment() {
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            BusLineFragment().apply {
+            BusLinesFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }

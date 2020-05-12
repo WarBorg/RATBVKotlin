@@ -14,12 +14,23 @@ class BusRepository(
     private val busTimetablesDao: BusTimetablesDao,
     private val busWebService: BusWebService) {
 
-    suspend fun getBusLines(isForcedRefresh: Boolean): LiveData<List<BusLineModel>> {
-        val busLinesCount = busLinesDao.countBusLines()
+    suspend fun getBusLines(isForcedRefresh: Boolean): List<BusLineModel> {
+
+        return listOf(
+            BusLineModel(1, "test1", "route 1", "", "", "", ""),
+            BusLineModel(2, "test2", "route 2", "", "", "", "")
+        )
+
+        /*val busLinesCount = busLinesDao.countBusLines()
 
         if (isForcedRefresh || busLinesCount == 0) {
 
-            val busLines = busWebService.getBusLines()
+            val busLinesMock = listOf(
+                BusLineModel(1, "test1", "route 1", "", "", "", ""),
+                BusLineModel(2, "test2", "route 2", "", "", "", "")
+            )
+
+            val busLines = busLinesMock //busWebService.getBusLines()
             val current = Calendar.getInstance().time
             val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
             val lastUpdated = formatter.format(current)
@@ -27,7 +38,7 @@ class BusRepository(
             insertBusLinesInDatabase(busLines, lastUpdated)
         }
 
-        return busLinesDao.getBusLines()
+        return busLinesDao.getBusLines()*/
     }
 
     suspend fun getBusStations(directionLink: String,

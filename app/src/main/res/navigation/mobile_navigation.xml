@@ -24,7 +24,7 @@
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/navigation_bus_line"
-        android:name="com.example.ratbvkotlin.ui.busline.BusLineFragment"
+        android:name="com.example.ratbvkotlin.ui.busline.BusLinesFragment"
         android:label="@string/title_bus_line"
         tools:layout="@layout/fragment_bus_line_list" />
 </navigation>
