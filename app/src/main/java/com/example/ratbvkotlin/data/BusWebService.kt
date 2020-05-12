@@ -1,5 +1,6 @@
 package com.example.ratbvkotlin.data
 
+import com.example.ratbvkotlin.data.interfaces.IBusWebservice
 import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.data.models.BusStationModel
 import com.example.ratbvkotlin.data.models.BusTimetableModel
@@ -13,7 +14,7 @@ import retrofit2.http.Path
  * Class responsible with initialisation of the [BusApi] Retrofit instance
  * and forwarding API calls to it.
  */
-class BusWebService {
+class BusWebService : IBusWebservice {
 
     private val api: BusApi by lazy {
         val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation()
@@ -26,9 +27,9 @@ class BusWebService {
             .create(BusApi::class.java)
     }
 
-    suspend fun getBusLines(): List<BusLineModel> = api.getBusLines()
-    suspend fun getBusStations(lineNumberLink: String): List<BusStationModel> = api.getBusStations(lineNumberLink)
-    suspend fun getBusTimetables(scheduleLink: String): List<BusTimetableModel> = api.getBusTimetables(scheduleLink)
+    override suspend fun getBusLines(): List<BusLineModel> = api.getBusLines()
+    override suspend fun getBusStations(lineNumberLink: String): List<BusStationModel> = api.getBusStations(lineNumberLink)
+    override suspend fun getBusTimetables(scheduleLink: String): List<BusTimetableModel> = api.getBusTimetables(scheduleLink)
 
     /**
      * Retrofit instance which holds details about the API calls.

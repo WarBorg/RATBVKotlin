@@ -1,6 +1,7 @@
 package com.example.ratbvkotlin.data
 
 import androidx.lifecycle.LiveData
+import com.example.ratbvkotlin.data.interfaces.IBusWebservice
 import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.data.models.BusStationModel
 import com.example.ratbvkotlin.data.models.BusTimetableModel
@@ -12,7 +13,8 @@ class BusRepository(
     private val busLinesDao: BusLinesDao,
     private val busStationsDao: BusStationsDao,
     private val busTimetablesDao: BusTimetablesDao,
-    private val busWebService: BusWebService) {
+    private val busWebService: IBusWebservice
+) {
 
     suspend fun getBusLines(isForcedRefresh: Boolean): List<BusLineModel> {
 
@@ -20,13 +22,7 @@ class BusRepository(
 
         if (isForcedRefresh || busLinesCount == 0) {
 
-            val busLinesMock = listOf(
-                BusLineModel(1, "test1", "route 1", "", "", "", ""),
-                BusLineModel(2, "test2", "route 2", "", "", "", ""),
-                BusLineModel(3, "test3", "route 3", "", "", "", "")
-            )
-
-            val busLines = busLinesMock //busWebService.getBusLines()
+            val busLines = busWebService.getBusLines()
             val current = Calendar.getInstance().time
             val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
             val lastUpdated = formatter.format(current)
