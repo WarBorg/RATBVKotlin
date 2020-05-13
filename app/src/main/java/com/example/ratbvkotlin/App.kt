@@ -32,8 +32,8 @@ class App : Application() {
         single { get<BusDatabase>().busLinesDao() }
         single { get<BusDatabase>().busStationsDao() }
         single { get<BusDatabase>().busTimetablesDao() }
-        /*single { BusWebService() as IBusWebservice }*/
-        single { BusWebServiceMock() as IBusWebservice }
+        single { BusWebService() as IBusWebservice }
+        /*single { BusWebServiceMock() as IBusWebservice }*/
         single { BusRepository(get(), get(), get() , get()) }
         viewModel { BusLinesViewModel(get()) }
     }

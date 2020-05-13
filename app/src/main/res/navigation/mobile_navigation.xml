@@ -3,28 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/navigation_bus_line">
+    app:startDestination="@id/navigation_bus">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.ratbvkotlin.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.ratbvkotlin.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.ratbvkotlin.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
-    <fragment
-        android:id="@+id/navigation_bus_line"
+        android:id="@+id/navigation_bus"
         android:name="com.example.ratbvkotlin.ui.busline.BusLinesFragment"
-        android:label="@string/title_bus_line"
-        tools:layout="@layout/fragment_bus_line_list" />
+        android:label="@string/title_bus"
+        tools:layout="@layout/fragment_bus_line_list" >
+        <argument
+            android:name="busType"
+            app:argType="string"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_midibus"
+        android:name="com.example.ratbvkotlin.ui.busline.BusLinesFragment"
+        android:label="@string/title_midibus" />
+    <fragment
+        android:id="@+id/navigation_trolleybus"
+        android:name="com.example.ratbvkotlin.ui.busline.BusLinesFragment"
+        android:label="@string/title_trolleybus" />
+
 </navigation>
