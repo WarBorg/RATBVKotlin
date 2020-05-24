@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.busstation.BusStationsActivity"
+            android:name=".ui.busstations.BusStationsActivity"
             android:label="@string/title_activity_bus_stations"></activity>
         <activity
             android:name=".ui.buslines.BusLinesActivity"
