@@ -1,25 +1,16 @@
-package com.example.ratbvkotlin.ui.busline
+package com.example.ratbvkotlin.ui.buslines
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import com.example.ratbvkotlin.data.BusWebService
-import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.databinding.FragmentBusLineListBinding
-
-import com.example.ratbvkotlin.ui.busline.dummy.DummyContent
-import com.example.ratbvkotlin.ui.busline.dummy.DummyContent.DummyItem
-import kotlinx.coroutines.GlobalScope
+import com.example.ratbvkotlin.ui.buslines.dummy.DummyContent.DummyItem
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 

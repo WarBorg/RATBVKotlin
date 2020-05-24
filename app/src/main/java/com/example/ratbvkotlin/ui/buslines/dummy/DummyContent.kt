@@ -1,4 +1,4 @@
-package com.example.ratbvkotlin.ui.busline.dummy
+package com.example.ratbvkotlin.ui.buslines.dummy
 
 import java.util.ArrayList
 import java.util.HashMap

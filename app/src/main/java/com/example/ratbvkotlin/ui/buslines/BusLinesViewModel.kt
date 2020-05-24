@@ -1,4 +1,4 @@
-package com.example.ratbvkotlin.ui.busline
+package com.example.ratbvkotlin.ui.buslines
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

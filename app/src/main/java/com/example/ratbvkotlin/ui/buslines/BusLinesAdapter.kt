@@ -1,4 +1,4 @@
-package com.example.ratbvkotlin.ui.busline
+package com.example.ratbvkotlin.ui.buslines
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ratbvkotlin.databinding.FragmentBusLineBinding
 
-import com.example.ratbvkotlin.ui.busline.BusLinesViewModel.*
+import com.example.ratbvkotlin.ui.buslines.BusLinesViewModel.*
 
-import com.example.ratbvkotlin.ui.busline.BusLinesFragment.OnListFragmentInteractionListener
-import com.example.ratbvkotlin.ui.busline.dummy.DummyContent.DummyItem
+import com.example.ratbvkotlin.ui.buslines.BusLinesFragment.OnListFragmentInteractionListener
+import com.example.ratbvkotlin.ui.buslines.dummy.DummyContent.DummyItem
 
 class BusLinesAdapter(private val mListener: OnListFragmentInteractionListener?)
     : ListAdapter<BusLineViewModel, BusLinesAdapter.BusLineViewHolder>(DiffCallback()) {

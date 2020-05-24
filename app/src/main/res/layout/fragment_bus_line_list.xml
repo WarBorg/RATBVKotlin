@@ -12,7 +12,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:context=".ui.busline.BusLinesFragment"
+        tools:context=".ui.buslines.BusLinesFragment"
         tools:listitem="@layout/fragment_bus_line" />
 
 </layout>

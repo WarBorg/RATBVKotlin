@@ -7,8 +7,7 @@ import com.example.ratbvkotlin.data.BusDatabase.Companion.DATABASE_NAME
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.BusWebService
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
-import com.example.ratbvkotlin.data.mocks.BusWebServiceMock
-import com.example.ratbvkotlin.ui.busline.BusLinesViewModel
+import com.example.ratbvkotlin.ui.buslines.BusLinesViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin

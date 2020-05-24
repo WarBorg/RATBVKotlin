@@ -2,12 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@id/navigation_bus">
+    android:id="@+id/bus_lines_navigation"
+    app:startDestination="@id/bus_dest">
 
     <fragment
-        android:id="@+id/navigation_bus"
-        android:name="com.example.ratbvkotlin.ui.busline.BusLinesFragment"
+        android:id="@+id/bus_dest"
+        android:name="com.example.ratbvkotlin.ui.buslines.BusLinesFragment"
         android:label="@string/title_bus"
         tools:layout="@layout/fragment_bus_line_list" >
         <argument
@@ -16,18 +16,20 @@
             android:defaultValue="Bus" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_midibus"
-        android:name="com.example.ratbvkotlin.ui.busline.BusLinesFragment"
-        android:label="@string/title_midibus" >
+        android:id="@+id/midibus_dest"
+        android:name="com.example.ratbvkotlin.ui.buslines.BusLinesFragment"
+        android:label="@string/title_midibus"
+        tools:layout="@layout/fragment_bus_line_list" >
         <argument
             android:name="busTransportSubtype"
             app:argType="string"
             android:defaultValue="Midibus" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_trolleybus"
-        android:name="com.example.ratbvkotlin.ui.busline.BusLinesFragment"
-        android:label="@string/title_trolleybus" >
+        android:id="@+id/trolleybus_dest"
+        android:name="com.example.ratbvkotlin.ui.buslines.BusLinesFragment"
+        android:label="@string/title_trolleybus"
+        tools:layout="@layout/fragment_bus_line_list" >
         <argument
             android:name="busTransportSubtype"
             app:argType="string"

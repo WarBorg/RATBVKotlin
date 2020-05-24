@@ -7,7 +7,7 @@
     <data>
         <variable
             name="busLineViewModel"
-            type="com.example.ratbvkotlin.ui.busline.BusLinesViewModel.BusLineViewModel" />
+            type="com.example.ratbvkotlin.ui.buslines.BusLinesViewModel.BusLineViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
