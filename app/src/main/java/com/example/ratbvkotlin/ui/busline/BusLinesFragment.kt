@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.example.ratbvkotlin.data.BusWebService
 import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.databinding.FragmentBusLineListBinding
@@ -18,7 +19,9 @@ import com.example.ratbvkotlin.ui.busline.dummy.DummyContent
 import com.example.ratbvkotlin.ui.busline.dummy.DummyContent.DummyItem
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * A fragment representing a list of Items.
@@ -29,7 +32,7 @@ class BusLinesFragment : Fragment() {
 
     private lateinit var binding: FragmentBusLineListBinding
 
-    private val busLinesViewModel: BusLinesViewModel by viewModel()
+    //private val busLinesViewModel: BusLinesViewModel by viewModel()
 
     private var listener: OnListFragmentInteractionListener? = null
 
@@ -37,6 +40,11 @@ class BusLinesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val safeArgs: BusLinesFragmentArgs by navArgs()
+        val busTransportSubtype = safeArgs.busTransportSubtype
+
+        val busLinesViewModel : BusLinesViewModel by viewModel { parametersOf(busTransportSubtype) }
 
         binding = FragmentBusLineListBinding.inflate(layoutInflater)
 

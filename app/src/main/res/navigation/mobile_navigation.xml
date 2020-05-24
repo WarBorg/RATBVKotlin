@@ -11,17 +11,27 @@
         android:label="@string/title_bus"
         tools:layout="@layout/fragment_bus_line_list" >
         <argument
-            android:name="busType"
+            android:name="busTransportSubtype"
             app:argType="string"
-            android:defaultValue="0" />
+            android:defaultValue="Bus" />
     </fragment>
     <fragment
         android:id="@+id/navigation_midibus"
         android:name="com.example.ratbvkotlin.ui.busline.BusLinesFragment"
-        android:label="@string/title_midibus" />
+        android:label="@string/title_midibus" >
+        <argument
+            android:name="busTransportSubtype"
+            app:argType="string"
+            android:defaultValue="Midibus" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_trolleybus"
         android:name="com.example.ratbvkotlin.ui.busline.BusLinesFragment"
-        android:label="@string/title_trolleybus" />
+        android:label="@string/title_trolleybus" >
+        <argument
+            android:name="busTransportSubtype"
+            app:argType="string"
+            android:defaultValue="Trolleybus" />
+    </fragment>
 
 </navigation>

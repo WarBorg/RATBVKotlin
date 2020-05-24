@@ -7,12 +7,14 @@ import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.databinding.FragmentBusLineBinding
 
-class BusLinesViewModel(private val repository: BusRepository) : ViewModel() {
+class BusLinesViewModel(private val repository: BusRepository,
+                        private val busTransportSubtype: String)
+    : ViewModel() {
 
     val busLines : LiveData<List<BusLineViewModel>> = liveData {
-        val busLines = repository.getBusLines(true).map {
-                busLineModel -> BusLineViewModel(busLineModel)
-        }
+        val busLines = repository.getBusLines(true)
+            .filter { busLineModel -> busLineModel.type == busTransportSubtype }
+            .map { busLineModel -> BusLineViewModel(busLineModel) }
 
         emit(busLines)
     }
@@ -23,7 +25,7 @@ class BusLinesViewModel(private val repository: BusRepository) : ViewModel() {
      */
     inner class BusLineViewModel(val busLine: BusLineModel) : ViewModel() {
 
-        // TODO resolve the click event issues (MVVM says to not place it in the ViewModel)
+        // TODO resolve the click event to move to another activity using navgraph
         /*fun onItemClicked() {
             onItemClickListener?.invoke(forecast.date.time)
         }*/
