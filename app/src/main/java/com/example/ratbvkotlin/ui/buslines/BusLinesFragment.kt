@@ -7,77 +7,67 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.ratbvkotlin.databinding.FragmentBusLineListBinding
-import com.example.ratbvkotlin.ui.buslines.dummy.DummyContent.DummyItem
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 /**
- * A fragment representing a list of Items.
- * Activities containing this fragment MUST implement the
- * [BusLinesFragment.OnListFragmentInteractionListener] interface.
+ * Shows the bus stations for a specific bus line
+ * List layout [fragment_bus_line_list.xml]
+ * List item layout [fragment_bus_line.xml]
  */
 class BusLinesFragment : Fragment() {
 
     private lateinit var binding: FragmentBusLineListBinding
 
-    //private val busLinesViewModel: BusLinesViewModel by viewModel()
+    // Gets the arguments passed to the fragment
+    private val args: BusLinesFragmentArgs by navArgs()
+    // Sets the viewmodel parameters with the necessary arguments
+    private val busLinesViewModel: BusLinesViewModel by viewModel { parametersOf(args.busTransportSubtype) }
 
-    private var listener: OnListFragmentInteractionListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val safeArgs: BusLinesFragmentArgs by navArgs()
-        val busTransportSubtype = safeArgs.busTransportSubtype
-
-        val busLinesViewModel : BusLinesViewModel by viewModel { parametersOf(busTransportSubtype) }
-
+        // Links the binding to the fragment layout [fragment_bus_line_list.xml]
         binding = FragmentBusLineListBinding.inflate(layoutInflater)
 
-        val busLinesAdapter = BusLinesAdapter(listener)
+        val busLinesAdapter = BusLinesAdapter()
         binding.busLineList.adapter = busLinesAdapter
 
+        // Observes the busLines LiveData list from the viewmodel,
+        // when changed it will update the recycleview adapter
         lifecycleScope.launch {
-            busLinesViewModel.busLines.observe(viewLifecycleOwner,  Observer { busLines ->
+            busLinesViewModel.busLines.observe(viewLifecycleOwner, Observer { busLines ->
                 busLinesAdapter.submitList(busLines)
             })
         }
 
+        // Sets a listener to receive callbacks whenever an item is clicked
+        busLinesViewModel.onBusLineClickListener = onBusLineClickListener
+
         return binding.root
     }
 
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        if (context is OnListFragmentInteractionListener) {
-//            listener = context
-//        } else {
-//            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
-//        }
-//    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
+    /**
+     * Called when the view is destroyed
+     */
+    override fun onDestroyView() {
+        // We clear the onItemClickListener in order to avoid any leaks
+        busLinesViewModel.onBusLineClickListener = null
+        super.onDestroyView()
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson
-     * [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
+     * Called when an item is clicked in [BusLinesViewModel].
      */
-    interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
+    private val onBusLineClickListener: OnBusLineClickListener = { busLineId ->
+        // Navigate to the bus stations page
+        findNavController().navigate(BusLinesFragmentDirections.navigateToBusStationsActivityDest(busLineId))
     }
 }

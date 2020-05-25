@@ -1,32 +1,15 @@
 package com.example.ratbvkotlin.ui.buslines
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ratbvkotlin.databinding.FragmentBusLineBinding
+import com.example.ratbvkotlin.ui.buslines.BusLinesViewModel.BusLineViewModel
 
-import com.example.ratbvkotlin.ui.buslines.BusLinesViewModel.*
-
-import com.example.ratbvkotlin.ui.buslines.BusLinesFragment.OnListFragmentInteractionListener
-import com.example.ratbvkotlin.ui.buslines.dummy.DummyContent.DummyItem
-
-class BusLinesAdapter(private val mListener: OnListFragmentInteractionListener?)
+class BusLinesAdapter()
     : ListAdapter<BusLineViewModel, BusLinesAdapter.BusLineViewHolder>(DiffCallback()) {
-
-    // TODO resolve the click event issues (MVVM says to not place it in the ViewModel)
-    private val mOnClickListener: View.OnClickListener
-
-    init {
-        mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-            mListener?.onListFragmentInteraction(item)
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): BusLineViewHolder {
@@ -62,7 +45,7 @@ class BusLinesAdapter(private val mListener: OnListFragmentInteractionListener?)
 
         override fun areContentsTheSame(oldItem: BusLineViewModel,
                                         newItem: BusLineViewModel): Boolean {
-            //return oldItem.busLine.lastUpdateDate == newItem.busLine.lastUpdateDate
+
             return oldItem.busLine.id == newItem.busLine.id
         }
     }
