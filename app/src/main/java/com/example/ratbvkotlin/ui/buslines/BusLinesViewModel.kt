@@ -39,4 +39,4 @@ class BusLinesViewModel(private val repository: BusRepository,
 /**
  * Shortcut for a method call when a [FragmentBusLineBinding] is clicked.
  */
-typealias OnBusLineClickListener = (date: Int) -> Unit
+typealias OnBusLineClickListener = (busLineId: Int) -> Unit

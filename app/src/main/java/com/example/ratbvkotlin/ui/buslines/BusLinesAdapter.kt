@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ratbvkotlin.databinding.FragmentBusLineBinding
 import com.example.ratbvkotlin.ui.buslines.BusLinesViewModel.BusLineViewModel
 
-class BusLinesAdapter()
+class BusLinesAdapter
     : ListAdapter<BusLineViewModel, BusLinesAdapter.BusLineViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): BusLineViewHolder {
+
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = FragmentBusLineBinding.inflate(layoutInflater)
         return BusLineViewHolder(binding)
@@ -38,6 +39,7 @@ class BusLinesAdapter()
      * each time [submitList] is called on the [BusLinesAdapter].
      */
     private class DiffCallback : DiffUtil.ItemCallback<BusLineViewModel>() {
+
         override fun areItemsTheSame(oldItem: BusLineViewModel,
                                      newItem: BusLineViewModel): Boolean {
             return oldItem == newItem
