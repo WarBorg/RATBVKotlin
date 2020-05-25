@@ -8,6 +8,7 @@ import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.BusWebService
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
 import com.example.ratbvkotlin.ui.buslines.BusLinesViewModel
+import com.example.ratbvkotlin.ui.busstations.BusStationsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -35,5 +36,6 @@ class App : Application() {
         /*single { BusWebServiceMock() as IBusWebservice }*/
         single { BusRepository(get(), get(), get() , get()) }
         viewModel { (busTransportSubtype : String) -> BusLinesViewModel(get(), busTransportSubtype) }
+        viewModel { (busLineId : Int) -> BusStationsViewModel(get(), busLineId) }
     }
 }

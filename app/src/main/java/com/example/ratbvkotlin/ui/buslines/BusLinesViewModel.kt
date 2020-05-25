@@ -11,6 +11,11 @@ class BusLinesViewModel(private val repository: BusRepository,
                         private val busTransportSubtype: String)
     : ViewModel() {
 
+    /**
+     * Listener set by [BusLinesFragment] in order to get notified when an [FragmentBusLineBinding] is clicked.
+     */
+    var onBusLineClickListener: OnBusLineClickListener? = null
+
     val busLines : LiveData<List<BusLineViewModel>> = liveData {
         val busLines = repository.getBusLines(true)
             .filter { busLineModel -> busLineModel.type == busTransportSubtype }
@@ -25,9 +30,13 @@ class BusLinesViewModel(private val repository: BusRepository,
      */
     inner class BusLineViewModel(val busLine: BusLineModel) : ViewModel() {
 
-        // TODO resolve the click event to move to another activity using navgraph
-        /*fun onItemClicked() {
-            onItemClickListener?.invoke(forecast.date.time)
-        }*/
+        fun onItemClicked() {
+            onBusLineClickListener?.invoke(busLine.id)
+        }
     }
 }
+
+/**
+ * Shortcut for a method call when a [FragmentBusLineBinding] is clicked.
+ */
+typealias OnBusLineClickListener = (date: Int) -> Unit

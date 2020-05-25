@@ -14,6 +14,9 @@
             android:name="busTransportSubtype"
             app:argType="string"
             android:defaultValue="Bus" />
+        <action
+            android:id="@+id/navigateTo_busStationsActivity_dest"
+            app:destination="@id/busStationsActivity_dest" />
     </fragment>
     <fragment
         android:id="@+id/midibus_dest"
@@ -24,6 +27,9 @@
             android:name="busTransportSubtype"
             app:argType="string"
             android:defaultValue="Midibus" />
+        <action
+            android:id="@+id/navigateTo_busStationsActivity_dest"
+            app:destination="@id/busStationsActivity_dest" />
     </fragment>
     <fragment
         android:id="@+id/trolleybus_dest"
@@ -34,6 +40,16 @@
             android:name="busTransportSubtype"
             app:argType="string"
             android:defaultValue="Trolleybus" />
+        <action
+            android:id="@+id/navigateTo_busStationsActivity_dest"
+            app:destination="@id/busStationsActivity_dest" />
     </fragment>
-
+    <activity
+        android:id="@+id/busStationsActivity_dest"
+        android:name="com.example.ratbvkotlin.ui.busstations.BusStationsActivity"
+        android:label="BusStationsActivity" >
+        <argument
+            android:name="busLineId"
+            app:argType="integer" />
+    </activity>
 </navigation>
