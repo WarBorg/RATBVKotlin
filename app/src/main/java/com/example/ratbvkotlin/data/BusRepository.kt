@@ -57,7 +57,7 @@ class BusRepository(
     suspend fun getBusTimetables(scheduleLink: String,
                                  busStationId: Int,
                                  isForcedRefresh: Boolean)
-            : LiveData<List<BusTimetableModel>> {
+            : List<BusTimetableModel> {
 
         val busTimetablesCount = busTimetablesDao.countBusTimetablesByBusStationId(busStationId)
 

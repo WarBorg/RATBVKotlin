@@ -1,6 +1,5 @@
 package com.example.ratbvkotlin.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -13,7 +12,7 @@ interface BusTimetablesDao {
     suspend fun countBusTimetablesByBusStationId(busStationId: Int): Int
 
     @Query("SELECT * FROM BusTimetables WHERE busStationId = :busStationId")
-    fun getBusTimetablesByBusStationId(busStationId: Int): LiveData<List<BusTimetableModel>>
+    suspend fun getBusTimetablesByBusStationId(busStationId: Int): List<BusTimetableModel>
 
     @Insert
     suspend fun saveBusTimetables(list: List<BusTimetableModel>)

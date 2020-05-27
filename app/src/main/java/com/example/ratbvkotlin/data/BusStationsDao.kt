@@ -1,6 +1,5 @@
 package com.example.ratbvkotlin.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
