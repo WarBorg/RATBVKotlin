@@ -16,7 +16,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * Shows the bus stations for a specific bus line
  * List layout [fragment_bus_station_list.xml]
- * List item layout [fragment_bus_station.xml]
+ * List item layout [fragment_bus_station_list_item.xml]
  */
 class BusStationsFragment : Fragment() {
 

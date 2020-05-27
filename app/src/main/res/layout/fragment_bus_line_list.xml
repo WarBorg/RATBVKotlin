@@ -6,7 +6,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bus_line_list"
-        android:name="com.example.ratbvkotlin.ui.busline.BusLineFragment"
+        android:name="com.example.ratbvkotlin.ui.buslinez.BusLinezFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"

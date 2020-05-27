@@ -1,17 +1,14 @@
 package com.example.ratbvkotlin.ui.busstations
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.navArgs
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.ratbvkotlin.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class BusStationsActivity : AppCompatActivity() {
 

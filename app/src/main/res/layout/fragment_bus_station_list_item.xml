@@ -16,7 +16,7 @@
         android:padding="10dp"
         android:onClick="@{_ -> busStationViewModel.onItemClicked()}">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/fragment_busstationlistitem_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
