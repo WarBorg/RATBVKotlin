@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ratbvkotlin.databinding.FragmentBusstationListitemBinding
+import com.example.ratbvkotlin.databinding.FragmentBusStationListItemBinding
 import com.example.ratbvkotlin.ui.busstations.BusStationsViewModel.BusStationViewModel
 
 class BusStationsAdapter
@@ -15,7 +15,7 @@ class BusStationsAdapter
                                     viewType: Int): BusStationViewHolder {
 
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = FragmentBusstationListitemBinding.inflate(layoutInflater)
+        val binding = FragmentBusStationListItemBinding.inflate(layoutInflater)
         return BusStationViewHolder(binding)
     }
 
@@ -26,7 +26,7 @@ class BusStationsAdapter
         busStationViewHolder.bind(busStation)
     }
 
-    inner class BusStationViewHolder(private val binding: FragmentBusstationListitemBinding)
+    inner class BusStationViewHolder(private val binding: FragmentBusStationListItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(busStationViewModel: BusStationViewModel) {

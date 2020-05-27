@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusLineModel
-import com.example.ratbvkotlin.databinding.FragmentBusLineBinding
 
 class BusLinesViewModel(private val repository: BusRepository,
                         private val busTransportSubtype: String)
