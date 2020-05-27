@@ -43,8 +43,10 @@ class BusLinesFragment : Fragment() {
         // Observes the busLines LiveData list from the viewmodel,
         // when changed it will update the recycleview adapter
         lifecycleScope.launch {
-            busLinesViewModel.busLines.observe(viewLifecycleOwner, Observer { busLines ->
-                busLinesAdapter.submitList(busLines)
+            busLinesViewModel
+                .busLines
+                .observe(viewLifecycleOwner, Observer { busLines ->
+                    busLinesAdapter.submitList(busLines)
             })
         }
 
@@ -66,8 +68,10 @@ class BusLinesFragment : Fragment() {
     /**
      * Called when an item is clicked in [BusLinesViewModel].
      */
-    private val onBusLineClickListener: OnBusLineClickListener = { busLineId ->
+    private val onBusLineClickListener: OnBusLineClickListener = { directionLink, direction, busLineId ->
         // Navigate to the bus stations page
-        findNavController().navigate(BusLinesFragmentDirections.navigateToBusStationsActivityDest(busLineId))
+        findNavController()
+            .navigate(BusLinesFragmentDirections
+            .navigateToBusStationsActivityDest(directionLink, direction, busLineId))
     }
 }

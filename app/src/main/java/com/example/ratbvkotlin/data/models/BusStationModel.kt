@@ -37,7 +37,7 @@ data class BusStationModel(
     var direction: String,
 
     @Expose
-    @SerializedName("schedualLink")
+    @SerializedName("scheduleLink")
     @ColumnInfo(name = "ScheduleLink")
     val scheduleLink: String,
 

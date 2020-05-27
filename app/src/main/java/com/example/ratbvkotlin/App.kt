@@ -36,6 +36,9 @@ class App : Application() {
         /*single { BusWebServiceMock() as IBusWebservice }*/
         single { BusRepository(get(), get(), get() , get()) }
         viewModel { (busTransportSubtype : String) -> BusLinesViewModel(get(), busTransportSubtype) }
-        viewModel { (busLineId : Int) -> BusStationsViewModel(get(), busLineId) }
+        viewModel {
+                (directionLink: String, direction: String, busLineId : Int) ->
+            BusStationsViewModel(get(), directionLink, direction, busLineId)
+        }
     }
 }

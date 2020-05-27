@@ -49,6 +49,12 @@
         android:name="com.example.ratbvkotlin.ui.busstations.BusStationsActivity"
         android:label="BusStationsActivity" >
         <argument
+            android:name="directionLink"
+            app:argType="string" />
+        <argument
+            android:name="direction"
+            app:argType="string" />
+        <argument
             android:name="busLineId"
             app:argType="integer" />
     </activity>

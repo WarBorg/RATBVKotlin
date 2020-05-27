@@ -37,7 +37,7 @@ class BusRepository(
                                direction: String,
                                busLineId: Int,
                                isForcedRefresh: Boolean)
-            : LiveData<List<BusStationModel>> {
+            : List<BusStationModel> {
 
         val busStationsCount = busStationsDao.countBusStationsByBusLineIdAndDirection(busLineId, direction)
 
