@@ -15,10 +15,10 @@ class BusLinesViewModel(private val repository: BusRepository,
      */
     var onBusLineClickListener: OnBusLineClickListener? = null
 
-    val busLines : LiveData<List<BusLineViewModel>> = liveData {
+    val busLines : LiveData<List<BusLineItemViewModel>> = liveData {
         val busLines = repository.getBusLines(true)
             .filter { busLineModel -> busLineModel.type == busTransportSubtype }
-            .map { busLineModel -> BusLineViewModel(busLineModel) }
+            .map { busLineModel -> BusLineItemViewModel(busLineModel) }
 
         emit(busLines)
     }
@@ -27,7 +27,7 @@ class BusLinesViewModel(private val repository: BusRepository,
      * [ViewModel] for a specific [FragmentBusLineBinding], which contains the item's [busLine]
      * and [onItemClicked] which is called when the users clicks on the current item.
      */
-    inner class BusLineViewModel(val busLine: BusLineModel) : ViewModel() {
+    inner class BusLineItemViewModel(val busLine: BusLineModel) : ViewModel() {
 
         fun onItemClicked() {
             onBusLineClickListener?.invoke(busLine.linkNormalWay,"normal", busLine.id)

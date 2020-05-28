@@ -12,7 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class BusTimetablesActivity : AppCompatActivity() {
 
-    //private val args: BusTimetablesFragmentArgs by navArgs()
+    private val args: BusTimetablesFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +22,7 @@ class BusTimetablesActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.bus_timetable_list_nav_view)
 
         val navController = findNavController(R.id.bus_timetable_list_nav_host_fragment)
-        //navController.setGraph(R.navigation.bus_timetables_navigation, args.toBundle())
+        navController.setGraph(R.navigation.bus_timetables_navigation, args.toBundle())
 
         setupToolbar(navController)
 

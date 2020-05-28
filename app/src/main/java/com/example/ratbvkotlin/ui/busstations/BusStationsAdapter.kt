@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ratbvkotlin.databinding.FragmentBusStationListItemBinding
-import com.example.ratbvkotlin.ui.busstations.BusStationsViewModel.BusStationViewModel
+import com.example.ratbvkotlin.ui.busstations.BusStationsViewModel.BusStationItemViewModel
 
 class BusStationsAdapter
-    : ListAdapter<BusStationViewModel, BusStationsAdapter.BusStationViewHolder>(DiffCallback()) {
+    : ListAdapter<BusStationItemViewModel, BusStationsAdapter.BusStationViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): BusStationViewHolder {
@@ -29,8 +29,8 @@ class BusStationsAdapter
     inner class BusStationViewHolder(private val binding: FragmentBusStationListItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(busStationViewModel: BusStationViewModel) {
-            binding.busStationViewModel = busStationViewModel
+        fun bind(busStationItemViewModel: BusStationItemViewModel) {
+            binding.busStationViewModel = busStationItemViewModel
         }
     }
 
@@ -38,15 +38,15 @@ class BusStationsAdapter
      * Class used to perform a diff between the old list of elements and the new list,
      * each time [submitList] is called on the [BusStationsAdapter].
      */
-    private class DiffCallback : DiffUtil.ItemCallback<BusStationViewModel>() {
+    private class DiffCallback : DiffUtil.ItemCallback<BusStationItemViewModel>() {
 
-        override fun areItemsTheSame(oldItem: BusStationViewModel,
-                                     newItem:BusStationViewModel): Boolean {
+        override fun areItemsTheSame(oldItem: BusStationItemViewModel,
+                                     newItem:BusStationItemViewModel): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: BusStationViewModel,
-                                        newItem:BusStationViewModel): Boolean {
+        override fun areContentsTheSame(oldItem: BusStationItemViewModel,
+                                        newItem:BusStationItemViewModel): Boolean {
             return oldItem.busStation.id == newItem.busStation.id
         }
     }

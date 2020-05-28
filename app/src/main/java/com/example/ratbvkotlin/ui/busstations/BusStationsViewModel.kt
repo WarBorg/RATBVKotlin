@@ -17,21 +17,21 @@ class BusStationsViewModel(private val repository: BusRepository,
      */
     var onBusStationClickListener: OnBusStationClickListener? = null
 
-    val busStations : LiveData<List<BusStationsViewModel.BusStationViewModel>> = liveData {
+    val busStations : LiveData<List<BusStationsViewModel.BusStationItemViewModel>> = liveData {
         val busStations = repository.getBusStations(directionLink,
                                                                                            direction,
                                                                                            busLineId,
                                                                                            true)
-            .map { busStationModel -> BusStationViewModel(busStationModel) }
+            .map { busStationModel -> BusStationItemViewModel(busStationModel) }
 
         emit(busStations)
     }
 
     /**
-     * [ViewModel] for a specific [FragmentBusStationBinding], which contains the item's [busStation]
+     * [ViewModel] for a specific [FragmentBusStationListItemBinding], which contains the item's [busStation]
      * and [onItemClicked] which is called when the users clicks on the current item.
      */
-    inner class BusStationViewModel(val busStation: BusStationModel) : ViewModel() {
+    inner class BusStationItemViewModel(val busStation: BusStationModel) : ViewModel() {
 
         fun onItemClicked() {
             onBusStationClickListener?.invoke(busStation.id)

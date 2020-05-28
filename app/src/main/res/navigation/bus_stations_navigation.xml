@@ -19,6 +19,20 @@
         <argument
             android:name="busLineId"
             app:argType="integer" />
+        <action
+            android:id="@+id/navigateTo_busTimetablesActivity_dest"
+            app:destination="@id/busTimetablesActivity" />
     </fragment>
+    <activity
+        android:id="@+id/busTimetablesActivity"
+        android:name="com.example.ratbvkotlin.ui.bustimetables.BusTimetablesActivity"
+        android:label="BusTimetablesActivity" >
+        <argument
+            android:name="scheduleLink"
+            app:argType="string" />
+        <argument
+            android:name="busStationId"
+            app:argType="integer" />
+    </activity>
 
 </navigation>

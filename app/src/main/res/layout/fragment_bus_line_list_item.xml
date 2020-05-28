@@ -7,13 +7,13 @@
     <data>
         <variable
             name="busLineViewModel"
-            type="com.example.ratbvkotlin.ui.buslines.BusLinesViewModel.BusLineViewModel" />
+            type="com.example.ratbvkotlin.ui.buslines.BusLinesViewModel.BusLineItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="@dimen/list_item_padding"
         android:onClick="@{_ -> busLineViewModel.onItemClicked()}">
 
         <androidx.appcompat.widget.AppCompatTextView
