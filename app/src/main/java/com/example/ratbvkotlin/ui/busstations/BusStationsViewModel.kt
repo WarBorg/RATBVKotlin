@@ -19,9 +19,9 @@ class BusStationsViewModel(private val repository: BusRepository,
 
     val busStations : LiveData<List<BusStationsViewModel.BusStationItemViewModel>> = liveData {
         val busStations = repository.getBusStations(directionLink,
-                                                                                           direction,
-                                                                                           busLineId,
-                                                                                           true)
+                                                                                              direction,
+                                                                                              busLineId,
+                                                                                true)
             .map { busStationModel -> BusStationItemViewModel(busStationModel) }
 
         emit(busStations)

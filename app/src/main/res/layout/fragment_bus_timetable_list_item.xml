@@ -4,11 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-<!--    <data>-->
-<!--        <variable-->
-<!--            name="busTimetableViewModel"-->
-<!--            type="com.example.ratbvkotlin.ui.bustimetables.BusTimetablesViewModel.BusTimetableViewModel" />-->
-<!--    </data>-->
+    <data>
+        <variable
+            name="busTimetableViewModel"
+            type="com.example.ratbvkotlin.ui.bustimetables.BusTimetablesViewModel.BusTimetableItemViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,6 +19,7 @@
             android:id="@+id/fragment_bustimetablelistitem_hour"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{busTimetableViewModel.busTimetable.hour}"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:gravity="center"
             app:layout_constraintWidth_percent="0.25"
@@ -30,11 +31,12 @@
             android:id="@+id/fragment_bustimetablelistitem_minutes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{busTimetableViewModel.busTimetable.minutes}"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintWidth_percent="0.75"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fragment_bustimetablelistitem_hour"
-            tools:text="05  12  23  43  44  56" />
+            tools:text="05 12 23 43 44 56" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

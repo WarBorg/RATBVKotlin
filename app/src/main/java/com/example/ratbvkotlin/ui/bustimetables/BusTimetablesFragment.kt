@@ -42,13 +42,13 @@ class BusTimetablesFragment  : Fragment() {
 
         // Observes the busLines LiveData list from the viewmodel,
         // when changed it will update the recycleview adapter
-        /*lifecycleScope.launch {
+        lifecycleScope.launch {
             busTimetablesViewModel
                 .busTimetables
                 .observe(viewLifecycleOwner, Observer { busTimetables ->
                     busTimetablesAdapter.submitList(busTimetables)
                 })
-        }*/
+        }
 
         return binding.root
     }
