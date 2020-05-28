@@ -17,21 +17,23 @@
         android:onClick="@{_ -> busLineViewModel.onItemClicked()}">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/fragment_buslinelistitem_name"
+            android:id="@+id/bus_line_list_item_name_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{busLineViewModel.busLine.name}"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bus_line_list_item_route_textview"
             tools:text="@tools:sample/date/day_of_week" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/fragment_buslinelistitem_route"
+            android:id="@+id/bus_line_list_item_route_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(busLineViewModel.busLine.route)}"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintTop_toBottomOf="@id/fragment_buslinelistitem_name"
+            app:layout_constraintTop_toBottomOf="@id/bus_line_list_item_name_textview"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="@tools:sample/date/day_of_week" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

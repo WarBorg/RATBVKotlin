@@ -9,6 +9,7 @@ import com.example.ratbvkotlin.data.BusWebService
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
 import com.example.ratbvkotlin.ui.buslines.BusLinesViewModel
 import com.example.ratbvkotlin.ui.busstations.BusStationsViewModel
+import com.example.ratbvkotlin.ui.bustimetables.BusTimetablesViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -39,6 +40,10 @@ class App : Application() {
         viewModel {
                 (directionLink: String, direction: String, busLineId : Int) ->
             BusStationsViewModel(get(), directionLink, direction, busLineId)
+        }
+        viewModel {
+                (scheduleLink: String, busStationId : Int, timetableType: String) ->
+            BusTimetablesViewModel(get(), scheduleLink, busStationId, timetableType)
         }
     }
 }

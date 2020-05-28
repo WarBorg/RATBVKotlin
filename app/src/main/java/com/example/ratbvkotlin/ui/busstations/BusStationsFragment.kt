@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ratbvkotlin.databinding.FragmentBusStationListBinding
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -37,11 +40,16 @@ class BusStationsFragment : Fragment() {
         // Links the binding to the fragment layout [fragment_bus_station_list.xml]
         binding = FragmentBusStationListBinding.inflate(layoutInflater)
 
+        binding.busStationsViewModel = busStationsViewModel
+
         val busStationsAdapter = BusStationsAdapter()
-        binding.busStationList.adapter = busStationsAdapter
+        binding.busStationListRecyclerview.adapter = busStationsAdapter
+        binding.busStationListRecyclerview.addItemDecoration(
+            DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+        )
 
         // Observes the busLines LiveData list from the viewmodel,
-        // when changed it will update the recycleview adapter
+        // when changed it will update the recyclerview adapter
         lifecycleScope.launch {
             busStationsViewModel
                 .busStations
@@ -51,8 +59,27 @@ class BusStationsFragment : Fragment() {
         }
 
         // Sets a listener to receive callbacks whenever an item is clicked
-        //busStationsViewModel.onBusStationClickListener = on
+        busStationsViewModel.onBusStationClickListener = onBusTimetableClickListener
 
         return binding.root
+    }
+
+    /**
+     * Called when the view is destroyed
+     */
+    override fun onDestroyView() {
+        // We clear the onItemClickListener in order to avoid any leaks
+        busStationsViewModel.onBusStationClickListener = null
+        super.onDestroyView()
+    }
+
+    /**
+     * Called when an item is clicked in [BusStationsViewModel].
+     */
+    private val onBusTimetableClickListener: OnBusStationClickListener = { scheduleLink, busStationId ->
+        // Navigate to the bus timetables page
+        findNavController()
+            .navigate(BusStationsFragmentDirections
+                .navigateToBusTimetablesActivityDest(scheduleLink, busStationId))
     }
 }

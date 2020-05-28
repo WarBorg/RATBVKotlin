@@ -16,6 +16,7 @@ class BusStationsAdapter
 
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = FragmentBusStationListItemBinding.inflate(layoutInflater)
+
         return BusStationViewHolder(binding)
     }
 

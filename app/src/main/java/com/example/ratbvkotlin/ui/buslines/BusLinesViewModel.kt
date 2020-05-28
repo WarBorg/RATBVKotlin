@@ -5,15 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusLineModel
+import com.example.ratbvkotlin.databinding.FragmentBusLineListItemBinding
 
 class BusLinesViewModel(private val repository: BusRepository,
                         private val busTransportSubtype: String)
     : ViewModel() {
 
     /**
-     * Listener set by [BusLinesFragment] in order to get notified when an [FragmentBusLineBinding] is clicked.
+     * Listener set by [BusLinesFragment] in order to get notified when an [FragmentBusLineListItemBinding] is clicked.
      */
     var onBusLineClickListener: OnBusLineClickListener? = null
+
+    var lastUpdated = "Never"
 
     val busLines : LiveData<List<BusLineItemViewModel>> = liveData {
         val busLines = repository.getBusLines(true)
@@ -24,7 +27,7 @@ class BusLinesViewModel(private val repository: BusRepository,
     }
 
     /**
-     * [ViewModel] for a specific [FragmentBusLineBinding], which contains the item's [busLine]
+     * [ViewModel] for a specific [FragmentBusLineListItemBinding], which contains the item's [busLine]
      * and [onItemClicked] which is called when the users clicks on the current item.
      */
     inner class BusLineItemViewModel(val busLine: BusLineModel) : ViewModel() {
@@ -36,6 +39,6 @@ class BusLinesViewModel(private val repository: BusRepository,
 }
 
 /**
- * Shortcut for a method call when a [FragmentBusLineBinding] is clicked.
+ * Shortcut for a method call when a [FragmentBusLineListItemBinding] is clicked.
  */
 typealias OnBusLineClickListener = (directionLink: String, direction: String, busLineId: Int) -> Unit

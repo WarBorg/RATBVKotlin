@@ -19,7 +19,7 @@
         <argument
             android:name="timetableType"
             app:argType="string"
-            android:defaultValue="weekdays" />
+            android:defaultValue="WeekDays" />
     </fragment>
     <fragment
         android:id="@+id/saturday_dest"
@@ -35,7 +35,7 @@
         <argument
             android:name="timetableType"
             app:argType="string"
-            android:defaultValue="saturday" />
+            android:defaultValue="Saturday" />
     </fragment>
     <fragment
         android:id="@+id/sunday_dest"
@@ -51,6 +51,6 @@
         <argument
             android:name="timetableType"
             app:argType="string"
-            android:defaultValue="sunday" />
+            android:defaultValue="Sunday" />
     </fragment>
 </navigation>

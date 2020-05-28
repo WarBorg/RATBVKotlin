@@ -12,30 +12,32 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="@dimen/list_item_padding">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/fragment_bustimetablelistitem_hour"
-            android:layout_width="0dp"
+            android:id="@+id/bus_timetable_list_item_hour_textview"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:text="@{busTimetableViewModel.busTimetable.hour}"
+            android:text='@{busTimetableViewModel.busTimetable.hour}'
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             app:layout_constraintWidth_percent="0.25"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/fragment_bustimetablelistitem_minutes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bus_timetable_list_item_minutes_textview"
             tools:text="03" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/fragment_bustimetablelistitem_minutes"
-            android:layout_width="0dp"
+            android:id="@+id/bus_timetable_list_item_minutes_textview"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{busTimetableViewModel.busTimetable.minutes}"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintWidth_percent="0.75"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fragment_bustimetablelistitem_hour"
+            app:layout_constraintStart_toEndOf="@+id/bus_timetable_list_item_hour_textview"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="05 12 23 43 44 56" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

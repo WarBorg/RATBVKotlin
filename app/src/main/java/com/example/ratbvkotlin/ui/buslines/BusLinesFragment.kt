@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ratbvkotlin.databinding.FragmentBusLineListBinding
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -28,7 +30,6 @@ class BusLinesFragment : Fragment() {
     // Sets the viewmodel parameters with the necessary arguments
     private val busLinesViewModel: BusLinesViewModel by viewModel { parametersOf(args.busTransportSubtype) }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,11 +38,16 @@ class BusLinesFragment : Fragment() {
         // Links the binding to the fragment layout [fragment_bus_line_list.xml]
         binding = FragmentBusLineListBinding.inflate(layoutInflater)
 
+        binding.busLinesViewModel = busLinesViewModel
+
         val busLinesAdapter = BusLinesAdapter()
-        binding.busLineList.adapter = busLinesAdapter
+        binding.busLineListRecyclerview.adapter = busLinesAdapter
+        binding.busLineListRecyclerview.addItemDecoration(
+            DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+        )
 
         // Observes the busLines LiveData list from the viewmodel,
-        // when changed it will update the recycleview adapter
+        // when changed it will update the recyclerview adapter
         lifecycleScope.launch {
             busLinesViewModel
                 .busLines
@@ -72,6 +78,6 @@ class BusLinesFragment : Fragment() {
         // Navigate to the bus stations page
         findNavController()
             .navigate(BusLinesFragmentDirections
-            .navigateToBusStationsActivityDest(directionLink, direction, busLineId))
+                .navigateToBusStationsActivityDest(directionLink, direction, busLineId))
     }
 }

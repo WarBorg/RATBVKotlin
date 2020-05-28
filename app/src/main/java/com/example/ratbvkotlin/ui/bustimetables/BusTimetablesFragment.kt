@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.ratbvkotlin.data.models.BusTimetableModel
 import com.example.ratbvkotlin.databinding.FragmentBusTimetableListBinding
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -37,11 +40,15 @@ class BusTimetablesFragment  : Fragment() {
         // Links the binding to the fragment layout [fragment_bus_station_list.xml]
         binding = FragmentBusTimetableListBinding.inflate(layoutInflater)
 
+        binding.busTimetablesViewModel = busTimetablesViewModel
+
         val busTimetablesAdapter = BusTimetablesAdapter()
-        //binding.busTimetablesList.adapter = busTimetablesAdapter
+        binding.busTimetableListRecyclerview.adapter = busTimetablesAdapter
+        binding.busTimetableListRecyclerview.addItemDecoration(
+            DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
 
         // Observes the busLines LiveData list from the viewmodel,
-        // when changed it will update the recycleview adapter
+        // when changed it will update the recyclerview adapter
         lifecycleScope.launch {
             busTimetablesViewModel
                 .busTimetables

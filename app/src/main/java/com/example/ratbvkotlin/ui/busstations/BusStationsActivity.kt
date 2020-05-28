@@ -25,19 +25,6 @@ class BusStationsActivity : AppCompatActivity() {
         navController.setGraph(R.navigation.bus_stations_navigation, args.toBundle())
 
         setupToolbar(navController)
-
-        /** Passing each menu ID as a set of Ids because each
-         *  menu should be considered as top level destinations.
-         */
-        //val appBarConfiguration = AppBarConfiguration(
-        //    setOf(
-        //        R.id.station_list_dest
-        //    )
-        //)
-
-        //setupActionBarWithNavController(navController, appBarConfiguration)
-
-        //navView.setupWithNavController(navController)
     }
 
     /**
