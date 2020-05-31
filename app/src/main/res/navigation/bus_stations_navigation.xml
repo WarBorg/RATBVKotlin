@@ -36,6 +36,9 @@
         <argument
             android:name="busStationId"
             app:argType="integer" />
+        <argument
+            android:name="busStationName"
+            app:argType="string" />
     </activity>
 
 </navigation>

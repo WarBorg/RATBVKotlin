@@ -52,7 +52,7 @@ class BusStationsViewModel(private val repository: BusRepository,
     inner class BusStationItemViewModel(val busStation: BusStationModel) : ViewModel() {
 
         fun onItemClicked() {
-            onBusStationClickListener?.invoke(busStation.scheduleLink, busStation.id)
+            onBusStationClickListener?.invoke(busStation.scheduleLink, busStation.id, busStation.name)
         }
     }
 }
@@ -60,4 +60,6 @@ class BusStationsViewModel(private val repository: BusRepository,
 /**
  * Shortcut for a method call when a [FragmentBusStationListItemBinding] is clicked.
  */
-typealias OnBusStationClickListener = (scheduleLink: String, busStationId: Int) -> Unit
+typealias OnBusStationClickListener = (scheduleLink: String,
+                                       busStationId: Int,
+                                       busStationName: String) -> Unit

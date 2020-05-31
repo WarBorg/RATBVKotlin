@@ -8,6 +8,7 @@ import com.example.ratbvkotlin.databinding.FragmentBusTimetableListItemBinding
 class BusTimetablesViewModel(private val repository: BusRepository,
                              private val scheduleLink: String,
                              private val busStationId: Int,
+                             val busStationName: String,
                              private val timetableType: String)
     : ViewModel() {
 

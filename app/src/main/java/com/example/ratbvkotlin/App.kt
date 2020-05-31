@@ -42,8 +42,8 @@ class App : Application() {
             BusStationsViewModel(get(), directionLink, direction, busLineId, busLineName)
         }
         viewModel {
-                (scheduleLink: String, busStationId: Int, timetableType: String) ->
-            BusTimetablesViewModel(get(), scheduleLink, busStationId, timetableType)
+                (scheduleLink: String, busStationId: Int, busStationName: String, timetableType: String) ->
+            BusTimetablesViewModel(get(), scheduleLink, busStationId, busStationName, timetableType)
         }
     }
 }
