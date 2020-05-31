@@ -29,7 +29,7 @@ class BusLinesViewModel(private val repository: BusRepository,
     /**
      * Gets the bus lines data from the repository as LiveData
      */
-    suspend fun refreshBusLines() {
+    suspend fun getBusLines() {
 
         _isRefreshing.value = true
 

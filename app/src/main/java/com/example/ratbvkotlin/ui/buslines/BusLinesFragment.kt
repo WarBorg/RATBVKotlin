@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.ratbvkotlin.databinding.FragmentBusLineListBinding
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -54,7 +53,7 @@ class BusLinesFragment : Fragment() {
         // Sets the behaviour when swiping to refresh
         binding.busLineListSwiperefreshlayout.setOnRefreshListener {
             lifecycleScope.launch {
-                busLinesViewModel.refreshBusLines()
+                busLinesViewModel.getBusLines()
             }
         }
 
@@ -75,7 +74,7 @@ class BusLinesFragment : Fragment() {
                 })
 
             // Gets the data when the fragment first loads
-            busLinesViewModel.refreshBusLines()
+            busLinesViewModel.getBusLines()
         }
 
         // Sets a listener to receive callbacks whenever an item is clicked

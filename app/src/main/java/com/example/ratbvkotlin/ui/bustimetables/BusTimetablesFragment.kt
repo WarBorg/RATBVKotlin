@@ -54,26 +54,44 @@ class BusTimetablesFragment  : Fragment() {
         // Sets the viewmodel for this page
         binding.busTimetablesViewModel = busTimetablesViewModel
 
+        // Creates the adapter for the Recyclerview
         val busTimetablesAdapter = BusTimetablesAdapter()
         binding.busTimetableListRecyclerview.adapter = busTimetablesAdapter
         binding.busTimetableListRecyclerview.addItemDecoration(
             DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
 
-        // Observes the busLines LiveData list from the viewmodel,
-        // when changed it will update the recyclerview adapter
+        // Sets the behaviour when swiping to refresh
+        binding.busTimetableListSwiperefreshlayout.setOnRefreshListener {
+            lifecycleScope.launch {
+                busTimetablesViewModel.getBusTimetables()
+            }
+        }
+
         lifecycleScope.launch {
+
+            // Observes the busLines LiveData list from the viewmodel, when changed it will update the recyclerview adapter
             busTimetablesViewModel
                 .busTimetables
                 .observe(viewLifecycleOwner, Observer { busTimetables ->
                     busTimetablesAdapter.submitList(busTimetables)
                 })
+
+            // Observes the isRefreshing variable to show or hide the Swiperefreshlayout busy icon
+            busTimetablesViewModel
+                .isRefreshing
+                .observe(viewLifecycleOwner, Observer { isRefreshing ->
+                    binding.busTimetableListSwiperefreshlayout.isRefreshing = isRefreshing
+                })
+
+            // Gets the data when the fragment first loads
+            busTimetablesViewModel.getBusTimetables()
         }
 
         return binding.root
     }
 
     /**
-     * Static constructor for the fragment with passed in values
+     * Static constructor for the fragment with passed in values and constants
      */
     companion object {
         private const val SCHEDULE_LINK_STRING = "scheduleLink"

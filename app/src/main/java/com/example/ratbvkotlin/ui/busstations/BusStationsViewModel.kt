@@ -30,7 +30,7 @@ class BusStationsViewModel(private val repository: BusRepository,
     /**
      * Gets the bus stations data from the repository as LiveData
      */
-    suspend fun refreshBusStations() {
+    suspend fun getBusStations() {
 
         _isRefreshing.value = true
 

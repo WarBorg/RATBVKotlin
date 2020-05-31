@@ -55,7 +55,7 @@ class BusStationsFragment : Fragment() {
         // Sets the behaviour when swiping to refresh
         binding.busStationListSwiperefreshlayout.setOnRefreshListener {
             lifecycleScope.launch {
-                busStationsViewModel.refreshBusStations()
+                busStationsViewModel.getBusStations()
             }
         }
 
@@ -76,7 +76,7 @@ class BusStationsFragment : Fragment() {
                 })
 
             // Gets the data when the fragment first loads
-            busStationsViewModel.refreshBusStations()
+            busStationsViewModel.getBusStations()
         }
 
         // Sets a listener to receive callbacks whenever an item is clicked
