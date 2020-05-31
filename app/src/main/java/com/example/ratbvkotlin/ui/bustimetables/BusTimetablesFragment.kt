@@ -97,7 +97,7 @@ class BusTimetablesFragment  : Fragment() {
     private fun setupSwipeRefreshLayout() {
         binding.busTimetableListSwiperefreshlayout.setOnRefreshListener {
             lifecycleScope.launch {
-                busTimetablesViewModel.getBusTimetables()
+                busTimetablesViewModel.getBusTimetables(true)
             }
         }
     }

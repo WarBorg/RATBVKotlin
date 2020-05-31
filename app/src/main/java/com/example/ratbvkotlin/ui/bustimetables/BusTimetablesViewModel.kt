@@ -26,13 +26,13 @@ class BusTimetablesViewModel(private val repository: BusRepository,
     /**
      * Gets the bus stations data from the repository as LiveData
      */
-    suspend fun getBusTimetables() {
+    suspend fun getBusTimetables(isForcedRefresh: Boolean = false) {
 
         _isRefreshing.value = true
 
         _busTimetables.value = repository.getBusTimetables(scheduleLink,
             busStationId,
-            true)
+            isForcedRefresh)
             .filter { busTimetableModel -> busTimetableModel.timeOfWeek == timetableType }
             .map { busTimetableModel -> BusTimetableItemViewModel(busTimetableModel) }
 

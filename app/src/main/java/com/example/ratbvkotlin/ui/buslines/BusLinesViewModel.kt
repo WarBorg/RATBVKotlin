@@ -5,8 +5,8 @@ import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.databinding.FragmentBusLineListItemBinding
 
-class BusLinesViewModel(private val repository: BusRepository,
-                        private val busTransportSubtype: String)
+class BusLinesViewModel(private val _repository: BusRepository,
+                        private val _busTransportSubtype: String)
     : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
@@ -29,12 +29,12 @@ class BusLinesViewModel(private val repository: BusRepository,
     /**
      * Gets the bus lines data from the repository as LiveData
      */
-    suspend fun getBusLines() {
+    suspend fun getBusLines(isForcedRefresh: Boolean = false) {
 
         _isRefreshing.value = true
 
-        _busLines.value = repository.getBusLines(true)
-            .filter { busLineModel -> busLineModel.type == busTransportSubtype }
+        _busLines.value = _repository.getBusLines(isForcedRefresh)
+            .filter { busLineModel -> busLineModel.type == _busTransportSubtype }
             .map { busLineModel -> BusLineItemViewModel(busLineModel) }
 
         _isRefreshing.value = false

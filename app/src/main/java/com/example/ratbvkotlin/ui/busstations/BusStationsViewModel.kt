@@ -33,7 +33,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
     /**
      * Gets the bus stations data from the repository as LiveData
      */
-    suspend fun getBusStations() {
+    suspend fun getBusStations(isForcedRefresh: Boolean = false) {
 
         _isRefreshing.value = true
 
@@ -47,7 +47,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
             directionLink,
             direction,
             _busLineId,
-            true)
+            isForcedRefresh)
             .map { busStationModel -> BusStationItemViewModel(busStationModel) }
 
         _isRefreshing.value = false

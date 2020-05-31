@@ -72,7 +72,7 @@ class BusLinesFragment : Fragment() {
     private fun setupSwipeRefreshLayout() {
         binding.busLineListSwiperefreshlayout.setOnRefreshListener {
             lifecycleScope.launch {
-                busLinesViewModel.getBusLines()
+                busLinesViewModel.getBusLines(true)
             }
         }
     }
