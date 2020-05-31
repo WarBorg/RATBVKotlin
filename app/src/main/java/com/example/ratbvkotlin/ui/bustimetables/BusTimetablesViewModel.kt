@@ -5,11 +5,11 @@ import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusTimetableModel
 import com.example.ratbvkotlin.databinding.FragmentBusTimetableListItemBinding
 
-class BusTimetablesViewModel(private val repository: BusRepository,
-                             private val scheduleLink: String,
-                             private val busStationId: Int,
+class BusTimetablesViewModel(private val _repository: BusRepository,
+                             private val _scheduleLink: String,
+                             private val _busStationId: Int,
                              val busStationName: String,
-                             private val timetableType: String)
+                             private val _timetableType: String)
     : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
@@ -30,10 +30,10 @@ class BusTimetablesViewModel(private val repository: BusRepository,
 
         _isRefreshing.value = true
 
-        _busTimetables.value = repository.getBusTimetables(scheduleLink,
-            busStationId,
+        _busTimetables.value = _repository.getBusTimetables(_scheduleLink,
+            _busStationId,
             isForcedRefresh)
-            .filter { busTimetableModel -> busTimetableModel.timeOfWeek == timetableType }
+            .filter { busTimetableModel -> busTimetableModel.timeOfWeek == _timetableType }
             .map { busTimetableModel -> BusTimetableItemViewModel(busTimetableModel) }
 
         _isRefreshing.value = false

@@ -1,6 +1,5 @@
 package com.example.ratbvkotlin.data
 
-import androidx.lifecycle.LiveData
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
 import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.data.models.BusStationModel
@@ -10,19 +9,19 @@ import java.util.*
 
 class BusRepository(
     // TODO Maybe I should send the whole database class here instead of individual DAO's
-    private val busLinesDao: BusLinesDao,
-    private val busStationsDao: BusStationsDao,
-    private val busTimetablesDao: BusTimetablesDao,
-    private val busWebService: IBusWebservice
+    private val _busLinesDao: BusLinesDao,
+    private val _busStationsDao: BusStationsDao,
+    private val _busTimetablesDao: BusTimetablesDao,
+    private val _busWebService: IBusWebservice
 ) {
 
     suspend fun getBusLines(isForcedRefresh: Boolean): List<BusLineModel> {
 
-        val busLinesCount = busLinesDao.countBusLines()
+        val busLinesCount = _busLinesDao.countBusLines()
 
         if (isForcedRefresh || busLinesCount == 0) {
 
-            val busLines = busWebService.getBusLines()
+            val busLines = _busWebService.getBusLines()
             val current = Calendar.getInstance().time
             val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
             val lastUpdated = formatter.format(current)
@@ -30,7 +29,7 @@ class BusRepository(
             insertBusLinesInDatabase(busLines, lastUpdated)
         }
 
-        return busLinesDao.getBusLines()
+        return _busLinesDao.getBusLines()
     }
 
     suspend fun getBusStations(directionLink: String,
@@ -39,11 +38,11 @@ class BusRepository(
                                isForcedRefresh: Boolean)
             : List<BusStationModel> {
 
-        val busStationsCount = busStationsDao.countBusStationsByBusLineIdAndDirection(busLineId, direction)
+        val busStationsCount = _busStationsDao.countBusStationsByBusLineIdAndDirection(busLineId, direction)
 
         if (isForcedRefresh || busStationsCount == 0) {
 
-            val busStations = busWebService.getBusStations(directionLink)
+            val busStations = _busWebService.getBusStations(directionLink)
             val current = Calendar.getInstance().time
             val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
             val lastUpdated = formatter.format(current)
@@ -51,7 +50,7 @@ class BusRepository(
             insertBusStationsInDatabase(busStations, busLineId, lastUpdated, direction)
         }
 
-        return busStationsDao.getBusStationsByBusLineIdAndDirection(busLineId, direction)
+        return _busStationsDao.getBusStationsByBusLineIdAndDirection(busLineId, direction)
     }
 
     suspend fun getBusTimetables(scheduleLink: String,
@@ -59,11 +58,11 @@ class BusRepository(
                                  isForcedRefresh: Boolean)
             : List<BusTimetableModel> {
 
-        val busTimetablesCount = busTimetablesDao.countBusTimetablesByBusStationId(busStationId)
+        val busTimetablesCount = _busTimetablesDao.countBusTimetablesByBusStationId(busStationId)
 
         if (isForcedRefresh || busTimetablesCount == 0) {
 
-            val busTimetables = busWebService.getBusTimetables(scheduleLink)
+            val busTimetables = _busWebService.getBusTimetables(scheduleLink)
             val current = Calendar.getInstance().time
             val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
             val lastUpdated = formatter.format(current)
@@ -71,7 +70,7 @@ class BusRepository(
             insertBusTimetablesInDatabase(busTimetables, busStationId, lastUpdated)
         }
 
-        return busTimetablesDao.getBusTimetablesByBusStationId(busStationId)
+        return _busTimetablesDao.getBusTimetablesByBusStationId(busStationId)
     }
 
     suspend fun downloadAllStationsTimetables(normalDirectionLink: String,
@@ -82,70 +81,74 @@ class BusRepository(
         val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
         val lastUpdated = formatter.format(current)
 
-        val busStationsNormalDirection = busWebService.getBusStations(normalDirectionLink)
-        busStationsNormalDirection.forEach { b ->
-            b.direction = "normal"
+        val busStationsNormalDirection = _busWebService.getBusStations(normalDirectionLink)
+        busStationsNormalDirection.forEach { busStationModel ->
+            busStationModel.direction = "normal"
         }
 
-        val busStationsReverseDirection = busWebService.getBusStations(reverseDirectionLink)
-        busStationsReverseDirection.forEach { b ->
-            b.direction = "reverse"
+        val busStationsReverseDirection = _busWebService.getBusStations(reverseDirectionLink)
+        busStationsReverseDirection.forEach { busStationModel ->
+            busStationModel.direction = "reverse"
         }
 
         val busStations = busStationsNormalDirection + busStationsReverseDirection
 
         insertBusStationsInDatabase(busStations, busLineId, lastUpdated)
 
-        busStations.forEach { b ->
-            val busTimetables = busWebService.getBusTimetables(b.scheduleLink)
+        val insertedBusStations = _busStationsDao.getBusStationsByBusLineId(busLineId)
 
-            insertBusTimetablesInDatabase(busTimetables, b.id, lastUpdated)
+        insertedBusStations.forEach { busStationModel ->
+            val busTimetables = _busWebService.getBusTimetables(busStationModel.scheduleLink)
+
+            insertBusTimetablesInDatabase(busTimetables, busStationModel.id, lastUpdated)
         }
     }
 
     private suspend fun insertBusLinesInDatabase(busLines: List<BusLineModel>,
                                                  lastUpdated: String) {
-        busLines.forEach { b ->
-            b.lastUpdateDate = lastUpdated
+        busLines.forEach { busLineModel ->
+            busLineModel.lastUpdateDate = lastUpdated
         }
 
-        busLinesDao.clearBusLines()
-        busLinesDao.saveBusLines(busLines)
+        _busLinesDao.clearBusLines()
+        _busLinesDao.saveBusLines(busLines)
     }
 
     private suspend fun insertBusStationsInDatabase(busStations: List<BusStationModel>,
                                                     busLineId: Int,
                                                     lastUpdated: String,
-                                                    direction: String? = null) {
-        busStations.forEach { b ->
-            b.busLineId = busLineId
-            b.lastUpdateDate = lastUpdated
+                                                    direction: String? = null): List<BusStationModel> {
+        busStations.forEach { busStationModel ->
+            busStationModel.busLineId = busLineId
+            busStationModel.lastUpdateDate = lastUpdated
 
             when {
                 direction != null -> {
-                    b.direction = direction
+                    busStationModel.direction = direction
                 }
             }
         }
 
         when (direction) {
             // Used from the [downloadAllStationsTimetables()] function is called
-            null -> busStationsDao.clearBusStationsByBusLineId(busLineId)
-            else -> busStationsDao.clearBusStationsByBusLineIdAndDirection(busLineId, direction)
+            null -> _busStationsDao.clearBusStationsByBusLineId(busLineId)
+            else -> _busStationsDao.clearBusStationsByBusLineIdAndDirection(busLineId, direction)
         }
 
-        busStationsDao.saveBusStations(busStations)
+        _busStationsDao.saveBusStations(busStations)
+
+        return busStations
     }
 
     private suspend fun insertBusTimetablesInDatabase(busTimetables: List<BusTimetableModel>,
                                                       busStationId: Int,
                                                       lastUpdated: String) {
-        busTimetables.forEach { b ->
-            b.busStationId = busStationId
-            b.lastUpdateDate = lastUpdated
+        busTimetables.forEach { busTimetableModel ->
+            busTimetableModel.busStationId = busStationId
+            busTimetableModel.lastUpdateDate = lastUpdated
         }
 
-        busTimetablesDao.clearBusTimetablesByBusStationId(busStationId)
-        busTimetablesDao.saveBusTimetables(busTimetables)
+        _busTimetablesDao.clearBusTimetablesByBusStationId(busStationId)
+        _busTimetablesDao.saveBusTimetables(busTimetables)
     }
 }
