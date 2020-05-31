@@ -142,6 +142,14 @@ class BusStationsFragment : Fragment() {
             R.id.station_list_action_download -> {
                 lifecycleScope.launch {
                     busStationsViewModel.downloadStationsTimetables()
+
+                    Toast
+                        .makeText(
+                            context,
+                            "Download of timetables for all stations is complete",
+                            Toast.LENGTH_LONG
+                        )
+                        .show()
                 }
 
                 return true

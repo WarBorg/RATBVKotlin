@@ -68,10 +68,17 @@ class BusStationsViewModel(private val _repository: BusRepository,
      */
     suspend fun downloadStationsTimetables() {
 
+        _isRefreshing.value = true
+
         _repository.downloadAllStationsTimetables(
             _directionLinkNormal,
             _directionLinkReverse,
             _busLineId)
+
+        // Refreshes the list with the new inserted stations
+        getBusStations()
+
+        _isRefreshing.value = false
     }
 
     /**

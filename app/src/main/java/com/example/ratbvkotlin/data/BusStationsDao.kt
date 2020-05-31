@@ -11,6 +11,9 @@ interface BusStationsDao {
     @Query("SELECT COUNT(*) FROM BusStations WHERE busLineId = :busLineId AND direction = :direction")
     suspend fun countBusStationsByBusLineIdAndDirection(busLineId: Int, direction: String): Int
 
+    @Query("SELECT * FROM BusStations WHERE busLineId = :busLineId")
+    suspend fun getBusStationsByBusLineId(busLineId: Int): List<BusStationModel>
+
     @Query("SELECT * FROM BusStations WHERE busLineId = :busLineId AND direction = :direction")
     suspend fun getBusStationsByBusLineIdAndDirection(busLineId: Int, direction: String): List<BusStationModel>
 
