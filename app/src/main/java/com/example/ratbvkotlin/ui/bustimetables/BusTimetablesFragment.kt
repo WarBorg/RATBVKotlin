@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.savedstate.SavedStateRegistry
 import com.example.ratbvkotlin.data.models.BusTimetableModel
 import com.example.ratbvkotlin.databinding.FragmentBusTimetableListBinding
 import kotlinx.coroutines.launch
@@ -25,11 +27,15 @@ class BusTimetablesFragment  : Fragment() {
 
     private lateinit var binding: FragmentBusTimetableListBinding
 
+    private lateinit var scheduleLink: String
+    private var busStationId: Int = 0
+    private lateinit var timetableType: String
+
     // Gets the arguments passed to the fragment
-    private val args: BusTimetablesFragmentArgs by navArgs()
+    //private val args: BusTimetablesFragmentArgs by navArgs()
     // Sets the viewmodel parameters with the necessary arguments
     private val busTimetablesViewModel: BusTimetablesViewModel by viewModel {
-        parametersOf(args.scheduleLink, args.busStationId, args.timetableType)
+        parametersOf(scheduleLink, busStationId, timetableType)
     }
 
     override fun onCreateView(
@@ -39,6 +45,10 @@ class BusTimetablesFragment  : Fragment() {
 
         // Links the binding to the fragment layout [fragment_bus_station_list.xml]
         binding = FragmentBusTimetableListBinding.inflate(layoutInflater)
+
+        scheduleLink = arguments?.getString(SCHEDULE_LINK_STRING) ?: ""
+        busStationId = arguments?.getInt(BUS_STATION_ID_INT) ?: 0
+        timetableType = arguments?.getString(TIMETABLE_TYPE_STRING) ?: ""
 
         binding.busTimetablesViewModel = busTimetablesViewModel
 
@@ -58,5 +68,38 @@ class BusTimetablesFragment  : Fragment() {
         }
 
         return binding.root
+    }
+
+    /*private val savedStateProvider = SavedStateRegistry.SavedStateProvider {
+        bundleOf(
+            SCHEDULE_LINK_STRING to scheduleLink,
+            BUS_STATION_ID_INT to busStationId,
+            TIMETABLE_TYPE_STRING to timetableType )
+
+//        Bundle().apply {
+//            putString(SCHEDULE_LINK_STRING, scheduleLink)
+//        }
+    }*/
+
+    companion object {
+        private const val SCHEDULE_LINK_STRING = "scheduleLink"
+        private const val BUS_STATION_ID_INT = "busStationId"
+        private const val TIMETABLE_TYPE_STRING = "timetableType"
+
+        /*fun newInstance(scheduleLink: String,
+                        busStationId: Int,
+                        timetableType: String) {
+            savedStateRegistry
+                .registerSavedStateProvider(SCHEDULE_LINK_STRING, savedStateProvider)
+        }*/
+
+        fun newInstance(scheduleLink: String,
+                        busStationId: Int,
+                        timetableType: String) = BusTimetablesFragment().apply {
+            arguments = bundleOf(
+                SCHEDULE_LINK_STRING to scheduleLink,
+                BUS_STATION_ID_INT to busStationId,
+                TIMETABLE_TYPE_STRING to timetableType)
+        }
     }
 }
