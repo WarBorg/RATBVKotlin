@@ -15,4 +15,6 @@
 
     <string name="title_activity_bus_stations">Bus Stations</string>
     <string name="title_activity_bus_timetables">Bus Timetables</string>
+    <string name="bus_station_list_option_reverse">Reverse</string>
+    <string name="bus_station_list_option_download">Download</string>
 </resources>

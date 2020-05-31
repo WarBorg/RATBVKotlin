@@ -1,10 +1,9 @@
 package com.example.ratbvkotlin.ui.busstations
 
 import android.os.Bundle
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.ratbvkotlin.R
 import com.example.ratbvkotlin.databinding.FragmentBusStationListBinding
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -46,6 +46,8 @@ class BusStationsFragment : Fragment() {
         binding.lifecycleOwner = this
         // Sets the viewmodel for this page
         binding.busStationsViewModel = busStationsViewModel
+
+        setHasOptionsMenu(true)
 
         setupRecyclerView()
         setupSupportActionBar()
@@ -112,6 +114,29 @@ class BusStationsFragment : Fragment() {
             // Gets the data when the fragment first loads
             busStationsViewModel.getBusStations()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
+        inflater.inflate(R.menu.bus_stations_options_menu, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.station_list_action_reverse -> {
+                Toast.makeText(context, "reverse", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            R.id.station_list_action_download -> {
+                Toast.makeText(context, "download", Toast.LENGTH_SHORT).show()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     /**
