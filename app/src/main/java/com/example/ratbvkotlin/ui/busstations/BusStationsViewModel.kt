@@ -1,9 +1,6 @@
 package com.example.ratbvkotlin.ui.busstations
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusStationModel
 import com.example.ratbvkotlin.databinding.FragmentBusStationListItemBinding
@@ -14,26 +11,37 @@ class BusStationsViewModel(private val repository: BusRepository,
                            private val busLineId: Int)
     : ViewModel() {
 
-    private val _lastUpdated = MutableLiveData("Never")
-    val lastUpdated: LiveData<String> = _lastUpdated
+    private val _isRefreshing = MutableLiveData(false)
+    private val _busStations = MutableLiveData<List<BusStationItemViewModel>>()
+
+    val isRefreshing: LiveData<Boolean> = _isRefreshing
+    val busStations: LiveData<List<BusStationItemViewModel>> = _busStations
+
+    // Sets the lastUpdated value based on the first item of the list since all will have the same value
+    val lastUpdated: LiveData<String> = Transformations.map(_busStations) { busStations ->
+        busStations.firstOrNull()?.busStation?.lastUpdateDate ?: "Never"
+    }
 
     /**
      * Listener set by [BusStationsFragment] in order to get notified when an [FragmentBusStationListItemBinding] is clicked.
      */
     var onBusStationClickListener: OnBusStationClickListener? = null
 
-    val busStations : LiveData<List<BusStationsViewModel.BusStationItemViewModel>> = liveData {
-        val busStations = repository.getBusStations(directionLink,
-                                                                                              direction,
-                                                                                              busLineId,
-                                                                                true)
+    /**
+     * Gets the bus stations data from the repository as LiveData
+     */
+    suspend fun refreshBusStations() {
+
+        _isRefreshing.value = true
+
+        _busStations.value = repository.getBusStations(
+            directionLink,
+            direction,
+            busLineId,
+            true)
             .map { busStationModel -> BusStationItemViewModel(busStationModel) }
 
-
-         // Sets the lastUpdated value based on the first item of the list since all will have the same value
-        _lastUpdated.value = busStations.firstOrNull()?.busStation?.lastUpdateDate ?: "Never"
-
-        emit(busStations)
+        _isRefreshing.value = false
     }
 
     /**

@@ -45,19 +45,38 @@ class BusStationsFragment : Fragment() {
         // Sets the viewmodel for this page
         binding.busStationsViewModel = busStationsViewModel
 
+        // Creates the adapter for the Recyclerview
         val busStationsAdapter = BusStationsAdapter()
         binding.busStationListRecyclerview.adapter = busStationsAdapter
         binding.busStationListRecyclerview.addItemDecoration(
             DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
         )
 
-        // Observes the busLines LiveData list from the viewmodel, when changed it will update the recyclerview adapter
+        // Sets the behaviour when swiping to refresh
+        binding.busStationListSwiperefreshlayout.setOnRefreshListener {
+            lifecycleScope.launch {
+                busStationsViewModel.refreshBusStations()
+            }
+        }
+
         lifecycleScope.launch {
+
+            // Observes the busLines LiveData list from the viewmodel, when changed it will update the recyclerview adapter
             busStationsViewModel
                 .busStations
                 .observe(viewLifecycleOwner, Observer { busStations ->
                     busStationsAdapter.submitList(busStations)
                 })
+
+            // Observes the isRefreshing variable to show or hide the Swiperefreshlayout busy icon
+            busStationsViewModel
+                .isRefreshing
+                .observe(viewLifecycleOwner, Observer { isRefreshing ->
+                    binding.busStationListSwiperefreshlayout.isRefreshing = isRefreshing
+                })
+
+            // Gets the data when the fragment first loads
+            busStationsViewModel.refreshBusStations()
         }
 
         // Sets a listener to receive callbacks whenever an item is clicked

@@ -10,7 +10,7 @@ class BusLinesViewModel(private val repository: BusRepository,
     : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
-    private val _busLines = MutableLiveData<List<BusLinesViewModel.BusLineItemViewModel>>()
+    private val _busLines = MutableLiveData<List<BusLineItemViewModel>>()
 
     val isRefreshing: LiveData<Boolean> = _isRefreshing
     val busLines: LiveData<List<BusLineItemViewModel>> = _busLines
@@ -27,7 +27,7 @@ class BusLinesViewModel(private val repository: BusRepository,
 
 
     /**
-     * Gets the bus line data from the repository as LiveData
+     * Gets the bus lines data from the repository as LiveData
      */
     suspend fun refreshBusLines() {
 
