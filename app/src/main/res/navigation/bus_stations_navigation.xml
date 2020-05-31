@@ -11,10 +11,10 @@
         android:label="Line 1 Test"
         tools:layout="@layout/fragment_bus_station_list" >
         <argument
-            android:name="directionLink"
+            android:name="directionLinkNormal"
             app:argType="string" />
         <argument
-            android:name="direction"
+            android:name="directionLinkReverse"
             app:argType="string" />
         <argument
             android:name="busLineId"

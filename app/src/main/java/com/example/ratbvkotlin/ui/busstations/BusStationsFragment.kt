@@ -31,7 +31,7 @@ class BusStationsFragment : Fragment() {
     private val args: BusStationsFragmentArgs by navArgs()
     // Sets the viewmodel parameters with the necessary arguments
     private val busStationsViewModel: BusStationsViewModel by viewModel {
-        parametersOf(args.directionLink, args.direction, args.busLineId, args.busLineName)
+        parametersOf(args.directionLinkNormal, args.directionLinkReverse, args.busLineId, args.busLineName)
     }
 
     override fun onCreateView(
@@ -116,6 +116,9 @@ class BusStationsFragment : Fragment() {
         }
     }
 
+    /**
+     * Creates the menu options on the right of the toolbar
+     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
         inflater.inflate(R.menu.bus_stations_options_menu, menu)
@@ -123,15 +126,24 @@ class BusStationsFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    /**
+     * Creates actions for different selected menu option
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
             R.id.station_list_action_reverse -> {
-                Toast.makeText(context, "reverse", Toast.LENGTH_SHORT).show()
+                lifecycleScope.launch {
+                    busStationsViewModel.reverseStations()
+                }
+
                 return true
             }
             R.id.station_list_action_download -> {
-                Toast.makeText(context, "download", Toast.LENGTH_SHORT).show()
+                lifecycleScope.launch {
+                    busStationsViewModel.downloadStationsTimetables()
+                }
+
                 return true
             }
         }

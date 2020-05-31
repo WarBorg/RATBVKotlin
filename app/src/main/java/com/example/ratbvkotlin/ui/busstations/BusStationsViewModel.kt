@@ -5,10 +5,10 @@ import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusStationModel
 import com.example.ratbvkotlin.databinding.FragmentBusStationListItemBinding
 
-class BusStationsViewModel(private val repository: BusRepository,
-                           private val directionLink: String,
-                           private val direction: String,
-                           private val busLineId: Int,
+class BusStationsViewModel(private val _repository: BusRepository,
+                           private val _directionLinkNormal: String,
+                           private val _directionLinkReverse: String,
+                           private val _busLineId: Int,
                            val busLineName: String)
     : ViewModel() {
 
@@ -28,6 +28,8 @@ class BusStationsViewModel(private val repository: BusRepository,
      */
     var onBusStationClickListener: OnBusStationClickListener? = null
 
+    var direction = "normal"
+
     /**
      * Gets the bus stations data from the repository as LiveData
      */
@@ -35,14 +37,41 @@ class BusStationsViewModel(private val repository: BusRepository,
 
         _isRefreshing.value = true
 
-        _busStations.value = repository.getBusStations(
+        val directionLink = when (direction) {
+            "normal" -> _directionLinkNormal
+            "reverse" -> _directionLinkReverse
+            else -> _directionLinkNormal
+        }
+
+        _busStations.value = _repository.getBusStations(
             directionLink,
             direction,
-            busLineId,
+            _busLineId,
             true)
             .map { busStationModel -> BusStationItemViewModel(busStationModel) }
 
         _isRefreshing.value = false
+    }
+
+    /**
+     * Reverses the bus stations
+     */
+    suspend fun reverseStations() {
+
+        direction = if (direction == "normal") "reverse" else "normal"
+
+        getBusStations()
+    }
+
+    /**
+     * Downloads all timetables for all stations of specific bus line
+     */
+    suspend fun downloadStationsTimetables() {
+
+        _repository.downloadAllStationsTimetables(
+            _directionLinkNormal,
+            _directionLinkReverse,
+            _busLineId)
     }
 
     /**

@@ -47,7 +47,7 @@ class BusLinesViewModel(private val repository: BusRepository,
     inner class BusLineItemViewModel(val busLine: BusLineModel) : ViewModel() {
 
         fun onItemClicked() {
-            onBusLineClickListener?.invoke(busLine.linkNormalWay,"normal", busLine.id, busLine.name)
+            onBusLineClickListener?.invoke(busLine.linkNormalWay, busLine.linkReverseWay, busLine.id, busLine.name)
         }
     }
 }
@@ -55,7 +55,7 @@ class BusLinesViewModel(private val repository: BusRepository,
 /**
  * Shortcut for a method call when a [FragmentBusLineListItemBinding] is clicked.
  */
-typealias OnBusLineClickListener = (directionLink: String,
-                                    direction: String,
+typealias OnBusLineClickListener = (directionLinkNormal: String,
+                                    directionLinkReverse: String,
                                     busLineId: Int,
                                     busLineName: String) -> Unit
