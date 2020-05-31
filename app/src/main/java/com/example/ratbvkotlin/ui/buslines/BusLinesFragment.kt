@@ -38,6 +38,9 @@ class BusLinesFragment : Fragment() {
         // Links the binding to the fragment layout [fragment_bus_line_list.xml]
         binding = FragmentBusLineListBinding.inflate(layoutInflater)
 
+        // Uses Fragment.viewLifecycleOwner for LiveData Binding
+        binding.lifecycleOwner = this
+        // Sets the viewmodel for this page
         binding.busLinesViewModel = busLinesViewModel
 
         val busLinesAdapter = BusLinesAdapter()

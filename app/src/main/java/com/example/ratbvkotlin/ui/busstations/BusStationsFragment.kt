@@ -40,6 +40,9 @@ class BusStationsFragment : Fragment() {
         // Links the binding to the fragment layout [fragment_bus_station_list.xml]
         binding = FragmentBusStationListBinding.inflate(layoutInflater)
 
+        // Uses Fragment.viewLifecycleOwner for LiveData Binding
+        binding.lifecycleOwner = this
+        // Sets the viewmodel for this page
         binding.busStationsViewModel = busStationsViewModel
 
         val busStationsAdapter = BusStationsAdapter()
@@ -48,8 +51,7 @@ class BusStationsFragment : Fragment() {
             DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
         )
 
-        // Observes the busLines LiveData list from the viewmodel,
-        // when changed it will update the recyclerview adapter
+        // Observes the busLines LiveData list from the viewmodel, when changed it will update the recyclerview adapter
         lifecycleScope.launch {
             busStationsViewModel
                 .busStations

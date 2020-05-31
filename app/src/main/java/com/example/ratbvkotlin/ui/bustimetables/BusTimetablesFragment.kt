@@ -50,6 +50,9 @@ class BusTimetablesFragment  : Fragment() {
         busStationId = arguments?.getInt(BUS_STATION_ID_INT) ?: 0
         timetableType = arguments?.getString(TIMETABLE_TYPE_STRING) ?: ""
 
+        // Uses Fragment.viewLifecycleOwner for LiveData Binding
+        binding.lifecycleOwner = this
+        // Sets the viewmodel for this page
         binding.busTimetablesViewModel = busTimetablesViewModel
 
         val busTimetablesAdapter = BusTimetablesAdapter()

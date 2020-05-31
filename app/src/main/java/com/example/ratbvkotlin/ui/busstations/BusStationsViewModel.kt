@@ -1,6 +1,7 @@
 package com.example.ratbvkotlin.ui.busstations
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.example.ratbvkotlin.data.BusRepository
@@ -13,12 +14,13 @@ class BusStationsViewModel(private val repository: BusRepository,
                            private val busLineId: Int)
     : ViewModel() {
 
+    private val _lastUpdated = MutableLiveData("Never")
+    val lastUpdated: LiveData<String> = _lastUpdated
+
     /**
      * Listener set by [BusStationsFragment] in order to get notified when an [FragmentBusStationListItemBinding] is clicked.
      */
     var onBusStationClickListener: OnBusStationClickListener? = null
-
-    var lastUpdated: String = "Never"
 
     val busStations : LiveData<List<BusStationsViewModel.BusStationItemViewModel>> = liveData {
         val busStations = repository.getBusStations(directionLink,
@@ -26,6 +28,10 @@ class BusStationsViewModel(private val repository: BusRepository,
                                                                                               busLineId,
                                                                                 true)
             .map { busStationModel -> BusStationItemViewModel(busStationModel) }
+
+
+         // Sets the lastUpdated value based on the first item of the list since all will have the same value
+        _lastUpdated.value = busStations.firstOrNull()?.busStation?.lastUpdateDate ?: "Never"
 
         emit(busStations)
     }
