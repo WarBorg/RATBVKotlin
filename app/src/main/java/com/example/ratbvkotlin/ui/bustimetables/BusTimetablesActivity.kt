@@ -20,15 +20,9 @@ class BusTimetablesActivity : AppCompatActivity(R.layout.activity_bus_timetables
 
         val navView: BottomNavigationView = findViewById(R.id.bus_timetable_list_nav_view)
 
-        /**
-         * Forces [BusTimetablesActivity] appbar to display the back button in the appbar
-         */
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        setupToolbar()
 
-        /**
-         * Creates the listener for switching the bottom navigation tabs
-         */
+        // Creates the listener for switching the bottom navigation tabs
         navView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.weekdays_dest -> replaceTimetableFragment("WeekDays")
@@ -39,10 +33,19 @@ class BusTimetablesActivity : AppCompatActivity(R.layout.activity_bus_timetables
             true
         }
 
-        /**
-         * Loads the first tab fragment
-         */
+        //Loads the first tab fragment when Activity is created
         replaceTimetableFragment("WeekDays")
+    }
+
+    /**
+     * Forces [BusTimetablesActivity] appbar to display the back button in the appbar
+     */
+    private fun setupToolbar() {
+
+        supportActionBar?.title = "this is a test "
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     private fun replaceTimetableFragment(timetableType: String) {

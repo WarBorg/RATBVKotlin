@@ -57,5 +57,8 @@
         <argument
             android:name="busLineId"
             app:argType="integer" />
+        <argument
+            android:name="busLineName"
+            app:argType="string" />
     </activity>
 </navigation>

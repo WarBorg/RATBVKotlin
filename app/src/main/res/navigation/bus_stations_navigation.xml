@@ -22,6 +22,9 @@
         <action
             android:id="@+id/navigateTo_busTimetablesActivity_dest"
             app:destination="@id/busTimetablesActivity" />
+        <argument
+            android:name="busLineName"
+            app:argType="string" />
     </fragment>
     <activity
         android:id="@+id/busTimetablesActivity"

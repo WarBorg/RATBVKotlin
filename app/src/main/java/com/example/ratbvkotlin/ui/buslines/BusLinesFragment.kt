@@ -95,10 +95,13 @@ class BusLinesFragment : Fragment() {
     /**
      * Called when an item is clicked in [BusLinesViewModel].
      */
-    private val onBusLineClickListener: OnBusLineClickListener = { directionLink, direction, busLineId ->
+    private val onBusLineClickListener: OnBusLineClickListener = { directionLink,
+                                                                   direction,
+                                                                   busLineId,
+                                                                   busLineName ->
         // Navigate to the bus stations page
         findNavController()
             .navigate(BusLinesFragmentDirections
-                .navigateToBusStationsActivityDest(directionLink, direction, busLineId))
+                .navigateToBusStationsActivityDest(directionLink, direction, busLineId, busLineName))
     }
 }

@@ -38,11 +38,11 @@ class App : Application() {
         single { BusRepository(get(), get(), get() , get()) }
         viewModel { (busTransportSubtype : String) -> BusLinesViewModel(get(), busTransportSubtype) }
         viewModel {
-                (directionLink: String, direction: String, busLineId : Int) ->
-            BusStationsViewModel(get(), directionLink, direction, busLineId)
+                (directionLink: String, direction: String, busLineId: Int, busLineName: String) ->
+            BusStationsViewModel(get(), directionLink, direction, busLineId, busLineName)
         }
         viewModel {
-                (scheduleLink: String, busStationId : Int, timetableType: String) ->
+                (scheduleLink: String, busStationId: Int, timetableType: String) ->
             BusTimetablesViewModel(get(), scheduleLink, busStationId, timetableType)
         }
     }

@@ -2,42 +2,33 @@ package com.example.ratbvkotlin.ui.busstations
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.navArgs
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.ratbvkotlin.R
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class BusStationsActivity : AppCompatActivity() {
+class BusStationsActivity : AppCompatActivity(R.layout.activity_bus_stations) {
 
     private val args: BusStationsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_bus_stations)
-
-        val navView: BottomNavigationView = findViewById(R.id.bus_station_list_nav_view)
-
         val navController = findNavController(R.id.bus_station_list_nav_host_fragment)
         navController.setGraph(R.navigation.bus_stations_navigation, args.toBundle())
 
-        setupToolbar(navController)
+        setupToolbar()
     }
 
     /**
      * Forces [BusStationsActivity] appbar to display the back button in the appbar
      */
-    private fun setupToolbar(navController: NavController) {
+    private fun setupToolbar() {
 
-        val appBarConfiguration =
-            AppBarConfiguration.Builder()
-                .setFallbackOnNavigateUpListener { navController.navigateUp() }
-                .build()
+        // Sets the title of the action bar based on the bus line
+        //supportActionBar?.title = "this is a test "
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     /**

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,7 +30,7 @@ class BusStationsFragment : Fragment() {
     private val args: BusStationsFragmentArgs by navArgs()
     // Sets the viewmodel parameters with the necessary arguments
     private val busStationsViewModel: BusStationsViewModel by viewModel {
-        parametersOf(args.directionLink, args.direction, args.busLineId)
+        parametersOf(args.directionLink, args.direction, args.busLineId, args.busLineName)
     }
 
     override fun onCreateView(
@@ -51,6 +52,12 @@ class BusStationsFragment : Fragment() {
         binding.busStationListRecyclerview.addItemDecoration(
             DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
         )
+
+        // Sets the action bar title based on what bus line was chosen
+        (activity as AppCompatActivity).supportActionBar?.title = "Bus stations for ${busStationsViewModel.busLineName}"
+
+        // Sets a listener to receive callbacks whenever an item is clicked
+        busStationsViewModel.onBusStationClickListener = onBusTimetableClickListener
 
         // Sets the behaviour when swiping to refresh
         binding.busStationListSwiperefreshlayout.setOnRefreshListener {
@@ -78,9 +85,6 @@ class BusStationsFragment : Fragment() {
             // Gets the data when the fragment first loads
             busStationsViewModel.getBusStations()
         }
-
-        // Sets a listener to receive callbacks whenever an item is clicked
-        busStationsViewModel.onBusStationClickListener = onBusTimetableClickListener
 
         return binding.root
     }

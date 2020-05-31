@@ -8,7 +8,8 @@ import com.example.ratbvkotlin.databinding.FragmentBusStationListItemBinding
 class BusStationsViewModel(private val repository: BusRepository,
                            private val directionLink: String,
                            private val direction: String,
-                           private val busLineId: Int)
+                           private val busLineId: Int,
+                           val busLineName: String)
     : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
