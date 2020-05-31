@@ -25,6 +25,7 @@ import org.koin.core.parameter.parametersOf
 class BusStationsFragment : Fragment() {
 
     private lateinit var binding: FragmentBusStationListBinding
+    private lateinit var busStationsAdapter: BusStationsAdapter
 
     // Gets the arguments passed to the fragment
     private val args: BusStationsFragmentArgs by navArgs()
@@ -46,26 +47,52 @@ class BusStationsFragment : Fragment() {
         // Sets the viewmodel for this page
         binding.busStationsViewModel = busStationsViewModel
 
-        // Creates the adapter for the Recyclerview
-        val busStationsAdapter = BusStationsAdapter()
-        binding.busStationListRecyclerview.adapter = busStationsAdapter
-        binding.busStationListRecyclerview.addItemDecoration(
-            DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-        )
-
-        // Sets the action bar title based on what bus line was chosen
-        (activity as AppCompatActivity).supportActionBar?.title = "Bus stations for ${busStationsViewModel.busLineName}"
+        setupRecyclerView()
+        setupSupportActionBar()
+        setupSwipeRefreshLayout()
+        setupLiveDataObservers()
 
         // Sets a listener to receive callbacks whenever an item is clicked
         busStationsViewModel.onBusStationClickListener = onBusTimetableClickListener
 
-        // Sets the behaviour when swiping to refresh
+        return binding.root
+    }
+
+    /**
+     * Creates the adapter for the Recyclerview
+     */
+    private fun setupRecyclerView() {
+
+        busStationsAdapter = BusStationsAdapter()
+        binding.busStationListRecyclerview.adapter = busStationsAdapter
+        binding.busStationListRecyclerview.addItemDecoration(
+            DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+        )
+    }
+
+    /**
+     * Sets the action bar title based on what bus line was chosen
+     */
+    private fun setupSupportActionBar() {
+        (activity as AppCompatActivity).supportActionBar?.title =
+            "Bus stations for ${busStationsViewModel.busLineName}"
+    }
+
+    /**
+     * Sets the behaviour when swiping to refresh
+     */
+    private fun setupSwipeRefreshLayout() {
         binding.busStationListSwiperefreshlayout.setOnRefreshListener {
             lifecycleScope.launch {
                 busStationsViewModel.getBusStations()
             }
         }
+    }
 
+    /**
+     * Sets observers for LiveData coming from the [BusStationsViewModel]
+     */
+    private fun setupLiveDataObservers() {
         lifecycleScope.launch {
 
             // Observes the busLines LiveData list from the viewmodel, when changed it will update the recyclerview adapter
@@ -85,8 +112,6 @@ class BusStationsFragment : Fragment() {
             // Gets the data when the fragment first loads
             busStationsViewModel.getBusStations()
         }
-
-        return binding.root
     }
 
     /**
@@ -101,10 +126,12 @@ class BusStationsFragment : Fragment() {
     /**
      * Called when an item is clicked in [BusStationsViewModel].
      */
-    private val onBusTimetableClickListener: OnBusStationClickListener = { scheduleLink, busStationId ->
+    private val onBusTimetableClickListener: OnBusStationClickListener = { scheduleLink,
+                                                                           busStationId,
+                                                                           busStationName ->
         // Navigate to the bus timetables page
         findNavController()
             .navigate(BusStationsFragmentDirections
-                .navigateToBusTimetablesActivityDest(scheduleLink, busStationId))
+                .navigateToBusTimetablesActivityDest(scheduleLink, busStationId, busStationName))
     }
 }

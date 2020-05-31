@@ -24,6 +24,7 @@ import org.koin.core.parameter.parametersOf
 class BusLinesFragment : Fragment() {
 
     private lateinit var binding: FragmentBusLineListBinding
+    private lateinit var busLinesAdapter: BusLinesAdapter
 
     // Gets the arguments passed to the fragment
     private val args: BusLinesFragmentArgs by navArgs()
@@ -43,20 +44,43 @@ class BusLinesFragment : Fragment() {
         // Sets the viewmodel for this page
         binding.busLinesViewModel = busLinesViewModel
 
+        setupRecyclerView()
+        setupSwipeRefreshLayout()
+        setupLiveDataObservers()
+
+        // Sets a listener to receive callbacks whenever an item is clicked
+        busLinesViewModel.onBusLineClickListener = onBusLineClickListener
+
+        return binding.root
+    }
+
+    /**
+     * Creates the adapter for the Recyclerview
+     */
+    private fun setupRecyclerView() {
         // Creates the adapter for the Recyclerview
-        val busLinesAdapter = BusLinesAdapter()
+        busLinesAdapter = BusLinesAdapter()
         binding.busLineListRecyclerview.adapter = busLinesAdapter
         binding.busLineListRecyclerview.addItemDecoration(
             DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
         )
+    }
 
-        // Sets the behaviour when swiping to refresh
+    /**
+     * Sets the behaviour when swiping to refresh
+     */
+    private fun setupSwipeRefreshLayout() {
         binding.busLineListSwiperefreshlayout.setOnRefreshListener {
             lifecycleScope.launch {
                 busLinesViewModel.getBusLines()
             }
         }
+    }
 
+    /**
+     * Sets observers for LiveData coming from the [BusLinesViewModel]
+     */
+    private fun setupLiveDataObservers() {
         lifecycleScope.launch {
 
             // Observes the busLines LiveData list from the viewmodel, when changed it will update the recyclerview adapter
@@ -64,7 +88,7 @@ class BusLinesFragment : Fragment() {
                 .busLines
                 .observe(viewLifecycleOwner, Observer { busLines ->
                     busLinesAdapter.submitList(busLines)
-            })
+                })
 
             // Observes the isRefreshing variable to show or hide the Swiperefreshlayout busy icon
             busLinesViewModel
@@ -76,11 +100,6 @@ class BusLinesFragment : Fragment() {
             // Gets the data when the fragment first loads
             busLinesViewModel.getBusLines()
         }
-
-        // Sets a listener to receive callbacks whenever an item is clicked
-        busLinesViewModel.onBusLineClickListener = onBusLineClickListener
-
-        return binding.root
     }
 
     /**
