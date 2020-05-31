@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/bus_dest"
         android:name="com.example.ratbvkotlin.ui.buslines.BusLinesFragment"
-        android:label="@string/title_bus"
+        android:label="@string/title_bus_lines"
         tools:layout="@layout/fragment_bus_line_list" >
         <argument
             android:name="busTransportSubtype"
@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/midibus_dest"
         android:name="com.example.ratbvkotlin.ui.buslines.BusLinesFragment"
-        android:label="@string/title_midibus"
+        android:label="@string/title_midibus_lines"
         tools:layout="@layout/fragment_bus_line_list" >
         <argument
             android:name="busTransportSubtype"
@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/trolleybus_dest"
         android:name="com.example.ratbvkotlin.ui.buslines.BusLinesFragment"
-        android:label="@string/title_trolleybus"
+        android:label="@string/title_trolleybus_lines"
         tools:layout="@layout/fragment_bus_line_list" >
         <argument
             android:name="busTransportSubtype"
