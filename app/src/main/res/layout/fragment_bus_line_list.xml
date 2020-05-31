@@ -22,20 +22,27 @@
             android:text='@{"Last updated: " + busLinesViewModel.lastUpdated}'
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:gravity="end"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="@dimen/child_view_left_right_margin"
+            android:layout_marginRight="@dimen/child_view_left_right_margin"
             tools:text="Last Updated: 24.05.2020 14:34"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/bus_line_list_recyclerview"
-            android:name="com.example.ratbvkotlin.ui.buslinez.BusLinezFragment"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/bus_line_list_swiperefreshlayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:context=".ui.buslines.BusLinesFragment"
-            tools:listitem="@layout/fragment_bus_line_list_item" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bus_line_list_recyclerview"
+                android:name="com.example.ratbvkotlin.ui.buslinez.BusLinezFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/child_view_left_right_margin"
+                android:layout_marginRight="@dimen/child_view_left_right_margin"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:context=".ui.buslines.BusLinesFragment"
+                tools:listitem="@layout/fragment_bus_line_list_item" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

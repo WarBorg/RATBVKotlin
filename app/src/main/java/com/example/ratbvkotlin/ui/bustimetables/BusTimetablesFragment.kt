@@ -31,8 +31,6 @@ class BusTimetablesFragment  : Fragment() {
     private var busStationId: Int = 0
     private lateinit var timetableType: String
 
-    // Gets the arguments passed to the fragment
-    //private val args: BusTimetablesFragmentArgs by navArgs()
     // Sets the viewmodel parameters with the necessary arguments
     private val busTimetablesViewModel: BusTimetablesViewModel by viewModel {
         parametersOf(scheduleLink, busStationId, timetableType)
@@ -46,6 +44,7 @@ class BusTimetablesFragment  : Fragment() {
         // Links the binding to the fragment layout [fragment_bus_station_list.xml]
         binding = FragmentBusTimetableListBinding.inflate(layoutInflater)
 
+        // Gets the passed data when navigating from the Activity
         scheduleLink = arguments?.getString(SCHEDULE_LINK_STRING) ?: ""
         busStationId = arguments?.getInt(BUS_STATION_ID_INT) ?: 0
         timetableType = arguments?.getString(TIMETABLE_TYPE_STRING) ?: ""
@@ -73,28 +72,13 @@ class BusTimetablesFragment  : Fragment() {
         return binding.root
     }
 
-    /*private val savedStateProvider = SavedStateRegistry.SavedStateProvider {
-        bundleOf(
-            SCHEDULE_LINK_STRING to scheduleLink,
-            BUS_STATION_ID_INT to busStationId,
-            TIMETABLE_TYPE_STRING to timetableType )
-
-//        Bundle().apply {
-//            putString(SCHEDULE_LINK_STRING, scheduleLink)
-//        }
-    }*/
-
+    /**
+     * Static constructor for the fragment with passed in values
+     */
     companion object {
         private const val SCHEDULE_LINK_STRING = "scheduleLink"
         private const val BUS_STATION_ID_INT = "busStationId"
         private const val TIMETABLE_TYPE_STRING = "timetableType"
-
-        /*fun newInstance(scheduleLink: String,
-                        busStationId: Int,
-                        timetableType: String) {
-            savedStateRegistry
-                .registerSavedStateProvider(SCHEDULE_LINK_STRING, savedStateProvider)
-        }*/
 
         fun newInstance(scheduleLink: String,
                         busStationId: Int,

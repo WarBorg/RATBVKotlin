@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.ratbvkotlin.databinding.FragmentBusLineListBinding
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -43,20 +44,38 @@ class BusLinesFragment : Fragment() {
         // Sets the viewmodel for this page
         binding.busLinesViewModel = busLinesViewModel
 
+        // Creates the adapter for the Recyclerview
         val busLinesAdapter = BusLinesAdapter()
         binding.busLineListRecyclerview.adapter = busLinesAdapter
         binding.busLineListRecyclerview.addItemDecoration(
             DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
         )
 
-        // Observes the busLines LiveData list from the viewmodel,
-        // when changed it will update the recyclerview adapter
+        // Sets the behaviour when swiping to refresh
+        binding.busLineListSwiperefreshlayout.setOnRefreshListener {
+            lifecycleScope.launch {
+                busLinesViewModel.refreshBusLines()
+            }
+        }
+
         lifecycleScope.launch {
+
+            // Observes the busLines LiveData list from the viewmodel, when changed it will update the recyclerview adapter
             busLinesViewModel
                 .busLines
                 .observe(viewLifecycleOwner, Observer { busLines ->
                     busLinesAdapter.submitList(busLines)
             })
+
+            // Observes the isRefreshing variable to show or hide the Swiperefreshlayout busy icon
+            busLinesViewModel
+                .isRefreshing
+                .observe(viewLifecycleOwner, Observer { isRefreshing ->
+                    binding.busLineListSwiperefreshlayout.isRefreshing = isRefreshing
+                })
+
+            // Gets the data when the fragment first loads
+            busLinesViewModel.refreshBusLines()
         }
 
         // Sets a listener to receive callbacks whenever an item is clicked
