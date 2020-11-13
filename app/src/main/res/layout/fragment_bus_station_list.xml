@@ -19,7 +19,7 @@
             android:id="@+id/bus_station_list_lastupdated_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text='@{"Last updated: " + busStationsViewModel.lastUpdated}'
+            android:text="@{@string/last_update(busStationsViewModel.lastUpdated)}"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:gravity="end"
             android:layout_marginLeft="@dimen/child_view_left_right_margin"

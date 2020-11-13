@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">RATBVKotlin</string>
 
+    <string name="last_update">Last update: %s</string>
+
     <string name="title_bus">Bus</string>
     <string name="title_midibus">Midibus</string>
     <string name="title_trolleybus">Trolleybus</string>
 
-    <string name="title_weekdays">Week Days</string>
+    <string name="title_weekdays">Weekdays</string>
     <string name="title_saturday">Saturday</string>
     <string name="title_sunday">Sunday</string>
 

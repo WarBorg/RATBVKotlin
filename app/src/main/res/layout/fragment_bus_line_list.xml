@@ -19,7 +19,7 @@
             android:id="@+id/bus_line_list_lastupdated_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text='@{"Last updated: " + busLinesViewModel.lastUpdated}'
+            android:text="@{@string/last_update(busLinesViewModel.lastUpdated)}"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:gravity="end"
             android:layout_marginLeft="@dimen/child_view_left_right_margin"
@@ -33,7 +33,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bus_line_list_recyclerview"
-                android:name="com.example.ratbvkotlin.ui.buslinez.BusLinezFragment"
+                android:name="com.example.ratbvkotlin.ui.buslines.BusLinesFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/child_view_left_right_margin"
