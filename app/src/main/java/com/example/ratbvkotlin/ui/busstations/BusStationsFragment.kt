@@ -100,16 +100,16 @@ class BusStationsFragment : Fragment() {
             // Observes the busLines LiveData list from the viewmodel, when changed it will update the recyclerview adapter
             busStationsViewModel
                 .busStations
-                .observe(viewLifecycleOwner, Observer { busStations ->
+                .observe(viewLifecycleOwner) { busStations ->
                     busStationsAdapter.submitList(busStations)
-                })
+                }
 
             // Observes the isRefreshing variable to show or hide the Swiperefreshlayout busy icon
             busStationsViewModel
                 .isRefreshing
-                .observe(viewLifecycleOwner, Observer { isRefreshing ->
+                .observe(viewLifecycleOwner) { isRefreshing ->
                     binding.busStationListSwiperefreshlayout.isRefreshing = isRefreshing
-                })
+                }
 
             // Gets the data when the fragment first loads
             busStationsViewModel.getBusStations()
@@ -139,7 +139,7 @@ class BusStationsFragment : Fragment() {
 
                 return true
             }
-            R.id.station_list_action_download -> {
+            R.id.station_list_actio n_download -> {
                 lifecycleScope.launch {
                     busStationsViewModel.downloadStationsTimetables()
 
