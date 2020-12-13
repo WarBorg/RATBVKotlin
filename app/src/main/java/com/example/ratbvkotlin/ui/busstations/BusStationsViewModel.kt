@@ -37,10 +37,10 @@ class BusStationsViewModel(private val _repository: BusRepository,
 
         _isRefreshing.value = true
 
-        val directionLink = when (isNormalDirection) {
-            true -> _directionLinkNormal
-            false -> _directionLinkReverse
-            else -> _directionLinkNormal
+        val (directionLink, direction) = when (isNormalDirection) {
+            true -> Pair(_directionLinkNormal, "normal")
+            false -> Pair(_directionLinkReverse, "reverse")
+            else -> Pair(_directionLinkNormal, "normal")
         }
 
         _busStations.value = _repository.getBusStations(

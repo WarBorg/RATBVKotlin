@@ -139,7 +139,7 @@ class BusStationsFragment : Fragment() {
 
                 return true
             }
-            R.id.station_list_actio n_download -> {
+            R.id.station_list_action_download -> {
                 lifecycleScope.launch {
                     busStationsViewModel.downloadStationsTimetables()
 
