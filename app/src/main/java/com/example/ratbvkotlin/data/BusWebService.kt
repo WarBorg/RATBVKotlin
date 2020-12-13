@@ -5,10 +5,12 @@ import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.data.models.BusStationModel
 import com.example.ratbvkotlin.data.models.BusTimetableModel
 import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import java.util.concurrent.TimeUnit
 
 /**
  * Class responsible with initialisation of the [BusApi] Retrofit instance
@@ -18,11 +20,18 @@ class BusWebService : IBusWebservice {
 
     private val api: BusApi by lazy {
         val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation()
-                                       .create()
+                                .create()
+
+        val client = OkHttpClient.Builder()
+            .retryOnConnectionFailure(true)
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .callTimeout(1, TimeUnit.MINUTES)
+            .build()
 
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(client)
             .build()
             .create(BusApi::class.java)
     }

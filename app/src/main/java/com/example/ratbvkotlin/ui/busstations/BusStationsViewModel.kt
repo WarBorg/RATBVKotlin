@@ -28,7 +28,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
      */
     var onBusStationClickListener: OnBusStationClickListener? = null
 
-    var direction = "normal"
+    var isNormalDirection = true
 
     /**
      * Gets the bus stations data from the repository as LiveData
@@ -37,10 +37,10 @@ class BusStationsViewModel(private val _repository: BusRepository,
 
         _isRefreshing.value = true
 
-        val directionLink = when (direction) {
-            "normal" -> _directionLinkNormal
-            "reverse" -> _directionLinkReverse
-            else -> _directionLinkNormal
+        val (directionLink, direction) = when (isNormalDirection) {
+            true -> Pair(_directionLinkNormal, "normal")
+            false -> Pair(_directionLinkReverse, "reverse")
+            else -> Pair(_directionLinkNormal, "normal")
         }
 
         _busStations.value = _repository.getBusStations(
@@ -58,7 +58,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
      */
     suspend fun reverseStations() {
 
-        direction = if (direction == "normal") "reverse" else "normal"
+        isNormalDirection = !isNormalDirection
 
         getBusStations()
     }
