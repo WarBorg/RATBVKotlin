@@ -19,7 +19,7 @@
             android:id="@+id/bus_timetable_list_item_hour_textview"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:text='@{busTimetableViewModel.busTimetable.hour}'
+            android:text='@{busTimetableViewModel.hour}'
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:gravity="center_horizontal"
             app:layout_constraintWidth_percent="0.25"
@@ -32,7 +32,7 @@
             android:id="@+id/bus_timetable_list_item_minutes_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{busTimetableViewModel.busTimetable.minutes}"
+            android:text="@{busTimetableViewModel.minutes}"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintWidth_percent="0.75"
             app:layout_constraintTop_toTopOf="parent"

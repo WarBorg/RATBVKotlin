@@ -2,20 +2,34 @@ package com.example.ratbvkotlin.ui.bustimetables
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.setContent
 import androidx.fragment.app.commit
 import androidx.navigation.navArgs
 import com.example.ratbvkotlin.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class BusTimetablesActivity : AppCompatActivity(R.layout.activity_bus_timetables) {
+//class BusTimetablesActivity : AppCompatActivity(R.layout.activity_bus_timetables) {
+class BusTimetablesActivity : AppCompatActivity() {
 
     private val args: BusTimetablesActivityArgs by navArgs()
+
+    // Sets the viewmodel parameters with the necessary arguments
+    private val busTimetablesViewModel: BusTimetablesViewModel by viewModel {
+        parametersOf(args.scheduleLink, args.busStationId, args.busStationName, "WeekDays")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
-        val navView: BottomNavigationView = findViewById(R.id.bus_timetable_list_nav_view)
+        setContent {
+            BusTimetablesScreen(busTimetablesViewModel)
+        }
+    }
+}
+        /*val navView: BottomNavigationView = findViewById(R.id.bus_timetable_list_nav_view)
 
         setupSupportActionBar()
 
@@ -34,18 +48,14 @@ class BusTimetablesActivity : AppCompatActivity(R.layout.activity_bus_timetables
         replaceTimetableFragment("WeekDays")
     }
 
-    /**
-     * Forces [BusTimetablesActivity] appbar to display the back button in the appbar
-     */
+
     private fun setupSupportActionBar() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
-    /**
-     * Replaces timetable fragments based on type of week
-     */
+
     private fun replaceTimetableFragment(timetableType: String) {
 
         val timetablesFragment = BusTimetablesFragment.newInstance(
@@ -60,11 +70,9 @@ class BusTimetablesActivity : AppCompatActivity(R.layout.activity_bus_timetables
         }
     }
 
-    /**
-     * Finishes the current [BusTimetablesActivity] when pressing the appbar back button
-     */
+
     override fun onSupportNavigateUp() : Boolean {
         finish()
         return true
     }
-}
+*/

@@ -20,20 +20,20 @@ class BusTimetablesViewModel(private val _repository: BusRepository,
 
     // Sets the lastUpdated value based on the first item of the list since all will have the same value
     val lastUpdated: LiveData<String> = Transformations.map(_busTimetables) { busTimetables ->
-        busTimetables.firstOrNull()?.busTimetable?.lastUpdateDate ?: "Never"
+        busTimetables.firstOrNull()?.lastUpdateDate ?: "Never"
     }
 
     /**
      * Gets the bus stations data from the repository as LiveData
      */
-    suspend fun getBusTimetables(isForcedRefresh: Boolean = false) {
+    suspend fun getBusTimetables(timetableType: String, isForcedRefresh: Boolean = false) {
 
         _isRefreshing.value = true
 
         _busTimetables.value = _repository.getBusTimetables(_scheduleLink,
             _busStationId,
             isForcedRefresh)
-            .filter { busTimetableModel -> busTimetableModel.timeOfWeek == _timetableType }
+            .filter { busTimetableModel -> busTimetableModel.timeOfWeek == timetableType }
             .map { busTimetableModel -> BusTimetableItemViewModel(busTimetableModel) }
 
         _isRefreshing.value = false
@@ -42,5 +42,12 @@ class BusTimetablesViewModel(private val _repository: BusRepository,
     /**
      * [ViewModel] for a specific [FragmentBusTimetableListItemBinding], which contains the item's [busTimetable]
      */
-     class BusTimetableItemViewModel (val busTimetable: BusTimetableModel) : ViewModel()
+     class BusTimetableItemViewModel (private val busTimetable: BusTimetableModel)
+        : ViewModel() {
+
+            val hour: String = busTimetable.hour
+            val minutes: String = busTimetable.minutes
+
+            val lastUpdateDate: String = busTimetable.lastUpdateDate
+        }
 }

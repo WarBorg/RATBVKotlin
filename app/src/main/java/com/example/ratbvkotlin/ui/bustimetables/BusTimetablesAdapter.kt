@@ -49,7 +49,7 @@ class BusTimetablesAdapter
         override fun areContentsTheSame(oldItem: BusTimetableItemViewModel,
                                         newItem: BusTimetableItemViewModel): Boolean {
 
-            return oldItem.busTimetable.id == newItem.busTimetable.id
+            return 1 == 1//oldItem.busTimetable.id == newItem.busTimetable.id
         }
     }
 }
