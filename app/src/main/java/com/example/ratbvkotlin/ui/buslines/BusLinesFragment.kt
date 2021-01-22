@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -34,7 +33,7 @@ class BusLinesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // Links the binding to the fragment layout [fragment_bus_line_list.xml]
         binding = FragmentBusLineListBinding.inflate(layoutInflater)
@@ -86,14 +85,14 @@ class BusLinesFragment : Fragment() {
             // Observes the busLines LiveData list from the viewmodel, when changed it will update the recyclerview adapter
             busLinesViewModel
                 .busLines
-                .observe(viewLifecycleOwner, Observer { busLines ->
+                .observe(viewLifecycleOwner, { busLines ->
                     busLinesAdapter.submitList(busLines)
                 })
 
             // Observes the isRefreshing variable to show or hide the Swiperefreshlayout busy icon
             busLinesViewModel
                 .isRefreshing
-                .observe(viewLifecycleOwner, Observer { isRefreshing ->
+                .observe(viewLifecycleOwner, { isRefreshing ->
                     binding.busLineListSwiperefreshlayout.isRefreshing = isRefreshing
                 })
 

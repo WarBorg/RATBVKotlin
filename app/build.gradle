@@ -1,16 +1,17 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'androidx.navigation.safeargs.kotlin'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+}
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.2'
 
     defaultConfig {
         applicationId "com.example.ratbvkotlin"
-        minSdkVersion 22
+        minSdkVersion 28
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -25,25 +26,24 @@ android {
         }
     }
 
-    buildFeatures {
-        dataBinding = true
-        compose = true
-    }
-
-// To inline the bytecode built with JVM target 1.8 into
-// bytecode that is being built with JVM target 1.6. (e.g. navArgs)
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = '1.8'
+        useIR = true
+    }
+
+    buildFeatures {
+        compose = true
+        dataBinding = true
     }
 
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.4.10'
+        kotlinCompilerVersion kotlin_version
     }
 }
 
@@ -73,8 +73,10 @@ dependencies {
     // Compose
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation "androidx.compose.runtime:runtime:$compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.ui:ui-tooling:$compose_ui_tooling_version"
     implementation "androidx.navigation:navigation-compose:$nav_compose_version"
 
     // Room
