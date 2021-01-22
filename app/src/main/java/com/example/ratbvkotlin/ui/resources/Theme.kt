@@ -1,4 +1,4 @@
-package com.example.jetpackcomposetest.ui
+package com.example.ratbvkotlin.ui.resources
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
