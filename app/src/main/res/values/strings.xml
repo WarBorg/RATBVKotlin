@@ -2,6 +2,7 @@
     <string name="app_name">RATBVKotlin</string>
 
     <string name="last_update">Last update: %s</string>
+    <string name="last_update_simple">Last update: </string>
 
     <string name="title_bus">Bus</string>
     <string name="title_midibus">Midibus</string>
