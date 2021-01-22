@@ -7,7 +7,6 @@ import androidx.navigation.navArgs
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-//class BusTimetablesActivity : AppCompatActivity(R.layout.activity_bus_timetables) {
 class BusTimetablesActivity : AppCompatActivity() {
 
     private val args: BusTimetablesActivityArgs by navArgs()
@@ -21,6 +20,7 @@ class BusTimetablesActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+        // Create the composable view
         setContent {
             BusTimetablesScaffoldScreen(busTimetablesViewModel,
                                         onBackNavigation = { finish() })
