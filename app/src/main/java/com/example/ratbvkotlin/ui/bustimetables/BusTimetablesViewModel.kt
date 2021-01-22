@@ -3,7 +3,6 @@ package com.example.ratbvkotlin.ui.bustimetables
 import androidx.lifecycle.*
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusTimetableModel
-import com.example.ratbvkotlin.databinding.FragmentBusTimetableListItemBinding
 
 class BusTimetablesViewModel(private val _repository: BusRepository,
                              private val _scheduleLink: String,
