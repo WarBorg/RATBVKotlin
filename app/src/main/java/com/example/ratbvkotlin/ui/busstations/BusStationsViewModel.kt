@@ -1,9 +1,11 @@
 package com.example.ratbvkotlin.ui.busstations
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusStationModel
-import com.example.ratbvkotlin.databinding.FragmentBusStationListItemBinding
 
 class BusStationsViewModel(private val _repository: BusRepository,
                            private val _directionLinkNormal: String,
@@ -23,11 +25,6 @@ class BusStationsViewModel(private val _repository: BusRepository,
         busStations.firstOrNull()?.busStation?.lastUpdateDate ?: "Never"
     }
 
-    /**
-     * Listener set by [BusStationsFragment] in order to get notified when an [FragmentBusStationListItemBinding] is clicked.
-     */
-    var onBusStationClickListener: OnBusStationClickListener? = null
-
     var isNormalDirection = true
 
     /**
@@ -40,7 +37,6 @@ class BusStationsViewModel(private val _repository: BusRepository,
         val (directionLink, direction) = when (isNormalDirection) {
             true -> Pair(_directionLinkNormal, "normal")
             false -> Pair(_directionLinkReverse, "reverse")
-            else -> Pair(_directionLinkNormal, "normal")
         }
 
         _busStations.value = _repository.getBusStations(
@@ -87,15 +83,8 @@ class BusStationsViewModel(private val _repository: BusRepository,
      */
     inner class BusStationItemViewModel(val busStation: BusStationModel) : ViewModel() {
 
-        fun onItemClicked() {
-            onBusStationClickListener?.invoke(busStation.scheduleLink, busStation.id, busStation.name)
-        }
+        val scheduleLink: String = busStation.scheduleLink
+        val busStationId: Int = busStation.id
+        val busStationName: String = busStation.name
     }
 }
-
-/**
- * Shortcut for a method call when a [FragmentBusStationListItemBinding] is clicked.
- */
-typealias OnBusStationClickListener = (scheduleLink: String,
-                                       busStationId: Int,
-                                       busStationName: String) -> Unit
