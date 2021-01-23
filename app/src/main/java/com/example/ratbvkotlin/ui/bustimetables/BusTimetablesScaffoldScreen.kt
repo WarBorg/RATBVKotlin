@@ -65,13 +65,14 @@ fun BusTimetablesScaffoldScreen(viewModel: BusTimetablesViewModel,
 fun BusTimetablesTopBarComponent(onBackNavigation: () -> Unit) {
     TopAppBar(
         title = {
-            Text(text = "Bus Timetables")
+            Text(text = stringResource(id = R.string.title_activity_bus_timetables))
         },
         navigationIcon = {
             IconButton(onClick = onBackNavigation) {
                 Icon(androidx.compose.material.icons.Icons.Filled.ArrowBack)
             }
-        })
+        }
+    )
 }
 
 @Composable
@@ -87,7 +88,7 @@ fun BusTimetablesNavHostComponent(navController: NavHostController,
 
             onLoadData(BusTimetablesBottomNavigationScreens.WeekDays.timeOfWeek)
 
-            BusTimetablesListScreen(
+            BusTimetablesListComponent(
                 viewModel.busTimetables,
                 viewModel.lastUpdated,
                 viewModel.isRefreshing
@@ -97,7 +98,7 @@ fun BusTimetablesNavHostComponent(navController: NavHostController,
 
             onLoadData(BusTimetablesBottomNavigationScreens.Saturday.timeOfWeek)
 
-            BusTimetablesListScreen(
+            BusTimetablesListComponent(
                 viewModel.busTimetables,
                 viewModel.lastUpdated,
                 viewModel.isRefreshing
@@ -107,7 +108,7 @@ fun BusTimetablesNavHostComponent(navController: NavHostController,
 
             onLoadData(BusTimetablesBottomNavigationScreens.Sunday.timeOfWeek)
 
-            BusTimetablesListScreen(
+            BusTimetablesListComponent(
                 viewModel.busTimetables,
                 viewModel.lastUpdated,
                 viewModel.isRefreshing

@@ -21,10 +21,10 @@ import com.example.ratbvkotlin.R
 import com.example.ratbvkotlin.ui.resources.typography
 
 @Composable
-fun BusTimetablesListScreen(busTimetablesLiveData: LiveData<List<BusTimetablesViewModel.BusTimetableItemViewModel>>,
-                            lastUpdateDateLiveData: LiveData<String>,
-                            isRefreshingLiveData: LiveData<Boolean>,
-                            modifier: Modifier = Modifier) {
+fun BusTimetablesListComponent(busTimetablesLiveData: LiveData<List<BusTimetablesViewModel.BusTimetableItemViewModel>>,
+                               lastUpdateDateLiveData: LiveData<String>,
+                               isRefreshingLiveData: LiveData<Boolean>,
+                               modifier: Modifier = Modifier) {
 
     val busTimetables by busTimetablesLiveData.observeAsState(initial = emptyList())
     val lastUpdateDate by lastUpdateDateLiveData.observeAsState(initial = "Never")
@@ -89,10 +89,16 @@ fun BusTimetableListComponent(
     LazyColumnForIndexed(
         items = busTimetables
     ) { index, timetable ->
-        BusTimetableItemScreen(timetable)
+        BusTimetableItemComponent(
+            timetable.hour,
+            timetable.minutes
+        )
 
         if (index < busTimetables.size - 1) {
-            Divider(color = Color.LightGray, thickness = 1.dp)
+            Divider(
+                color = Color.LightGray,
+                thickness = 1.dp
+            )
         }
     }
 }
@@ -104,8 +110,9 @@ fun LoadingComponent() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = CenterHorizontally
     ) {
-        // A pre-defined composable that's capable of rendering a circular progress indicator. It
-        // honors the Material Design specification.
-        CircularProgressIndicator(modifier = Modifier.wrapContentWidth(CenterHorizontally))
+        CircularProgressIndicator(
+            modifier = Modifier
+                .wrapContentWidth(CenterHorizontally)
+        )
     }
 }

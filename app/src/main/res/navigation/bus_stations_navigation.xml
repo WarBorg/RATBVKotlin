@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/station_list_dest"
         android:name="com.example.ratbvkotlin.ui.busstations.BusStationsFragment"
-        android:label="Line 1 Test"
-        tools:layout="@layout/fragment_bus_station_list" >
+        android:label="Line 1 Test" >
         <argument
             android:name="directionLinkNormal"
             app:argType="string" />
@@ -19,17 +18,17 @@
         <argument
             android:name="busLineId"
             app:argType="integer" />
-        <action
-            android:id="@+id/navigateTo_busTimetablesActivity_dest"
-            app:destination="@id/busTimetablesActivity" />
         <argument
             android:name="busLineName"
             app:argType="string" />
+        <action
+            android:id="@+id/navigateTo_busTimetablesFragment_dest"
+            app:destination="@id/timetables_list_dest" />
     </fragment>
-    <activity
-        android:id="@+id/busTimetablesActivity"
-        android:name="com.example.ratbvkotlin.ui.bustimetables.BusTimetablesActivity"
-        android:label="BusTimetablesActivity" >
+    <fragment
+        android:id="@+id/timetables_list_dest"
+        android:name="com.example.ratbvkotlin.ui.bustimetables.BusTimetablesFragment"
+        android:label="BusTimetablesFragment">
         <argument
             android:name="scheduleLink"
             app:argType="string" />
@@ -39,6 +38,6 @@
         <argument
             android:name="busStationName"
             app:argType="string" />
-    </activity>
+    </fragment>
 
 </navigation>

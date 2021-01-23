@@ -13,8 +13,9 @@ import androidx.compose.ui.unit.dp
 import com.example.ratbvkotlin.ui.resources.typography
 
 @Composable
-fun BusTimetableItemScreen(
-    timetable: BusTimetablesViewModel.BusTimetableItemViewModel
+fun BusTimetableItemComponent(
+    hourValue: String,
+    minuteValues: String
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -26,7 +27,7 @@ fun BusTimetableItemScreen(
             )
     ) {
         Text(
-            text = timetable.hour,
+            text = hourValue,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Normal,
             style = typography.h6,
@@ -35,7 +36,7 @@ fun BusTimetableItemScreen(
                 .weight(0.25f)
         )
         Text(
-            text = timetable.minutes,
+            text = minuteValues,
             textAlign = TextAlign.Start,
             fontWeight = FontWeight.Normal,
             style = typography.h6,
