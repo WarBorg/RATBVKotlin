@@ -1,4 +1,4 @@
-package com.example.ratbvkotlin.ui.bustimetables
+package com.example.ratbvkotlin.ui.bustimetables.composables
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

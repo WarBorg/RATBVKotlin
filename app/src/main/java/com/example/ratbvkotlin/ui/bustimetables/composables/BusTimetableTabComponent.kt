@@ -1,4 +1,4 @@
-package com.example.ratbvkotlin.ui.bustimetables
+package com.example.ratbvkotlin.ui.bustimetables.composables
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import com.example.ratbvkotlin.R
 import com.example.ratbvkotlin.ui.resources.typography
+import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
 
 @Composable
 fun BusTimetableTabComponent(busTimetablesLiveData: LiveData<List<BusTimetablesViewModel.BusTimetableItemViewModel>>,

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.example.ratbvkotlin.ui.bustimetables.composables.BusTimetablesScreen
+import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 

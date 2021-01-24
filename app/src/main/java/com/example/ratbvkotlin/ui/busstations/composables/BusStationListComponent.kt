@@ -1,4 +1,4 @@
-package com.example.ratbvkotlin.ui.busstations
+package com.example.ratbvkotlin.ui.busstations.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +13,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.ratbvkotlin.ui.busstations.BusStationsFragmentDirections
 import com.example.ratbvkotlin.ui.resources.typography
+import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
 
 @Composable
 fun BusStationListComponent(

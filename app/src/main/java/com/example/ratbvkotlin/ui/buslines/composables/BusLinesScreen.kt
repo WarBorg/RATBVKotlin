@@ -1,4 +1,4 @@
-package com.example.ratbvkotlin.ui.buslines
+package com.example.ratbvkotlin.ui.buslines.composables
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -23,7 +23,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.example.ratbvkotlin.R
+import com.example.ratbvkotlin.ui.buslines.BusLinesFragmentDirections
 import com.example.ratbvkotlin.ui.resources.typography
+import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
 import kotlinx.coroutines.launch
 
 sealed class BusLinesBottomNavigationScreens(val busType: String,

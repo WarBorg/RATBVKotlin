@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.ratbvkotlin.ui.busstations.composables.BusStationsScreen
+import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 

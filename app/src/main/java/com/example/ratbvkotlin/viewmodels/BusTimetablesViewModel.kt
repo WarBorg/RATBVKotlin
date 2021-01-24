@@ -1,4 +1,4 @@
-package com.example.ratbvkotlin.ui.bustimetables
+package com.example.ratbvkotlin.viewmodels
 
 import androidx.lifecycle.*
 import com.example.ratbvkotlin.data.BusRepository

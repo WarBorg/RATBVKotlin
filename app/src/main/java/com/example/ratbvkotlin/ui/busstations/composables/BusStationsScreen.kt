@@ -1,4 +1,4 @@
-package com.example.ratbvkotlin.ui.busstations
+package com.example.ratbvkotlin.ui.busstations.composables
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -20,8 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import com.example.ratbvkotlin.R
-import com.example.ratbvkotlin.ui.bustimetables.LoadingComponent
+import com.example.ratbvkotlin.ui.bustimetables.composables.LoadingComponent
 import com.example.ratbvkotlin.ui.resources.typography
+import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
 import kotlinx.coroutines.launch
 
 @Composable

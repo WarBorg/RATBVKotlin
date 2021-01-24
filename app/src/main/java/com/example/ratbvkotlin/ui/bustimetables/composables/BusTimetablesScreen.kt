@@ -1,4 +1,4 @@
-package com.example.ratbvkotlin.ui.bustimetables
+package com.example.ratbvkotlin.ui.bustimetables.composables
 
 import androidx.annotation.StringRes
 import androidx.compose.material.*
@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.example.ratbvkotlin.R
+import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
 import kotlinx.coroutines.launch
 
 sealed class BusTimetablesBottomNavigationScreens(val timeOfWeek: String,
