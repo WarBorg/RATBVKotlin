@@ -26,8 +26,8 @@ sealed class BusTimetablesBottomNavigationScreens(val timeOfWeek: String,
 }
 
 @Composable
-fun BusTimetablesScaffoldScreen(viewModel: BusTimetablesViewModel,
-                                onBackNavigation: () -> Unit) {
+fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
+                        onBackNavigation: () -> Unit) {
 
     val navController = rememberNavController()
     val coroutineScope = rememberCoroutineScope()

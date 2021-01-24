@@ -1,8 +1,7 @@
 package com.example.ratbvkotlin.ui.busstations
 
-import androidx.compose.foundation.clickable
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnForIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -13,9 +12,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
@@ -25,23 +25,43 @@ import com.example.ratbvkotlin.ui.resources.typography
 import kotlinx.coroutines.launch
 
 @Composable
-fun BusStationsScaffoldScreen(viewModel: BusStationsViewModel,
-                              navController: NavController,
-                              onBackNavigation: () -> Unit) {
+fun BusStationsScreen(viewModel: BusStationsViewModel,
+                      navController: NavController,
+                      onBackNavigation: () -> Unit) {
 
     val coroutineScope = rememberCoroutineScope()
+    val context = AmbientContext.current
 
     coroutineScope.launch {
-        viewModel.getBusStations() }
+        viewModel.getBusStations()
+    }
 
     Scaffold(
         topBar = {
             BusStationsTopBarComponent(
-                onBackNavigation
+                onBackNavigation,
+                onReverseStations = {
+                    coroutineScope.launch {
+                        viewModel.reverseStations()
+                    }
+                },
+                onDownloadAllTimetableData = {
+                    coroutineScope.launch {
+                        viewModel.downloadStationsTimetables()
+
+                        Toast
+                            .makeText(
+                                context,
+                                R.string.bus_station_list_download_complete_message,
+                                Toast.LENGTH_LONG
+                            )
+                            .show()
+                    }
+                }
             )
         },
         bodyContent = {
-            BusStationListScreen(
+            BusStationBodyComponent(
                 viewModel.busStations,
                 viewModel.lastUpdated,
                 viewModel.isRefreshing,
@@ -52,36 +72,62 @@ fun BusStationsScaffoldScreen(viewModel: BusStationsViewModel,
 }
 
 @Composable
-fun BusStationsTopBarComponent(onBackNavigation: () -> Unit) {
+fun BusStationsTopBarComponent(
+    onBackNavigation: () -> Unit,
+    onReverseStations: () -> Unit,
+    onDownloadAllTimetableData: () -> Unit
+) {
     TopAppBar(
         title = {
-            Text(text = stringResource(id = R.string.title_activity_bus_stations))
+            Text(
+                text = stringResource(
+                    id = R.string.title_activity_bus_stations
+                )
+            )
         },
         navigationIcon = {
             IconButton(onClick = onBackNavigation) {
                 Icon(Icons.Filled.ArrowBack)
+            }
+        },
+        actions = {
+            IconButton(onClick = onReverseStations) {
+                Icon(
+                    imageVector =  vectorResource(
+                        id = R.drawable.ic_option_reverse
+                    ),
+                    tint = Color.White
+                )
+            }
+            IconButton(onClick = onDownloadAllTimetableData) {
+                Icon(
+                    imageVector = vectorResource(
+                        id = R.drawable.ic_option_download
+                    ),
+                    tint = Color.White
+                )
             }
         }
     )
 }
 
 @Composable
-fun BusStationListScreen(busStationsLiveData: LiveData<List<BusStationsViewModel.BusStationItemViewModel>>,
-                         lastUpdateDateLiveData: LiveData<String>,
-                         isRefreshingLiveData: LiveData<Boolean>,
-                         navController: NavController,
-                         modifier: Modifier = Modifier) {
+fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewModel.BusStationItemViewModel>>,
+                            lastUpdateDateLiveData: LiveData<String>,
+                            isRefreshingLiveData: LiveData<Boolean>,
+                            navController: NavController,
+                            modifier: Modifier = Modifier) {
 
     val busStations by busStationsLiveData.observeAsState(initial = emptyList())
     val lastUpdateDate by lastUpdateDateLiveData.observeAsState(initial = "Never")
     val isRefreshing by isRefreshingLiveData.observeAsState(initial = true)
 
     Column(
-        modifier = Modifier.padding(
+        modifier = modifier.padding(
             start = 8.dp,
             top = 8.dp,
             end = 8.dp,
-            bottom = 58.dp
+            bottom = 8.dp
         )
     ) {
 
@@ -90,7 +136,8 @@ fun BusStationListScreen(busStationsLiveData: LiveData<List<BusStationsViewModel
             text = "${stringResource(id = R.string.last_update_simple)} $lastUpdateDate",
             fontWeight = FontWeight.Normal,
             style = typography.h6,
-            modifier = Modifier.align(Alignment.End)
+            modifier = modifier
+                .align(Alignment.End)
         )
 
         if (isRefreshing) {
@@ -99,43 +146,6 @@ fun BusStationListScreen(busStationsLiveData: LiveData<List<BusStationsViewModel
             BusStationListComponent(
                 busStations,
                 navController
-            )
-        }
-    }
-}
-
-@Composable
-fun BusStationListComponent(
-    busStations: List<BusStationsViewModel.BusStationItemViewModel>,
-    navController: NavController) {
-
-    LazyColumnForIndexed(
-        items = busStations,
-    ) { index, station ->
-
-        Text(
-            text = station.busStationName,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Normal,
-            style = typography.h6,
-            modifier = Modifier
-                .clickable(onClick = {
-                    navController.navigate(
-                        BusStationsFragmentDirections
-                            .navigateToBusTimetablesFragmentDest(
-                                station.scheduleLink,
-                                station.busStationId,
-                                station.busStationName
-                            )
-                    )
-                })
-                .padding(4.dp)
-        )
-
-        if (index < busStations.size - 1) {
-            Divider(
-                color = Color.LightGray,
-                thickness = 1.dp
             )
         }
     }
