@@ -7,8 +7,7 @@ import com.example.ratbvkotlin.data.models.BusTimetableModel
 class BusTimetablesViewModel(private val _repository: BusRepository,
                              private val _scheduleLink: String,
                              private val _busStationId: Int,
-                             val busStationName: String,
-                             private val _timetableType: String)
+                             val busStationName: String)
     : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
@@ -47,7 +46,6 @@ class BusTimetablesViewModel(private val _repository: BusRepository,
 
             val hour: String = busTimetable.hour
             val minutes: String = busTimetable.minutes
-
             val lastUpdateDate: String = busTimetable.lastUpdateDate
         }
 }

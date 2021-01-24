@@ -23,27 +23,82 @@ class App : Application() {
         // Initialize dependency injection
         startKoin {
             androidContext(this@App)
-            modules(appModule)
+            modules(
+                persistencyModule,
+                servicesModule,
+                viewModelsModule
+            )
+        }
+    }
+    
+    private val persistencyModule = module {
+
+        // Database dependencies
+        single {
+            Room.databaseBuilder(
+                get(),
+                BusDatabase::class.java,
+                DATABASE_NAME
+            ).build()
+        }
+        single {
+            get<BusDatabase>().busLinesDao()
+        }
+        single {
+            get<BusDatabase>().busStationsDao()
+        }
+        single {
+            get<BusDatabase>().busTimetablesDao()
         }
     }
 
-    // Module containing all project dependencies
-    private val appModule = module {
-        single { Room.databaseBuilder(get(), BusDatabase::class.java, DATABASE_NAME).build() }
-        single { get<BusDatabase>().busLinesDao() }
-        single { get<BusDatabase>().busStationsDao() }
-        single { get<BusDatabase>().busTimetablesDao() }
-        single { BusWebService() as IBusWebservice }
-        /*single { BusWebServiceMock() as IBusWebservice }*/
-        single { BusRepository(get(), get(), get() , get()) }
-        viewModel { (busTransportSubtype : String) -> BusLinesViewModel(get(), busTransportSubtype) }
-        viewModel {
-                (directionLinkNormal: String, directionLinkReverse: String, busLineId: Int, busLineName: String) ->
-            BusStationsViewModel(get(), directionLinkNormal, directionLinkReverse, busLineId, busLineName)
+    private val servicesModule = module {
+        // Web service dependencies
+        single {
+            BusWebService() as IBusWebservice
         }
+        /*single { BusWebServiceMock() as IBusWebservice }*/
+
+        // Repository dependencies
+        single {
+            BusRepository(
+                get(),
+                get(),
+                get(),
+                get()
+            )
+        }
+    }
+    
+    private val viewModelsModule = module {
+        // View Model dependencies
         viewModel {
-                (scheduleLink: String, busStationId: Int, busStationName: String, timetableType: String) ->
-            BusTimetablesViewModel(get(), scheduleLink, busStationId, busStationName, timetableType)
+            BusLinesViewModel(get())
+        }
+        viewModel { (
+                    directionLinkNormal: String,
+                    directionLinkReverse: String,
+                    busLineId: Int, busLineName: String
+                ) ->
+            BusStationsViewModel(
+                get(),
+                directionLinkNormal,
+                directionLinkReverse,
+                busLineId,
+                busLineName
+            )
+        }
+        viewModel { (
+                    scheduleLink: String,
+                    busStationId: Int,
+                    busStationName: String
+                ) ->
+            BusTimetablesViewModel(
+                get(),
+                scheduleLink,
+                busStationId,
+                busStationName
+            )
         }
     }
 }

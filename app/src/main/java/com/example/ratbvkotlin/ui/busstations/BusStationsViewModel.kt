@@ -22,7 +22,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
 
     // Sets the lastUpdated value based on the first item of the list since all will have the same value
     val lastUpdated: LiveData<String> = Transformations.map(_busStations) { busStations ->
-        busStations.firstOrNull()?.busStation?.lastUpdateDate ?: "Never"
+        busStations.firstOrNull()?.lastUpdateDate ?: "Never"
     }
 
     var isNormalDirection = true
@@ -81,10 +81,13 @@ class BusStationsViewModel(private val _repository: BusRepository,
      * [ViewModel] for a specific [FragmentBusStationListItemBinding], which contains the item's [busStation]
      * and [onItemClicked] which is called when the users clicks on the current item.
      */
-    inner class BusStationItemViewModel(val busStation: BusStationModel) : ViewModel() {
+    inner class BusStationItemViewModel(private val busStation: BusStationModel) : ViewModel() {
 
+        val name: String = busStation.name
+        val lastUpdateDate: String = busStation.lastUpdateDate
+
+        // Navigation parameters
         val scheduleLink: String = busStation.scheduleLink
-        val busStationId: Int = busStation.id
-        val busStationName: String = busStation.name
+        val id: Int = busStation.id
     }
 }

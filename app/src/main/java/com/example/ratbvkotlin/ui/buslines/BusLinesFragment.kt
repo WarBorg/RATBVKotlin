@@ -6,17 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.ratbvkotlin.databinding.FragmentBusLineListBinding
-import com.example.ratbvkotlin.ui.busstations.BusStationsScreen
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 /**
  * Shows the bus stations for a specific bus line
@@ -25,16 +16,8 @@ import org.koin.core.parameter.parametersOf
  */
 class BusLinesFragment : Fragment() {
 
-    //private lateinit var binding: FragmentBusLineListBinding
-    //private lateinit var busLinesAdapter: BusLinesAdapter
-
-    // Gets the arguments passed to the fragment
-    private val args: BusLinesFragmentArgs by navArgs()
-
     // Sets the viewmodel parameters with the necessary arguments
-    private val busLinesViewModel: BusLinesViewModel by viewModel {
-        parametersOf("Bus")
-    }
+    private val busLinesViewModel: BusLinesViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,91 +32,5 @@ class BusLinesFragment : Fragment() {
                 )
             }
         }
-        // Links the binding to the fragment layout [fragment_bus_line_list.xml]
-        /*binding = FragmentBusLineListBinding.inflate(layoutInflater)
-
-        // Uses Fragment.viewLifecycleOwner for LiveData Binding
-        binding.lifecycleOwner = this
-        // Sets the viewmodel for this page
-        binding.busLinesViewModel = busLinesViewModel
-
-        setupRecyclerView()
-        setupSwipeRefreshLayout()
-        setupLiveDataObservers()
-
-        // Sets a listener to receive callbacks whenever an item is clicked
-        busLinesViewModel.onBusLineClickListener = onBusLineClickListener
-
-        return binding.root*/
     }
-
-    /**
-     * Creates the adapter for the Recyclerview
-     */
-    /*private fun setupRecyclerView() {
-        // Creates the adapter for the Recyclerview
-        busLinesAdapter = BusLinesAdapter()
-        binding.busLineListRecyclerview.adapter = busLinesAdapter
-        binding.busLineListRecyclerview.addItemDecoration(
-            DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-        )
-    }*/
-
-    /**
-     * Sets the behaviour when swiping to refresh
-     */
-    /*private fun setupSwipeRefreshLayout() {
-        binding.busLineListSwiperefreshlayout.setOnRefreshListener {
-            lifecycleScope.launch {
-                busLinesViewModel.getBusLines("Bus",true)
-            }
-        }
-    }*/
-
-    /**
-     * Sets observers for LiveData coming from the [BusLinesViewModel]
-     */
-    /*private fun setupLiveDataObservers() {
-        lifecycleScope.launch {
-
-            // Observes the busLines LiveData list from the viewmodel, when changed it will update the recyclerview adapter
-            busLinesViewModel
-                .busLines
-                .observe(viewLifecycleOwner, { busLines ->
-                    busLinesAdapter.submitList(busLines)
-                })
-
-            // Observes the isRefreshing variable to show or hide the Swiperefreshlayout busy icon
-            busLinesViewModel
-                .isRefreshing
-                .observe(viewLifecycleOwner, { isRefreshing ->
-                    binding.busLineListSwiperefreshlayout.isRefreshing = isRefreshing
-                })
-
-            // Gets the data when the fragment first loads
-            busLinesViewModel.getBusLines("Bus")
-        }
-    }*/
-
-    /**
-     * Called when the view is destroyed
-     */
-    /*override fun onDestroyView() {
-        // We clear the onItemClickListener in order to avoid any leaks
-        busLinesViewModel.onBusLineClickListener = null
-        super.onDestroyView()
-    }*/
-
-    /**
-     * Called when an item is clicked in [BusLinesViewModel].
-     */
-    /*private val onBusLineClickListener: OnBusLineClickListener = { directionLinkNormal,
-                                                                   directionLinkReverse,
-                                                                   busLineId,
-                                                                   busLineName ->
-        // Navigate to the bus stations page
-        findNavController()
-            .navigate(BusLinesFragmentDirections
-                .navigateToBusStationsActivityDest(directionLinkNormal, directionLinkReverse, busLineId, busLineName))
-    }*/
 }

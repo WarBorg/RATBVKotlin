@@ -25,7 +25,7 @@ fun BusStationListComponent(
     ) { index, station ->
 
         Text(
-            text = station.busStationName,
+            text = station.name,
             textAlign = TextAlign.Start,
             fontWeight = FontWeight.Normal,
             style = typography.h6,
@@ -35,8 +35,8 @@ fun BusStationListComponent(
                         BusStationsFragmentDirections
                             .navigateToBusTimetablesFragmentDest(
                                 station.scheduleLink,
-                                station.busStationId,
-                                station.busStationName
+                                station.id,
+                                station.name
                             )
                     )
                 })
