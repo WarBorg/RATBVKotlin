@@ -88,7 +88,7 @@ fun BusTimetablesNavHostComponent(navController: NavHostController,
 
             onLoadData(BusTimetablesBottomNavigationScreens.WeekDays.timeOfWeek)
 
-            BusTimetablesListComponent(
+            BusTimetableTabComponent(
                 viewModel.busTimetables,
                 viewModel.lastUpdated,
                 viewModel.isRefreshing
@@ -98,7 +98,7 @@ fun BusTimetablesNavHostComponent(navController: NavHostController,
 
             onLoadData(BusTimetablesBottomNavigationScreens.Saturday.timeOfWeek)
 
-            BusTimetablesListComponent(
+            BusTimetableTabComponent(
                 viewModel.busTimetables,
                 viewModel.lastUpdated,
                 viewModel.isRefreshing
@@ -108,7 +108,7 @@ fun BusTimetablesNavHostComponent(navController: NavHostController,
 
             onLoadData(BusTimetablesBottomNavigationScreens.Sunday.timeOfWeek)
 
-            BusTimetablesListComponent(
+            BusTimetableTabComponent(
                 viewModel.busTimetables,
                 viewModel.lastUpdated,
                 viewModel.isRefreshing

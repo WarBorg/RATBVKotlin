@@ -25,7 +25,8 @@ class BusTimetablesViewModel(private val _repository: BusRepository,
     /**
      * Gets the bus stations data from the repository as LiveData
      */
-    suspend fun getBusTimetables(timetableType: String, isForcedRefresh: Boolean = false) {
+    suspend fun getBusTimetables(timetableType: String,
+                                 isForcedRefresh: Boolean = false) {
 
         _isRefreshing.value = true
 
