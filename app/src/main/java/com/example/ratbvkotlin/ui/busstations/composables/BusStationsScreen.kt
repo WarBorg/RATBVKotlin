@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
-import androidx.navigation.NavController
 import com.example.ratbvkotlin.R
 import com.example.ratbvkotlin.ui.common.composables.LastUpdateComposable
 import com.example.ratbvkotlin.ui.common.composables.LoadingComponent
@@ -26,9 +25,11 @@ import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun BusStationsScreen(viewModel: BusStationsViewModel,
-                      navController: NavController,
-                      onBackNavigation: () -> Unit) {
+fun BusStationsScreen(
+    viewModel: BusStationsViewModel,
+    onBackNavigation: () -> Unit,
+    onBusStationClicked: (String, Int , String) -> Unit
+) {
 
     val coroutineScope = rememberCoroutineScope()
     val context = AmbientContext.current
@@ -62,7 +63,7 @@ fun BusStationsScreen(viewModel: BusStationsViewModel,
                 viewModel.busStations,
                 viewModel.lastUpdated,
                 viewModel.isRefreshing,
-                navController
+                onBusStationClicked
             )
         }
     )
@@ -112,7 +113,7 @@ fun BusStationsTopBarComponent(
 fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewModel.BusStationItemViewModel>>,
                             lastUpdateDateLiveData: LiveData<String>,
                             isRefreshingLiveData: LiveData<Boolean>,
-                            navController: NavController,
+                            onBusStationClicked: (String, Int , String) -> Unit,
                             modifier: Modifier = Modifier) {
 
     val busStations by busStationsLiveData.observeAsState(initial = emptyList())
@@ -139,7 +140,7 @@ fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewMo
         } else {
             BusStationListComponent(
                 busStations,
-                navController
+                onBusStationClicked
             )
         }
     }

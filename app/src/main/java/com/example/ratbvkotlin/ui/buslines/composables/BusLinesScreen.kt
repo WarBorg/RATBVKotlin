@@ -47,7 +47,7 @@ sealed class BusLinesBottomNavigationScreens(val busType: String,
 @Composable
 fun BusLinesScreen(
     viewModel: BusLinesViewModel,
-    navController: NavController,
+    onBusLineClicked: (String, String, Int , String) -> Unit
 ) {
 
     val internalNavHostController = rememberNavController()
@@ -66,14 +66,14 @@ fun BusLinesScreen(
         bodyContent = {
             BusLinesNavHostComponent(
                 internalNavHostController,
-                navController,
                 viewModel,
                 bottomNavigationItems,
                 onLoadData = { transportSubtype ->
                     coroutineScope.launch {
                         viewModel.getBusLines(transportSubtype)
                     }
-                }
+                },
+                onBusLineClicked
             )
         },
         bottomBar = {
@@ -96,10 +96,10 @@ fun BusLinesTopBarComponent() {
 
 @Composable
 fun BusLinesNavHostComponent(navHostController: NavHostController,
-                             navController: NavController,
                              viewModel: BusLinesViewModel,
                              bottomNavigationTabs: List<BusBottomNavigationScreens>,
-                             onLoadData: (String) -> Unit
+                             onLoadData: (String) -> Unit,
+                             onBusLineClicked: (String, String, Int , String) -> Unit
 ) {
     NavHost(
         navHostController,
@@ -114,7 +114,7 @@ fun BusLinesNavHostComponent(navHostController: NavHostController,
                     viewModel.busLines,
                     viewModel.lastUpdated,
                     viewModel.isRefreshing,
-                    navController
+                    onBusLineClicked
                 )
             }
         }

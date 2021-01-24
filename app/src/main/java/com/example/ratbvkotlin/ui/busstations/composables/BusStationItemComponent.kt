@@ -9,15 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.ratbvkotlin.ui.busstations.BusStationsFragmentDirections
 import com.example.ratbvkotlin.ui.resources.typography
 import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
 
 @Composable
 fun BusStationItemComponent(
     station: BusStationsViewModel.BusStationItemViewModel,
-    navController: NavController
+    onBusStationClicked: (String, Int, String) -> Unit
 ) {
     Text(
         text = station.name,
@@ -26,13 +24,10 @@ fun BusStationItemComponent(
         style = typography.h6,
         modifier = Modifier
             .clickable(onClick = {
-                navController.navigate(
-                    BusStationsFragmentDirections
-                        .navigateToBusTimetablesFragmentDest(
-                            station.scheduleLink,
-                            station.id,
-                            station.name
-                        )
+                onBusStationClicked(
+                    station.scheduleLink,
+                    station.id,
+                    station.name
                 )
             })
             .padding(

@@ -9,7 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
-import androidx.navigation.NavController
 import com.example.ratbvkotlin.ui.common.composables.LastUpdateComposable
 import com.example.ratbvkotlin.ui.common.composables.LoadingComponent
 import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
@@ -19,7 +18,7 @@ fun BusLinesTabComponent(
     busLinesLiveData: LiveData<List<BusLinesViewModel.BusLineItemViewModel>>,
     lastUpdateDateLiveData: LiveData<String>,
     isRefreshingLiveData: LiveData<Boolean>,
-    navController: NavController
+    onBusLineClicked: (String, String, Int , String) -> Unit
 ) {
 
     val busLines by busLinesLiveData.observeAsState(initial = emptyList())
@@ -45,7 +44,7 @@ fun BusLinesTabComponent(
         } else {
             BusLineListComponent(
                 busLines,
-                navController
+                onBusLineClicked
             )
         }
     }

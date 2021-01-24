@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.compose.ui.platform.ComposeView
-import androidx.navigation.findNavController
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.ratbvkotlin.ui.busstations.composables.BusStationsScreen
 import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
@@ -32,12 +33,33 @@ class BusStationsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        // Navigation components
+        val navController = findNavController()
+
+        val onBackNavigation: () -> Unit = {
+            navController.popBackStack()
+        }
+
+        val onBusStationClicked: (String, Int , String) -> Unit = {
+            scheduleLink, stationId, stationName ->
+                navController.navigate(
+                    BusStationsFragmentDirections
+                        .navigateToBusTimetablesFragmentDest(
+                            scheduleLink,
+                            stationId,
+                            stationName
+                        )
+                )
+            }
+
         return ComposeView(requireContext()).apply {
             setContent {
                 BusStationsScreen(
                     busStationsViewModel,
-                    findNavController(),
-                    onBackNavigation = { })
+                    onBackNavigation,
+                    onBusStationClicked
+                )
             }
         }
     }
