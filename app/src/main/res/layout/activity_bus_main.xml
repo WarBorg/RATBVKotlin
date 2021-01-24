@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:id="@+id/bus_line_list_nav_host_fragment"
+        android:id="@+id/bus_main_nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,6 +15,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/bus_lines_navigation" />
+        app:navGraph="@navigation/bus_main_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
