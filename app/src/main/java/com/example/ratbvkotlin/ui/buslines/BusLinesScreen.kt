@@ -2,6 +2,7 @@ package com.example.ratbvkotlin.ui.buslines
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnForIndexed
 import androidx.compose.material.*
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.example.ratbvkotlin.R
@@ -46,7 +48,10 @@ sealed class BusLinesBottomNavigationScreens(val busType: String,
 }
 
 @Composable
-fun BusLinesScreen(viewModel: BusLinesViewModel) {
+fun BusLinesScreen(
+    viewModel: BusLinesViewModel,
+    navController: NavController,
+) {
 
     val internalNavHostController = rememberNavController()
     val coroutineScope = rememberCoroutineScope()
@@ -64,6 +69,7 @@ fun BusLinesScreen(viewModel: BusLinesViewModel) {
         bodyContent = {
             BusLinesNavHostComponent(
                 internalNavHostController,
+                navController,
                 viewModel,
                 onLoadData = {
                     coroutineScope.launch {
@@ -91,8 +97,10 @@ fun BusLinesTopBarComponent() {
 
 @Composable
 fun BusLinesNavHostComponent(navHostController: NavHostController,
+                             navController: NavController,
                              viewModel: BusLinesViewModel,
-                             onLoadData: (String) -> Unit) {
+                             onLoadData: (String) -> Unit
+) {
 
     NavHost(
         navHostController,
@@ -105,7 +113,8 @@ fun BusLinesNavHostComponent(navHostController: NavHostController,
             BusLinesTabComponent(
                 viewModel.busLines,
                 viewModel.lastUpdated,
-                viewModel.isRefreshing
+                viewModel.isRefreshing,
+                navController
             )
         }
         composable(BusLinesBottomNavigationScreens.Trolleybus.busType) {
@@ -115,7 +124,8 @@ fun BusLinesNavHostComponent(navHostController: NavHostController,
             BusLinesTabComponent(
                 viewModel.busLines,
                 viewModel.lastUpdated,
-                viewModel.isRefreshing
+                viewModel.isRefreshing,
+                navController
             )
         }
         composable(BusLinesBottomNavigationScreens.Midibus.busType) {
@@ -125,7 +135,8 @@ fun BusLinesNavHostComponent(navHostController: NavHostController,
             BusLinesTabComponent(
                 viewModel.busLines,
                 viewModel.lastUpdated,
-                viewModel.isRefreshing
+                viewModel.isRefreshing,
+                navController
             )
         }
     }
@@ -188,7 +199,8 @@ private fun currentRoute(navController: NavHostController): String? {
 fun BusLinesTabComponent(
     busLinesLiveData: LiveData<List<BusLinesViewModel.BusLineItemViewModel>>,
     lastUpdateDateLiveData: LiveData<String>,
-    isRefreshingLiveData: LiveData<Boolean>
+    isRefreshingLiveData: LiveData<Boolean>,
+    navController: NavController
 ) {
 
     val busLines by busLinesLiveData.observeAsState(initial = emptyList())
@@ -213,13 +225,19 @@ fun BusLinesTabComponent(
         if (isRefreshing) {
             LoadingComponent()
         } else {
-            BusLineListComponent(busLines)
+            BusLineListComponent(
+                busLines,
+                navController
+            )
         }
     }
 }
 
 @Composable
-fun BusLineListComponent(busLines: List<BusLinesViewModel.BusLineItemViewModel>) {
+fun BusLineListComponent(
+    busLines: List<BusLinesViewModel.BusLineItemViewModel>,
+    navController: NavController
+) {
 
     LazyColumnForIndexed(
         items = busLines
@@ -227,7 +245,17 @@ fun BusLineListComponent(busLines: List<BusLinesViewModel.BusLineItemViewModel>)
         BusLineItemComponent(
             busLine.name,
             busLine.route
-        )
+        ) {
+            navController.navigate(
+                BusLinesFragmentDirections
+                    .navigateToBusStationsFragmentDest(
+                        busLine.linkNormalWay,
+                        busLine.linkReverseWay,
+                        busLine.id,
+                        busLine.name,
+                    )
+            )
+        }
 
         if (index < busLines.size - 1) {
             Divider(
@@ -259,16 +287,18 @@ fun LoadingComponent() {
 @Composable
 fun BusLineItemComponent(
     name: String,
-    route: String
+    route: String,
+    onItemClick: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
-            .fillMaxWidth()
+            .clickable(onClick = onItemClick)
             .padding(
                 top = 4.dp,
                 bottom = 4.dp
             )
+            .fillMaxWidth()
     ) {
         Text(
             text = name,

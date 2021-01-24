@@ -45,8 +45,8 @@ class BusLinesFragment : Fragment() {
             setContent {
                 BusLinesScreen(
                     busLinesViewModel,
+                    findNavController()
                 )
-                    //findNavController()
             }
         }
         // Links the binding to the fragment layout [fragment_bus_line_list.xml]

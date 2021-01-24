@@ -53,6 +53,11 @@ class BusLinesViewModel(private val _repository: BusRepository,
         val name: String = busLine.name
         val route: String = busLine.route
 
+        // Navigation parameters
+        val id: Int = busLine.id
+        val linkNormalWay: String = busLine.linkNormalWay
+        val linkReverseWay: String = busLine.linkReverseWay
+
         fun onItemClicked() {
             onBusLineClickListener?.invoke(busLine.linkNormalWay, busLine.linkReverseWay, busLine.id, busLine.name)
         }
