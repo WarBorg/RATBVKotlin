@@ -6,9 +6,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,28 +19,29 @@ import com.example.ratbvkotlin.R
 import com.example.ratbvkotlin.ui.common.BusBottomNavigationScreens
 import com.example.ratbvkotlin.ui.common.composables.BusBottomNavigationComponent
 import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
+import com.example.ratbvkotlin.viewmodels.BusTransportSubtypes
 import kotlinx.coroutines.launch
 
-sealed class BusLinesBottomNavigationScreens(val busType: String,
+sealed class BusLinesBottomNavigationScreens(val busTransportSubtype: String,
                                              @StringRes val transportSubtypeResource1Id: Int,
                                              @DrawableRes val transportSubtypeIconResourceId: Int
 ) : BusBottomNavigationScreens(
-    type = busType,
+    type = busTransportSubtype,
     titleResourceId = transportSubtypeResource1Id,
     iconResourceId = transportSubtypeIconResourceId
 ) {
     object Bus : BusLinesBottomNavigationScreens(
-        busType = "Bus",
+        busTransportSubtype = BusTransportSubtypes.Bus.name,
         transportSubtypeResource1Id = R.string.title_bus,
         transportSubtypeIconResourceId = R.drawable.ic_tab_bus
     )
     object Trolleybus : BusLinesBottomNavigationScreens(
-        busType = "Trolleybus",
+        busTransportSubtype = BusTransportSubtypes.Trolleybus.name,
         transportSubtypeResource1Id = R.string.title_trolleybus,
         transportSubtypeIconResourceId = R.drawable.ic_tab_trolleybus
     )
     object Midibus : BusLinesBottomNavigationScreens(
-        busType = "Midibus",
+        busTransportSubtype = BusTransportSubtypes.Midibus.name,
         transportSubtypeResource1Id = R.string.title_midibus,
         transportSubtypeIconResourceId = R.drawable.ic_tab_midibus
     )
@@ -61,7 +64,7 @@ fun BusLinesScreen(
 
     Scaffold(
         topBar = {
-            BusLinesTopBarComponent()
+            BusLinesTopBarComponent(viewModel.busTransportSubtype)
         },
         bodyContent = {
             BusLinesNavHostComponent(
@@ -86,10 +89,18 @@ fun BusLinesScreen(
 }
 
 @Composable
-fun BusLinesTopBarComponent() {
+fun BusLinesTopBarComponent(
+    busTransportSubtypeLiveData: LiveData<BusTransportSubtypes>
+) {
+    val busTransportSubtype by busTransportSubtypeLiveData.observeAsState(initial = BusTransportSubtypes.Bus)
+
     TopAppBar(
         title = {
-            Text(text = stringResource(id = R.string.title_bus_lines))
+            Text(text = when (busTransportSubtype) {
+                BusTransportSubtypes.Bus -> stringResource(id = R.string.title_bus_lines)
+                BusTransportSubtypes.Trolleybus -> stringResource(id = R.string.title_trolleybus_lines)
+                BusTransportSubtypes.Midibus -> stringResource(id = R.string.title_midibus_lines)
+            })
         }
     )
 }
@@ -98,17 +109,19 @@ fun BusLinesTopBarComponent() {
 fun BusLinesNavHostComponent(navHostController: NavHostController,
                              viewModel: BusLinesViewModel,
                              bottomNavigationTabs: List<BusBottomNavigationScreens>,
-                             onLoadData: (String) -> Unit,
+                             onLoadData: (BusTransportSubtypes) -> Unit,
                              onBusLineClicked: (String, String, Int , String) -> Unit
 ) {
     NavHost(
         navHostController,
-        startDestination = BusLinesBottomNavigationScreens.Bus.busType
+        startDestination = BusLinesBottomNavigationScreens.Bus.busTransportSubtype
     ) {
         bottomNavigationTabs.forEach { screen ->
             composable(screen.type) {
 
-                onLoadData(screen.type)
+                onLoadData(
+                    BusTransportSubtypes.valueOf(screen.type)
+                )
 
                 BusLinesTabComponent(
                     viewModel.busLines,

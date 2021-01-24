@@ -39,7 +39,7 @@ class BusTimetablesViewModel(private val _repository: BusRepository,
     }
 
     /**
-     * [ViewModel] for a specific [FragmentBusTimetableListItemBinding], which contains the item's [busTimetable]
+     * [ViewModel] for a specific [BusTimetableItemComponent], which contains the item's [busTimetable]
      */
      class BusTimetableItemViewModel (private val busTimetable: BusTimetableModel)
         : ViewModel() {

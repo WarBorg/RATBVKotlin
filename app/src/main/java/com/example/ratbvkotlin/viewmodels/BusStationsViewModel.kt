@@ -81,7 +81,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
     }
 
     /**
-     * [ViewModel] for a specific [BusStationListComponent], which contains the item's [busStation].
+     * [ViewModel] for a specific [BusStationItemComponent], which contains the item's [busStation].
      */
     inner class BusStationItemViewModel(private val busStation: BusStationModel) : ViewModel() {
 

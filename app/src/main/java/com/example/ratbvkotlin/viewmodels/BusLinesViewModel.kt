@@ -4,13 +4,19 @@ import androidx.lifecycle.*
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusLineModel
 
+enum class BusTransportSubtypes {
+    Bus, Trolleybus, Midibus
+}
+
 class BusLinesViewModel(private val _repository: BusRepository)
     : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
+    private val _busTransportSubtype = MutableLiveData<BusTransportSubtypes>()
     private val _busLines = MutableLiveData<List<BusLineItemViewModel>>()
 
     val isRefreshing: LiveData<Boolean> = _isRefreshing
+    val busTransportSubtype: LiveData<BusTransportSubtypes> = _busTransportSubtype
     val busLines: LiveData<List<BusLineItemViewModel>> = _busLines
 
     // Sets the lastUpdated value based on the first item of the list since all will have the same value
@@ -21,13 +27,15 @@ class BusLinesViewModel(private val _repository: BusRepository)
     /**
      * Gets the bus lines data from the repository as LiveData
      */
-    suspend fun getBusLines(busTransportSubtype: String,
+    suspend fun getBusLines(busTransportSubtype: BusTransportSubtypes,
                             isForcedRefresh: Boolean = false) {
 
         _isRefreshing.value = true
 
+        _busTransportSubtype.value = busTransportSubtype
+
         _busLines.value = _repository.getBusLines(isForcedRefresh)
-            .filter { busLineModel -> busLineModel.type == busTransportSubtype }
+            .filter { busLineModel -> busLineModel.type == busTransportSubtype.name }
             .map { busLineModel -> BusLineItemViewModel(busLineModel) }
 
         _isRefreshing.value = false
