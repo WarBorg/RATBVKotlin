@@ -1,12 +1,7 @@
 package com.example.ratbvkotlin.ui.buslines
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.ratbvkotlin.R
 
 // Define activity class and link it with layout file
@@ -16,7 +11,7 @@ class BusLinesActivity : AppCompatActivity(R.layout.activity_bus_lines) {
         super.onCreate(savedInstanceState)
 
         // Get bottom tab bar and navigation host fragment
-        val navView: BottomNavigationView = findViewById(R.id.bus_line_list_nav_view)
+        /*val navView: BottomNavigationView = findViewById(R.id.bus_line_list_nav_view)
         val navController = findNavController(R.id.bus_line_list_nav_host_fragment)
 
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
@@ -32,6 +27,6 @@ class BusLinesActivity : AppCompatActivity(R.layout.activity_bus_lines) {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         // Creates correlation between bottom tab bar and actual fragment displayed
-        navView.setupWithNavController(navController)
+        navView.setupWithNavController(navController)*/
     }
 }

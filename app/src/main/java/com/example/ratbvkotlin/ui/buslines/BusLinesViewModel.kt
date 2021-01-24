@@ -1,6 +1,9 @@
 package com.example.ratbvkotlin.ui.buslines
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.databinding.FragmentBusLineListItemBinding
@@ -29,12 +32,13 @@ class BusLinesViewModel(private val _repository: BusRepository,
     /**
      * Gets the bus lines data from the repository as LiveData
      */
-    suspend fun getBusLines(isForcedRefresh: Boolean = false) {
+    suspend fun getBusLines(busTransportSubtype: String,
+                            isForcedRefresh: Boolean = false) {
 
         _isRefreshing.value = true
 
         _busLines.value = _repository.getBusLines(isForcedRefresh)
-            .filter { busLineModel -> busLineModel.type == _busTransportSubtype }
+            .filter { busLineModel -> busLineModel.type == busTransportSubtype }
             .map { busLineModel -> BusLineItemViewModel(busLineModel) }
 
         _isRefreshing.value = false
@@ -45,6 +49,9 @@ class BusLinesViewModel(private val _repository: BusRepository,
      * and [onItemClicked] which is called when the users clicks on the current item.
      */
     inner class BusLineItemViewModel(val busLine: BusLineModel) : ViewModel() {
+
+        val name: String = busLine.name
+        val route: String = busLine.route
 
         fun onItemClicked() {
             onBusLineClickListener?.invoke(busLine.linkNormalWay, busLine.linkReverseWay, busLine.id, busLine.name)
