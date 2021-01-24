@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
@@ -37,6 +36,8 @@ fun BusStationsScreen(
     Scaffold(
         topBar = {
             BusStationsTopBarComponent(
+                viewModel.busLineName,
+                viewModel.isNormalDirection,
                 onBackNavigation,
                 onReverseStations = {
                     coroutineScope.launch {
@@ -71,16 +72,22 @@ fun BusStationsScreen(
 
 @Composable
 fun BusStationsTopBarComponent(
+    busLineName: String,
+    isNormalDirectionLiveData: LiveData<Boolean>,
     onBackNavigation: () -> Unit,
     onReverseStations: () -> Unit,
     onDownloadAllTimetableData: () -> Unit
 ) {
+
+    val isNormalDirection by isNormalDirectionLiveData.observeAsState(initial = true)
+
     TopAppBar(
         title = {
             Text(
-                text = stringResource(
-                    id = R.string.title_activity_bus_stations
-                )
+                text = when (isNormalDirection) {
+                    true -> "$busLineName - normal"
+                    false -> "$busLineName - reverse"
+                }
             )
         },
         navigationIcon = {

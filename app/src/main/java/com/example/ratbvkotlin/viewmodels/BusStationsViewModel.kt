@@ -12,11 +12,12 @@ class BusStationsViewModel(private val _repository: BusRepository,
                            val busLineName: String)
     : ViewModel() {
 
-    private var _isNormalDirection = true
+    private val _isNormalDirection = MutableLiveData(true)
     private val _isRefreshing = MutableLiveData(false)
     private val _busStations = MutableLiveData<List<BusStationItemViewModel>>()
 
     val isRefreshing: LiveData<Boolean> = _isRefreshing
+    val isNormalDirection: LiveData<Boolean> = _isNormalDirection
     val busStations: LiveData<List<BusStationItemViewModel>> = _busStations
 
     // Sets the lastUpdated value based on the first item of the list since all will have the same value
@@ -33,13 +34,14 @@ class BusStationsViewModel(private val _repository: BusRepository,
     /**
      * Gets the bus stations data from the repository as LiveData
      */
-    suspend fun getBusStations(isForcedRefresh: Boolean = false) {
+    private suspend fun getBusStations(isForcedRefresh: Boolean = false) {
 
         _isRefreshing.value = true
 
-        val (directionLink, direction) = when (_isNormalDirection) {
+        val (directionLink, direction) = when (_isNormalDirection.value) {
             true -> Pair(_directionLinkNormal, "normal")
             false -> Pair(_directionLinkReverse, "reverse")
+            else -> Pair(_directionLinkNormal, "normal")
         }
 
         _busStations.value = _repository.getBusStations(
@@ -57,7 +59,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
      */
     suspend fun reverseStations() {
 
-        _isNormalDirection = !_isNormalDirection
+        _isNormalDirection.value = !_isNormalDirection.value!!
 
         getBusStations()
     }
