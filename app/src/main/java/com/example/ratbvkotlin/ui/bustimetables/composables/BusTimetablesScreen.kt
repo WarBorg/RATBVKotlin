@@ -4,26 +4,34 @@ import androidx.annotation.StringRes
 import androidx.compose.material.*
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.ratbvkotlin.R
+import com.example.ratbvkotlin.ui.common.BusBottomNavigationScreens
+import com.example.ratbvkotlin.ui.common.composables.BusBottomNavigationComponent
 import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
 import kotlinx.coroutines.launch
 
 sealed class BusTimetablesBottomNavigationScreens(val timeOfWeek: String,
-                                                  @StringRes val resourceId: Int) {
+                                                  @StringRes val timeOfWeekResourceId: Int
+) : BusBottomNavigationScreens(
+    type = timeOfWeek,
+    titleResourceId = timeOfWeekResourceId,
+    iconResourceId = null
+) {
     object WeekDays : BusTimetablesBottomNavigationScreens(
         timeOfWeek = "WeekDays",
-        resourceId = R.string.title_weekdays)
+        timeOfWeekResourceId = R.string.title_weekdays)
     object Saturday : BusTimetablesBottomNavigationScreens(
         timeOfWeek = "Saturday",
-        resourceId = R.string.title_saturday)
+        timeOfWeekResourceId = R.string.title_saturday)
     object Sunday : BusTimetablesBottomNavigationScreens(
         timeOfWeek = "Sunday",
-        resourceId = R.string.title_sunday)
+        timeOfWeekResourceId = R.string.title_sunday)
 }
 
 @Composable
@@ -49,15 +57,19 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
             BusTimetablesNavHostComponent(
                 navController,
                 viewModel,
+                bottomNavigationItems,
                 onLoadData = {
                     coroutineScope.launch {
-                        viewModel.getBusTimetables(it) }
+                        viewModel.getBusTimetables(it)
+                    }
                 }
             )
         },
         bottomBar = {
-            BusTimetablesBottomNavigationComponent(navController,
-                bottomNavigationItems)
+            BusBottomNavigationComponent(
+                navController,
+                bottomNavigationItems
+            )
         }
     )
 }
@@ -79,77 +91,24 @@ fun BusTimetablesTopBarComponent(onBackNavigation: () -> Unit) {
 @Composable
 fun BusTimetablesNavHostComponent(navController: NavHostController,
                                   viewModel: BusTimetablesViewModel,
-                                  onLoadData: (String) -> Unit) {
-
+                                  bottomNavigationTabs: List<BusBottomNavigationScreens>,
+                                  onLoadData: (String) -> Unit
+) {
     NavHost(
         navController,
         startDestination = BusTimetablesBottomNavigationScreens.WeekDays.timeOfWeek
     ) {
-        composable(BusTimetablesBottomNavigationScreens.WeekDays.timeOfWeek) {
+        bottomNavigationTabs.forEach { screen ->
+            composable(screen.type) {
 
-            onLoadData(BusTimetablesBottomNavigationScreens.WeekDays.timeOfWeek)
+                onLoadData(screen.type)
 
-            BusTimetableTabComponent(
-                viewModel.busTimetables,
-                viewModel.lastUpdated,
-                viewModel.isRefreshing
-            )
-        }
-        composable(BusTimetablesBottomNavigationScreens.Saturday.timeOfWeek) {
-
-            onLoadData(BusTimetablesBottomNavigationScreens.Saturday.timeOfWeek)
-
-            BusTimetableTabComponent(
-                viewModel.busTimetables,
-                viewModel.lastUpdated,
-                viewModel.isRefreshing
-            )
-        }
-        composable(BusTimetablesBottomNavigationScreens.Sunday.timeOfWeek) {
-
-            onLoadData(BusTimetablesBottomNavigationScreens.Sunday.timeOfWeek)
-
-            BusTimetableTabComponent(
-                viewModel.busTimetables,
-                viewModel.lastUpdated,
-                viewModel.isRefreshing
-            )
+                BusTimetableTabComponent(
+                    viewModel.busTimetables,
+                    viewModel.lastUpdated,
+                    viewModel.isRefreshing
+                )
+            }
         }
     }
-}
-
-@Composable
-fun BusTimetablesBottomNavigationComponent(
-    navController: NavHostController,
-    items: List<BusTimetablesBottomNavigationScreens>
-) {
-    BottomNavigation {
-        val currentRoute = currentRoute(navController)
-
-        items.forEach { screen ->
-            BottomNavigationItem(
-                icon = { },
-                //label = { Text(text = screen.resourceId) },
-                label = { Text(text = stringResource(id = screen.resourceId)) },
-                selected = currentRoute == screen.timeOfWeek,
-                onClick = {
-                    // This is the equivalent to popUpTo the start destination
-                    //navController.popBackStack(navController.graph.startDestination, false)
-                    navController.popBackStack()
-
-                    // This if check gives us a "singleTop" behavior where we do not create a
-                    // second instance of the composable if we are already on that destination
-                    if (currentRoute != screen.timeOfWeek) {
-                        navController.navigate(screen.timeOfWeek)
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun currentRoute(navController: NavHostController): String? {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    return navBackStackEntry?.arguments?.getString(KEY_ROUTE)
 }

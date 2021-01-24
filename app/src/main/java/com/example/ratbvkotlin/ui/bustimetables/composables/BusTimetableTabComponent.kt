@@ -1,20 +1,21 @@
 package com.example.ratbvkotlin.ui.bustimetables.composables
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
-import com.example.ratbvkotlin.R
+import com.example.ratbvkotlin.ui.common.composables.LastUpdateComposable
+import com.example.ratbvkotlin.ui.common.composables.LoadingComponent
 import com.example.ratbvkotlin.ui.resources.typography
 import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
 
@@ -36,11 +37,10 @@ fun BusTimetableTabComponent(busTimetablesLiveData: LiveData<List<BusTimetablesV
                 bottom = 58.dp)
             ) {
 
-        Text(
-            text = "${stringResource(id = R.string.last_update_simple)} $lastUpdateDate",
-            fontWeight = FontWeight.Normal,
-            style = typography.h6,
-            modifier = Modifier.align(Alignment.End)
+        LastUpdateComposable(
+            lastUpdateDate,
+            modifier = Modifier
+                .align(Alignment.End)
         )
 
         BusTimetableListHeaderComponent()
@@ -76,20 +76,6 @@ fun BusTimetableListHeaderComponent() {
             modifier = Modifier
                 .padding(4.dp)
                 .weight(0.75f)
-        )
-    }
-}
-
-@Composable
-fun LoadingComponent() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = CenterHorizontally
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier
-                .wrapContentWidth(CenterHorizontally)
         )
     }
 }

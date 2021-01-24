@@ -1,11 +1,9 @@
 package com.example.ratbvkotlin.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusStationModel
+import kotlinx.coroutines.launch
 
 class BusStationsViewModel(private val _repository: BusRepository,
                            private val _directionLinkNormal: String,
@@ -14,6 +12,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
                            val busLineName: String)
     : ViewModel() {
 
+    private var _isNormalDirection = true
     private val _isRefreshing = MutableLiveData(false)
     private val _busStations = MutableLiveData<List<BusStationItemViewModel>>()
 
@@ -25,7 +24,11 @@ class BusStationsViewModel(private val _repository: BusRepository,
         busStations.firstOrNull()?.lastUpdateDate ?: "Never"
     }
 
-    var isNormalDirection = true
+    init {
+        viewModelScope.launch {
+            getBusStations()
+        }
+    }
 
     /**
      * Gets the bus stations data from the repository as LiveData
@@ -34,7 +37,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
 
         _isRefreshing.value = true
 
-        val (directionLink, direction) = when (isNormalDirection) {
+        val (directionLink, direction) = when (_isNormalDirection) {
             true -> Pair(_directionLinkNormal, "normal")
             false -> Pair(_directionLinkReverse, "reverse")
         }
@@ -54,7 +57,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
      */
     suspend fun reverseStations() {
 
-        isNormalDirection = !isNormalDirection
+        _isNormalDirection = !_isNormalDirection
 
         getBusStations()
     }
@@ -78,8 +81,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
     }
 
     /**
-     * [ViewModel] for a specific [FragmentBusStationListItemBinding], which contains the item's [busStation]
-     * and [onItemClicked] which is called when the users clicks on the current item.
+     * [ViewModel] for a specific [BusStationListComponent], which contains the item's [busStation].
      */
     inner class BusStationItemViewModel(private val busStation: BusStationModel) : ViewModel() {
 

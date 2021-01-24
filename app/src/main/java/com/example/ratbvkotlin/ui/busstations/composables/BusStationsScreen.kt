@@ -1,7 +1,8 @@
 package com.example.ratbvkotlin.ui.busstations.composables
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -15,13 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import com.example.ratbvkotlin.R
-import com.example.ratbvkotlin.ui.bustimetables.composables.LoadingComponent
-import com.example.ratbvkotlin.ui.resources.typography
+import com.example.ratbvkotlin.ui.common.composables.LastUpdateComposable
+import com.example.ratbvkotlin.ui.common.composables.LoadingComponent
 import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
 import kotlinx.coroutines.launch
 
@@ -32,10 +32,6 @@ fun BusStationsScreen(viewModel: BusStationsViewModel,
 
     val coroutineScope = rememberCoroutineScope()
     val context = AmbientContext.current
-
-    coroutineScope.launch {
-        viewModel.getBusStations()
-    }
 
     Scaffold(
         topBar = {
@@ -132,12 +128,9 @@ fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewMo
         )
     ) {
 
-        // TODO extract this as a separate component
-        Text(
-            text = "${stringResource(id = R.string.last_update_simple)} $lastUpdateDate",
-            fontWeight = FontWeight.Normal,
-            style = typography.h6,
-            modifier = modifier
+        LastUpdateComposable(
+            lastUpdateDate,
+            modifier = Modifier
                 .align(Alignment.End)
         )
 
@@ -149,19 +142,5 @@ fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewMo
                 navController
             )
         }
-    }
-}
-
-@Composable
-fun LoadingComponent() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier
-                .wrapContentWidth(Alignment.CenterHorizontally)
-        )
     }
 }

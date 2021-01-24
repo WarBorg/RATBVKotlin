@@ -1,9 +1,6 @@
 package com.example.ratbvkotlin.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusLineModel
 
@@ -37,8 +34,7 @@ class BusLinesViewModel(private val _repository: BusRepository)
     }
 
     /**
-     * [ViewModel] for a specific [FragmentBusLineListItemBinding], which contains the item's [busLine]
-     * and [onItemClicked] which is called when the users clicks on the current item.
+     * [ViewModel] for a specific [BusTimetableItemComponent], which contains the item's [busLine].
      */
     inner class BusLineItemViewModel(private val busLine: BusLineModel) : ViewModel() {
 
