@@ -4,10 +4,8 @@ import androidx.annotation.StringRes
 import androidx.compose.material.*
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.lifecycle.LiveData
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -53,8 +51,6 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
     Scaffold(
         topBar = {
             BusTimetablesTopBarComponent(
-                viewModel.busStationName,
-                viewModel.timeOfWeek,
                 onBackNavigation
             )
         },
@@ -81,16 +77,11 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
 
 @Composable
 fun BusTimetablesTopBarComponent(
-    busStationName: String,
-    timeOfWeekLiveData: LiveData<TimetableTypes>,
     onBackNavigation: () -> Unit
 ) {
-
-    val timeOfWeek by timeOfWeekLiveData.observeAsState(initial = TimetableTypes.WeekDays)
-
     TopAppBar(
         title = {
-            Text(text = "$busStationName - $timeOfWeek")
+            Text(text = stringResource(id = R.string.title_screen_bus_timetables))
         },
         navigationIcon = {
             IconButton(onClick = onBackNavigation) {
@@ -120,7 +111,9 @@ fun BusTimetablesNavHostComponent(navController: NavHostController,
                 BusTimetableTabComponent(
                     viewModel.busTimetables,
                     viewModel.lastUpdated,
-                    viewModel.isRefreshing
+                    viewModel.isRefreshing,
+                    viewModel.timeOfWeek,
+                    viewModel.busStationName,
                 )
             }
         }

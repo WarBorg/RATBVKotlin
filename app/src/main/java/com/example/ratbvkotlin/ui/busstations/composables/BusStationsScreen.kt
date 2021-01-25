@@ -2,6 +2,7 @@ package com.example.ratbvkotlin.ui.busstations.composables
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -14,12 +15,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import com.example.ratbvkotlin.R
 import com.example.ratbvkotlin.ui.common.composables.LastUpdateComposable
 import com.example.ratbvkotlin.ui.common.composables.LoadingComponent
+import com.example.ratbvkotlin.ui.resources.typography
 import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
 import kotlinx.coroutines.launch
 
@@ -36,8 +40,6 @@ fun BusStationsScreen(
     Scaffold(
         topBar = {
             BusStationsTopBarComponent(
-                viewModel.busLineName,
-                viewModel.isNormalDirection,
                 onBackNavigation,
                 onReverseStations = {
                     coroutineScope.launch {
@@ -64,6 +66,8 @@ fun BusStationsScreen(
                 viewModel.busStations,
                 viewModel.lastUpdated,
                 viewModel.isRefreshing,
+                viewModel.isNormalDirection,
+                viewModel.busLineName,
                 onBusStationClicked
             )
         }
@@ -72,22 +76,14 @@ fun BusStationsScreen(
 
 @Composable
 fun BusStationsTopBarComponent(
-    busLineName: String,
-    isNormalDirectionLiveData: LiveData<Boolean>,
     onBackNavigation: () -> Unit,
     onReverseStations: () -> Unit,
     onDownloadAllTimetableData: () -> Unit
 ) {
-
-    val isNormalDirection by isNormalDirectionLiveData.observeAsState(initial = true)
-
     TopAppBar(
         title = {
             Text(
-                text = when (isNormalDirection) {
-                    true -> "$busLineName - normal"
-                    false -> "$busLineName - reverse"
-                }
+                text = stringResource(id = R.string.title_screen_bus_stations)
             )
         },
         navigationIcon = {
@@ -98,7 +94,7 @@ fun BusStationsTopBarComponent(
         actions = {
             IconButton(onClick = onReverseStations) {
                 Icon(
-                    imageVector =  vectorResource(
+                    imageVector = vectorResource(
                         id = R.drawable.ic_option_reverse
                     ),
                     tint = Color.White
@@ -120,12 +116,15 @@ fun BusStationsTopBarComponent(
 fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewModel.BusStationItemViewModel>>,
                             lastUpdateDateLiveData: LiveData<String>,
                             isRefreshingLiveData: LiveData<Boolean>,
+                            isNormalDirectionLiveData: LiveData<Boolean>,
+                            busLineName: String,
                             onBusStationClicked: (String, Int , String) -> Unit,
                             modifier: Modifier = Modifier) {
 
     val busStations by busStationsLiveData.observeAsState(initial = emptyList())
     val lastUpdateDate by lastUpdateDateLiveData.observeAsState(initial = "Never")
     val isRefreshing by isRefreshingLiveData.observeAsState(initial = true)
+    val isNormalDirection by isNormalDirectionLiveData.observeAsState(initial = true)
 
     Column(
         modifier = modifier.padding(
@@ -140,6 +139,21 @@ fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewMo
             lastUpdateDate,
             modifier = Modifier
                 .align(Alignment.End)
+        )
+
+        Text(
+            text = when (isNormalDirection) {
+                true -> "$busLineName - normal"
+                false -> "$busLineName - reverse"
+            },
+            style = typography.h5,
+            textAlign = TextAlign.End,
+            modifier = Modifier
+                .padding(
+                    top = 4.dp,
+                    bottom = 4.dp
+                )
+                .fillMaxWidth()
         )
 
         if (isRefreshing) {

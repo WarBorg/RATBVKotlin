@@ -18,16 +18,21 @@ import com.example.ratbvkotlin.ui.common.composables.LastUpdateComposable
 import com.example.ratbvkotlin.ui.common.composables.LoadingComponent
 import com.example.ratbvkotlin.ui.resources.typography
 import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
+import com.example.ratbvkotlin.viewmodels.TimetableTypes
 
 @Composable
 fun BusTimetableTabComponent(busTimetablesLiveData: LiveData<List<BusTimetablesViewModel.BusTimetableItemViewModel>>,
                              lastUpdateDateLiveData: LiveData<String>,
                              isRefreshingLiveData: LiveData<Boolean>,
-                             modifier: Modifier = Modifier) {
+                             timeOfWeekLiveData: LiveData<TimetableTypes>,
+                             busStationName: String,
+                             modifier: Modifier = Modifier
+) {
 
     val busTimetables by busTimetablesLiveData.observeAsState(initial = emptyList())
     val lastUpdateDate by lastUpdateDateLiveData.observeAsState(initial = "Never")
     val isRefreshing by isRefreshingLiveData.observeAsState(initial = true)
+    val timeOfWeek by timeOfWeekLiveData.observeAsState(initial = TimetableTypes.WeekDays)
 
     Column(
             modifier = Modifier.padding(
@@ -41,6 +46,18 @@ fun BusTimetableTabComponent(busTimetablesLiveData: LiveData<List<BusTimetablesV
             lastUpdateDate,
             modifier = Modifier
                 .align(Alignment.End)
+        )
+
+        Text(
+            text = "$busStationName - $timeOfWeek",
+            style = typography.h5,
+            textAlign = TextAlign.End,
+            modifier = Modifier
+                .padding(
+                    top = 4.dp,
+                    bottom = 4.dp
+                )
+                .fillMaxWidth()
         )
 
         BusTimetableListHeaderComponent()

@@ -16,8 +16,10 @@
     <string name="title_midibus_lines">Midibus Lines</string>
     <string name="title_trolleybus_lines">Trolleybus Lines</string>
 
-    <string name="title_activity_bus_stations">Bus Stations</string>
-    <string name="title_activity_bus_timetables">Bus Timetables</string>
+    <string name="title_screen_bus_lines">Bus Lines</string>
+    <string name="title_screen_bus_stations">Bus Stations</string>
+    <string name="title_screen_bus_timetables">Bus Timetables</string>
+
     <string name="bus_station_list_option_reverse">Reverse</string>
     <string name="bus_station_list_option_download">Download</string>
 
