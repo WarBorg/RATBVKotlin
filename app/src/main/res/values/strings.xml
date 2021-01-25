@@ -5,7 +5,7 @@
     <string name="last_update_simple">Last update: </string>
 
     <string name="title_bus">Bus</string>
-    <string name="title_midibus">Midibus</string>
+    <string name="title_electricbus">Electric Bus</string>
     <string name="title_trolleybus">Trolleybus</string>
 
     <string name="title_weekdays">Weekdays</string>
@@ -13,7 +13,7 @@
     <string name="title_sunday">Sunday</string>
 
     <string name="title_bus_lines">Bus Lines</string>
-    <string name="title_midibus_lines">Midibus Lines</string>
+    <string name="title_electricbus_lines">Electric Bus Lines</string>
     <string name="title_trolleybus_lines">Trolleybus Lines</string>
 
     <string name="title_screen_bus_lines">Bus Lines</string>

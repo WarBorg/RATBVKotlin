@@ -31,7 +31,8 @@ data class BusLineModel(
     @Expose
     @SerializedName("type")
     @ColumnInfo(name = "Type")
-    val type: String,
+    // TODO change API to replace midibus with electric bus
+    var type: String,
 
     @Expose
     @SerializedName("linkNormalWay")

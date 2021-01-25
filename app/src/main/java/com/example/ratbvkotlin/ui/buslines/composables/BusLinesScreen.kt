@@ -35,15 +35,15 @@ sealed class BusLinesBottomNavigationScreens(val busTransportSubtype: String,
         transportSubtypeResource1Id = R.string.title_bus,
         transportSubtypeIconResourceId = R.drawable.ic_tab_bus
     )
+    object Electricbus : BusLinesBottomNavigationScreens(
+        busTransportSubtype = BusTransportSubtypes.Electricbus.name,
+        transportSubtypeResource1Id = R.string.title_electricbus,
+        transportSubtypeIconResourceId = R.drawable.ic_tab_electricbus
+    )
     object Trolleybus : BusLinesBottomNavigationScreens(
         busTransportSubtype = BusTransportSubtypes.Trolleybus.name,
         transportSubtypeResource1Id = R.string.title_trolleybus,
         transportSubtypeIconResourceId = R.drawable.ic_tab_trolleybus
-    )
-    object Midibus : BusLinesBottomNavigationScreens(
-        busTransportSubtype = BusTransportSubtypes.Midibus.name,
-        transportSubtypeResource1Id = R.string.title_midibus,
-        transportSubtypeIconResourceId = R.drawable.ic_tab_midibus
     )
 }
 
@@ -58,8 +58,8 @@ fun BusLinesScreen(
 
     val bottomNavigationItems = listOf(
         BusLinesBottomNavigationScreens.Bus,
-        BusLinesBottomNavigationScreens.Trolleybus,
-        BusLinesBottomNavigationScreens.Midibus,
+        BusLinesBottomNavigationScreens.Electricbus,
+        BusLinesBottomNavigationScreens.Trolleybus
     )
 
     Scaffold(
@@ -98,8 +98,8 @@ fun BusLinesTopBarComponent(
         title = {
             Text(text = when (busTransportSubtype) {
                 BusTransportSubtypes.Bus -> stringResource(id = R.string.title_bus_lines)
+                BusTransportSubtypes.Electricbus -> stringResource(id = R.string.title_electricbus_lines)
                 BusTransportSubtypes.Trolleybus -> stringResource(id = R.string.title_trolleybus_lines)
-                BusTransportSubtypes.Midibus -> stringResource(id = R.string.title_midibus_lines)
             })
         }
     )

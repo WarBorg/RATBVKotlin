@@ -5,7 +5,7 @@ import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusLineModel
 
 enum class BusTransportSubtypes {
-    Bus, Trolleybus, Midibus
+    Bus, Electricbus, Trolleybus
 }
 
 class BusLinesViewModel(private val _repository: BusRepository)

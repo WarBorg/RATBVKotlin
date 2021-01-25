@@ -108,6 +108,11 @@ class BusRepository(
                                                  lastUpdated: String) {
         busLines.forEach { busLineModel ->
             busLineModel.lastUpdateDate = lastUpdated
+            // TODO change API to replace midibus with electric bus
+            busLineModel.type = when (busLineModel.type) {
+                "Midibus" -> "Electricbus"
+                else -> busLineModel.type
+            }
         }
 
         _busLinesDao.clearBusLines()
