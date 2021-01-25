@@ -4,8 +4,10 @@ import androidx.annotation.StringRes
 import androidx.compose.material.*
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,6 +16,7 @@ import com.example.ratbvkotlin.R
 import com.example.ratbvkotlin.ui.common.BusBottomNavigationScreens
 import com.example.ratbvkotlin.ui.common.composables.BusBottomNavigationComponent
 import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
+import com.example.ratbvkotlin.viewmodels.TimetableTypes
 import kotlinx.coroutines.launch
 
 sealed class BusTimetablesBottomNavigationScreens(val timeOfWeek: String,
@@ -24,13 +27,13 @@ sealed class BusTimetablesBottomNavigationScreens(val timeOfWeek: String,
     iconResourceId = null
 ) {
     object WeekDays : BusTimetablesBottomNavigationScreens(
-        timeOfWeek = "WeekDays",
+        timeOfWeek = TimetableTypes.WeekDays.name,
         timeOfWeekResourceId = R.string.title_weekdays)
     object Saturday : BusTimetablesBottomNavigationScreens(
-        timeOfWeek = "Saturday",
+        timeOfWeek = TimetableTypes.Saturday.name,
         timeOfWeekResourceId = R.string.title_saturday)
     object Sunday : BusTimetablesBottomNavigationScreens(
-        timeOfWeek = "Sunday",
+        timeOfWeek = TimetableTypes.Sunday.name,
         timeOfWeekResourceId = R.string.title_sunday)
 }
 
@@ -50,6 +53,8 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
     Scaffold(
         topBar = {
             BusTimetablesTopBarComponent(
+                viewModel.busStationName,
+                viewModel.timeOfWeek,
                 onBackNavigation
             )
         },
@@ -58,9 +63,9 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
                 navController,
                 viewModel,
                 bottomNavigationItems,
-                onLoadData = {
+                onLoadData = { timetableType ->
                     coroutineScope.launch {
-                        viewModel.getBusTimetables(it)
+                        viewModel.getBusTimetables(timetableType)
                     }
                 }
             )
@@ -75,10 +80,17 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
 }
 
 @Composable
-fun BusTimetablesTopBarComponent(onBackNavigation: () -> Unit) {
+fun BusTimetablesTopBarComponent(
+    busStationName: String,
+    timeOfWeekLiveData: LiveData<TimetableTypes>,
+    onBackNavigation: () -> Unit
+) {
+
+    val timeOfWeek by timeOfWeekLiveData.observeAsState(initial = TimetableTypes.WeekDays)
+
     TopAppBar(
         title = {
-            Text(text = stringResource(id = R.string.title_activity_bus_timetables))
+            Text(text = "$busStationName - $timeOfWeek")
         },
         navigationIcon = {
             IconButton(onClick = onBackNavigation) {
@@ -92,7 +104,7 @@ fun BusTimetablesTopBarComponent(onBackNavigation: () -> Unit) {
 fun BusTimetablesNavHostComponent(navController: NavHostController,
                                   viewModel: BusTimetablesViewModel,
                                   bottomNavigationTabs: List<BusBottomNavigationScreens>,
-                                  onLoadData: (String) -> Unit
+                                  onLoadData: (TimetableTypes) -> Unit
 ) {
     NavHost(
         navController,
@@ -101,7 +113,9 @@ fun BusTimetablesNavHostComponent(navController: NavHostController,
         bottomNavigationTabs.forEach { screen ->
             composable(screen.type) {
 
-                onLoadData(screen.type)
+                onLoadData(
+                    TimetableTypes.valueOf(screen.type)
+                )
 
                 BusTimetableTabComponent(
                     viewModel.busTimetables,
