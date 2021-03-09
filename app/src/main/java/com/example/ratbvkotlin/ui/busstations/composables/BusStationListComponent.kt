@@ -1,6 +1,7 @@
 package com.example.ratbvkotlin.ui.busstations.composables
 
-import androidx.compose.foundation.lazy.LazyColumnForIndexed
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import com.example.ratbvkotlin.ui.common.composables.ListItemDivider
 import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
@@ -11,18 +12,18 @@ fun BusStationListComponent(
     onBusStationClicked: (String, Int , String) -> Unit
 ) {
 
-    LazyColumnForIndexed(
-        items = busStations,
-    ) { index, station ->
+    LazyColumn {
+        itemsIndexed(busStations) { index, station ->
 
-        BusStationItemComponent(
-            station,
-            onBusStationClicked
-        )
+            BusStationItemComponent(
+                station,
+                onBusStationClicked
+            )
 
-        ListItemDivider(
-            index,
-            busStations.size
-        )
+            ListItemDivider(
+                index,
+                busStations.size
+            )
+        }
     }
 }

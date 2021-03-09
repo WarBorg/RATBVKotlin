@@ -66,7 +66,7 @@ fun BusLinesScreen(
         topBar = {
             BusLinesTopBarComponent(viewModel.busTransportSubtype)
         },
-        bodyContent = {
+        content = {
             BusLinesNavHostComponent(
                 internalNavHostController,
                 viewModel,

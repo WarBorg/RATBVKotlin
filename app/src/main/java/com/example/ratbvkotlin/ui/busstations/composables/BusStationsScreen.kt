@@ -14,9 +14,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
@@ -35,7 +35,7 @@ fun BusStationsScreen(
 ) {
 
     val coroutineScope = rememberCoroutineScope()
-    val context = AmbientContext.current
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -61,7 +61,7 @@ fun BusStationsScreen(
                 }
             )
         },
-        bodyContent = {
+        content = {
             BusStationBodyComponent(
                 viewModel.busStations,
                 viewModel.lastUpdated,
@@ -88,23 +88,28 @@ fun BusStationsTopBarComponent(
         },
         navigationIcon = {
             IconButton(onClick = onBackNavigation) {
-                Icon(Icons.Filled.ArrowBack)
+                Icon(
+                    imageVector =  Icons.Filled.ArrowBack,
+                    contentDescription = null
+                )
             }
         },
         actions = {
             IconButton(onClick = onReverseStations) {
                 Icon(
-                    imageVector = vectorResource(
+                    painter = painterResource(
                         id = R.drawable.ic_option_reverse
                     ),
+                    contentDescription = "Reverse",
                     tint = Color.White
                 )
             }
             IconButton(onClick = onDownloadAllTimetableData) {
                 Icon(
-                    imageVector = vectorResource(
+                    painter = painterResource(
                         id = R.drawable.ic_option_download
                     ),
+                    contentDescription = "Download",
                     tint = Color.White
                 )
             }

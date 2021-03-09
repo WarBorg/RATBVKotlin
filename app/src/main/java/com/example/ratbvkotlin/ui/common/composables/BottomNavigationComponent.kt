@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.KEY_ROUTE
@@ -31,7 +31,8 @@ fun BusBottomNavigationComponent(
                 icon = {
                     screen.iconResourceId?.let { iconResourceId ->
                         Icon(
-                            imageVector = vectorResource(id = iconResourceId),
+                            painter = painterResource(id = iconResourceId),
+                            contentDescription = "Bus Type",
                             tint = Color.White,
                             modifier = Modifier.size(24.dp)
                         )

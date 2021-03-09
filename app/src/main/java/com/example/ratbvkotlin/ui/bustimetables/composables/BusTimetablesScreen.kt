@@ -54,7 +54,7 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
                 onBackNavigation
             )
         },
-        bodyContent = {
+        content = {
             BusTimetablesNavHostComponent(
                 navController,
                 viewModel,
@@ -85,7 +85,9 @@ fun BusTimetablesTopBarComponent(
         },
         navigationIcon = {
             IconButton(onClick = onBackNavigation) {
-                Icon(androidx.compose.material.icons.Icons.Filled.ArrowBack)
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Filled.ArrowBack,
+                    contentDescription = null)
             }
         }
     )
