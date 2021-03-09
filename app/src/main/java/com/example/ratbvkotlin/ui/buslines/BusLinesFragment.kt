@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.ratbvkotlin.ui.buslines.composables.BusLinesScreen
-import com.example.ratbvkotlin.ui.busstations.BusStationsFragmentDirections
 import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Shows the bus lines

@@ -51,3 +51,9 @@ fun BusLineItemComponent(
         )
     }
 }
+
+//@Preview
+//@Composable
+//fun ComposablePreview() {
+//    BusLineItemComponent("Test", "Test") { }
+//}

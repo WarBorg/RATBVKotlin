@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.ratbvkotlin.ui.bustimetables.composables.BusTimetablesScreen
 import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 /**

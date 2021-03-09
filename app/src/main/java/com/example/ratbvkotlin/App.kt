@@ -11,7 +11,7 @@ import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
 import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
 import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
