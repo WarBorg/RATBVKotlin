@@ -40,7 +40,6 @@ class BusStationsViewModel(private val _repository: BusRepository,
         val (directionLink, direction) = when (isNormalDirection) {
             true -> Pair(_directionLinkNormal, "normal")
             false -> Pair(_directionLinkReverse, "reverse")
-            else -> Pair(_directionLinkNormal, "normal")
         }
 
         _busStations.value = _repository.getBusStations(

@@ -20,7 +20,7 @@ class BusTimetablesActivity : AppCompatActivity(R.layout.activity_bus_timetables
         setupSupportActionBar()
 
         // Creates the listener for switching the bottom navigation tabs
-        navView.setOnNavigationItemSelectedListener { item ->
+        navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.weekdays_dest -> replaceTimetableFragment("WeekDays")
                 R.id.saturday_dest -> replaceTimetableFragment("Saturday")
