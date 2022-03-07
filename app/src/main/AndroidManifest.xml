@@ -14,8 +14,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.BusMainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
