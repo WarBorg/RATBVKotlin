@@ -2,6 +2,7 @@ package com.example.ratbvkotlin.ui.buslines.composables
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
@@ -66,7 +68,7 @@ fun BusLinesScreen(
         topBar = {
             BusLinesTopBarComponent(viewModel.busTransportSubtype)
         },
-        content = {
+        content = { padding ->
             BusLinesNavHostComponent(
                 internalNavHostController,
                 viewModel,
@@ -76,7 +78,9 @@ fun BusLinesScreen(
                         viewModel.getBusLines(transportSubtype)
                     }
                 },
-                onBusLineClicked
+                onBusLineClicked,
+                modifier = Modifier
+                    .padding(padding)
             )
         },
         bottomBar = {
@@ -110,11 +114,13 @@ fun BusLinesNavHostComponent(navHostController: NavHostController,
                              viewModel: BusLinesViewModel,
                              bottomNavigationTabs: List<BusBottomNavigationScreens>,
                              onLoadData: (BusTransportSubtypes) -> Unit,
-                             onBusLineClicked: (String, String, Int , String) -> Unit
+                             onBusLineClicked: (String, String, Int , String) -> Unit,
+                             modifier: Modifier = Modifier,
 ) {
     NavHost(
         navHostController,
-        startDestination = BusLinesBottomNavigationScreens.Bus.busTransportSubtype
+        startDestination = BusLinesBottomNavigationScreens.Bus.busTransportSubtype,
+        modifier = modifier
     ) {
         bottomNavigationTabs.forEach { screen ->
             composable(screen.type) {

@@ -1,10 +1,12 @@
 package com.example.ratbvkotlin.ui.bustimetables.composables
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -54,7 +56,7 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
                 onBackNavigation
             )
         },
-        content = {
+        content = { padding ->
             BusTimetablesNavHostComponent(
                 navController,
                 viewModel,
@@ -63,7 +65,9 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
                     coroutineScope.launch {
                         viewModel.getBusTimetables(timetableType)
                     }
-                }
+                },
+                modifier = Modifier
+                    .padding(padding)
             )
         },
         bottomBar = {
@@ -97,11 +101,13 @@ fun BusTimetablesTopBarComponent(
 fun BusTimetablesNavHostComponent(navController: NavHostController,
                                   viewModel: BusTimetablesViewModel,
                                   bottomNavigationTabs: List<BusBottomNavigationScreens>,
-                                  onLoadData: (TimetableTypes) -> Unit
+                                  onLoadData: (TimetableTypes) -> Unit,
+                                  modifier: Modifier = Modifier
 ) {
     NavHost(
         navController,
-        startDestination = BusTimetablesBottomNavigationScreens.WeekDays.timeOfWeek
+        startDestination = BusTimetablesBottomNavigationScreens.WeekDays.timeOfWeek,
+        modifier = modifier
     ) {
         bottomNavigationTabs.forEach { screen ->
             composable(screen.type) {
