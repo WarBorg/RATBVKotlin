@@ -86,8 +86,10 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
     // Koin
-    def koin_version = "3.0.1-beta-1"
+    def koin_version = "3.2.2"
     implementation "io.insert-koin:koin-android:$koin_version"
+    def koin_android_compose_version= "3.2.1"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_android_compose_version"
 
     // Testing
     testImplementation 'junit:junit:4.13.2'

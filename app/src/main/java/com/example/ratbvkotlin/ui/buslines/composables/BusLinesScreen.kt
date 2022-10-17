@@ -13,48 +13,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.ratbvkotlin.R
-import com.example.ratbvkotlin.ui.common.BusBottomNavigationScreens
 import com.example.ratbvkotlin.ui.common.composables.BusBottomNavigationComponent
+import com.example.ratbvkotlin.ui.common.navigationGraphs.BusLinesBottomNavigationScreens
+import com.example.ratbvkotlin.ui.common.navigationGraphs.BusLinesNavigationGraph
 import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
 import com.example.ratbvkotlin.viewmodels.BusTransportSubtypes
 import kotlinx.coroutines.launch
-
-sealed class BusLinesBottomNavigationScreens(val busTransportSubtype: String,
-                                             @StringRes val transportSubtypeResource1Id: Int,
-                                             @DrawableRes val transportSubtypeIconResourceId: Int
-) : BusBottomNavigationScreens(
-    type = busTransportSubtype,
-    titleResourceId = transportSubtypeResource1Id,
-    iconResourceId = transportSubtypeIconResourceId
-) {
-    object Bus : BusLinesBottomNavigationScreens(
-        busTransportSubtype = BusTransportSubtypes.Bus.name,
-        transportSubtypeResource1Id = R.string.title_bus,
-        transportSubtypeIconResourceId = R.drawable.ic_tab_bus
-    )
-    object Electricbus : BusLinesBottomNavigationScreens(
-        busTransportSubtype = BusTransportSubtypes.Electricbus.name,
-        transportSubtypeResource1Id = R.string.title_electricbus,
-        transportSubtypeIconResourceId = R.drawable.ic_tab_electricbus
-    )
-    object Trolleybus : BusLinesBottomNavigationScreens(
-        busTransportSubtype = BusTransportSubtypes.Trolleybus.name,
-        transportSubtypeResource1Id = R.string.title_trolleybus,
-        transportSubtypeIconResourceId = R.drawable.ic_tab_trolleybus
-    )
-}
 
 @Composable
 fun BusLinesScreen(
     viewModel: BusLinesViewModel,
     onBusLineClicked: (String, String, Int , String) -> Unit
 ) {
-
     val internalNavHostController = rememberNavController()
     val coroutineScope = rememberCoroutineScope()
 
@@ -69,7 +41,7 @@ fun BusLinesScreen(
             BusLinesTopBarComponent(viewModel.busTransportSubtype)
         },
         content = { padding ->
-            BusLinesNavHostComponent(
+            BusLinesNavigationGraph(
                 internalNavHostController,
                 viewModel,
                 bottomNavigationItems,
@@ -107,35 +79,4 @@ fun BusLinesTopBarComponent(
             })
         }
     )
-}
-
-@Composable
-fun BusLinesNavHostComponent(navHostController: NavHostController,
-                             viewModel: BusLinesViewModel,
-                             bottomNavigationTabs: List<BusBottomNavigationScreens>,
-                             onLoadData: (BusTransportSubtypes) -> Unit,
-                             onBusLineClicked: (String, String, Int , String) -> Unit,
-                             modifier: Modifier = Modifier,
-) {
-    NavHost(
-        navHostController,
-        startDestination = BusLinesBottomNavigationScreens.Bus.busTransportSubtype,
-        modifier = modifier
-    ) {
-        bottomNavigationTabs.forEach { screen ->
-            composable(screen.type) {
-
-                onLoadData(
-                    BusTransportSubtypes.valueOf(screen.type)
-                )
-
-                BusLinesTabComponent(
-                    viewModel.busLines,
-                    viewModel.lastUpdated,
-                    viewModel.isRefreshing,
-                    onBusLineClicked
-                )
-            }
-        }
-    }
 }

@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 fun BusStationsScreen(
     viewModel: BusStationsViewModel,
     onBackNavigation: () -> Unit,
-    onBusStationClicked: (String, Int , String) -> Unit
+    onBusStationClicked: (String, Int, String) -> Unit
 ) {
 
     val coroutineScope = rememberCoroutineScope()
