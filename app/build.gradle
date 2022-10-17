@@ -75,6 +75,10 @@ dependencies {
     implementation "androidx.compose.material:material-icons-core:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
+    // Accompanist
+    def accompanist_version = "0.25.1"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
+
     // Room
     def room_version = "2.4.3"
     implementation "androidx.room:room-ktx:$room_version"

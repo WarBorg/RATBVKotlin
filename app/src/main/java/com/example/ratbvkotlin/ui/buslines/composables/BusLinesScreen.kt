@@ -1,7 +1,5 @@
 package com.example.ratbvkotlin.ui.buslines.composables
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -48,6 +46,14 @@ fun BusLinesScreen(
                 onLoadData = { transportSubtype ->
                     coroutineScope.launch {
                         viewModel.getBusLines(transportSubtype)
+                    }
+                },
+                onPullToRefresh = { transportSubtype ->
+                    coroutineScope.launch {
+                        viewModel.getBusLines(
+                            transportSubtype,
+                            isForcedRefresh = true
+                        )
                     }
                 },
                 onBusLineClicked,

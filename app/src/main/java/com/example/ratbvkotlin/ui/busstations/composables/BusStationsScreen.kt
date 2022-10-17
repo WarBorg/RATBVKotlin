@@ -61,14 +61,21 @@ fun BusStationsScreen(
                 }
             )
         },
-        content = {
+        content = { padding ->
             BusStationBodyComponent(
                 viewModel.busStations,
                 viewModel.lastUpdated,
                 viewModel.isRefreshing,
                 viewModel.isNormalDirection,
                 viewModel.busLineName,
-                onBusStationClicked
+                onPullToRefresh = {
+                    coroutineScope.launch {
+                        viewModel.getBusStations(isForcedRefresh = true)
+                    }
+                },
+                onBusStationClicked,
+                modifier = Modifier
+                    .padding(padding)
             )
         }
     )
@@ -123,6 +130,7 @@ fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewMo
                             isRefreshingLiveData: LiveData<Boolean>,
                             isNormalDirectionLiveData: LiveData<Boolean>,
                             busLineName: String,
+                            onPullToRefresh: () -> Unit,
                             onBusStationClicked: (String, Int , String) -> Unit,
                             modifier: Modifier = Modifier) {
 
@@ -166,6 +174,8 @@ fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewMo
         } else {
             BusStationListComponent(
                 busStations,
+                isRefreshingLiveData,
+                onPullToRefresh,
                 onBusStationClicked
             )
         }

@@ -17,6 +17,7 @@ fun BusTimetablesNavigationGraph(navController: NavHostController,
                                  viewModel: BusTimetablesViewModel,
                                  bottomNavigationTabs: List<BusBottomNavigationScreens>,
                                  onLoadData: (TimetableTypes) -> Unit,
+                                 onPullToRefresh: (TimetableTypes) -> Unit,
                                  modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -27,9 +28,9 @@ fun BusTimetablesNavigationGraph(navController: NavHostController,
         bottomNavigationTabs.forEach { screen ->
             composable(screen.route) {
 
-                onLoadData(
-                    TimetableTypes.valueOf(screen.route)
-                )
+                val timetableType = TimetableTypes.valueOf(screen.route)
+
+                onLoadData(timetableType)
 
                 BusTimetableTabComponent(
                     viewModel.busTimetables,
@@ -37,6 +38,7 @@ fun BusTimetablesNavigationGraph(navController: NavHostController,
                     viewModel.isRefreshing,
                     viewModel.timeOfWeek,
                     viewModel.busStationName,
+                    onPullToRefresh = { onPullToRefresh(timetableType) },
                 )
             }
         }

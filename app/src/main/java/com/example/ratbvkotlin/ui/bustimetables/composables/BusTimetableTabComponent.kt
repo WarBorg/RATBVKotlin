@@ -21,12 +21,14 @@ import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
 import com.example.ratbvkotlin.viewmodels.TimetableTypes
 
 @Composable
-fun BusTimetableTabComponent(busTimetablesLiveData: LiveData<List<BusTimetablesViewModel.BusTimetableItemViewModel>>,
-                             lastUpdateDateLiveData: LiveData<String>,
-                             isRefreshingLiveData: LiveData<Boolean>,
-                             timeOfWeekLiveData: LiveData<TimetableTypes>,
-                             busStationName: String,
-                             modifier: Modifier = Modifier
+fun BusTimetableTabComponent(
+    busTimetablesLiveData: LiveData<List<BusTimetablesViewModel.BusTimetableItemViewModel>>,
+    lastUpdateDateLiveData: LiveData<String>,
+    isRefreshingLiveData: LiveData<Boolean>,
+    timeOfWeekLiveData: LiveData<TimetableTypes>,
+    busStationName: String,
+    onPullToRefresh: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
 
     val busTimetables by busTimetablesLiveData.observeAsState(initial = emptyList())
@@ -35,7 +37,7 @@ fun BusTimetableTabComponent(busTimetablesLiveData: LiveData<List<BusTimetablesV
     val timeOfWeek by timeOfWeekLiveData.observeAsState(initial = TimetableTypes.WeekDays)
 
     Column(
-            modifier = Modifier.padding(
+            modifier = modifier.padding(
                 start = 8.dp,
                 top = 8.dp,
                 end = 8.dp)
@@ -64,7 +66,11 @@ fun BusTimetableTabComponent(busTimetablesLiveData: LiveData<List<BusTimetablesV
         if (isRefreshing) {
             LoadingComponent()
         } else {
-            BusTimetableListComponent(busTimetables)
+            BusTimetableListComponent(
+                busTimetables,
+                isRefreshingLiveData,
+                onPullToRefresh
+            )
         }
     }
 }

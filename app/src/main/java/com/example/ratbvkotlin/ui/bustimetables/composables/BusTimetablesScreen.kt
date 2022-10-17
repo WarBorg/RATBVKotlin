@@ -44,6 +44,14 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
                         viewModel.getBusTimetables(timetableType)
                     }
                 },
+                onPullToRefresh = { timetableType ->
+                    coroutineScope.launch {
+                        viewModel.getBusTimetables(
+                            timetableType,
+                            isForcedRefresh = true
+                        )
+                    }
+                },
                 modifier = Modifier
                     .padding(padding)
             )

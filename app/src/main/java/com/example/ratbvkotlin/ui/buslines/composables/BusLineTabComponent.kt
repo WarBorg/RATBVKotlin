@@ -18,6 +18,7 @@ fun BusLinesTabComponent(
     busLinesLiveData: LiveData<List<BusLinesViewModel.BusLineItemViewModel>>,
     lastUpdateDateLiveData: LiveData<String>,
     isRefreshingLiveData: LiveData<Boolean>,
+    onPullToRefresh: () -> Unit,
     onBusLineClicked: (String, String, Int , String) -> Unit
 ) {
 
@@ -43,6 +44,8 @@ fun BusLinesTabComponent(
         } else {
             BusLineListComponent(
                 busLines,
+                isRefreshingLiveData,
+                onPullToRefresh,
                 onBusLineClicked
             )
         }

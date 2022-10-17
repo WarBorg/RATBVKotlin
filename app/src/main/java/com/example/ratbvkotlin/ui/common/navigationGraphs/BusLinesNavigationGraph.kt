@@ -18,6 +18,7 @@ fun BusLinesNavigationGraph(navHostController: NavHostController,
                             viewModel: BusLinesViewModel,
                             bottomNavigationTabs: List<BusBottomNavigationScreens>,
                             onLoadData: (BusTransportSubtypes) -> Unit,
+                            onPullToRefresh: (BusTransportSubtypes) -> Unit,
                             onBusLineClicked: (String, String, Int , String) -> Unit,
                             modifier: Modifier = Modifier,
 ) {
@@ -29,14 +30,15 @@ fun BusLinesNavigationGraph(navHostController: NavHostController,
         bottomNavigationTabs.forEach { screen ->
             composable(screen.route) {
 
-                onLoadData(
-                    BusTransportSubtypes.valueOf(screen.route)
-                )
+                val busTransportSubtype = BusTransportSubtypes.valueOf(screen.route)
+
+                onLoadData(busTransportSubtype)
 
                 BusLinesTabComponent(
                     viewModel.busLines,
                     viewModel.lastUpdated,
                     viewModel.isRefreshing,
+                    onPullToRefresh = { onPullToRefresh(busTransportSubtype) },
                     onBusLineClicked
                 )
             }
