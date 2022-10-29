@@ -5,12 +5,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.LiveData
 import androidx.navigation.compose.rememberNavController
 import com.example.ratbvkotlin.R
 import com.example.ratbvkotlin.ui.common.composables.BusBottomNavigationComponent
@@ -18,6 +17,7 @@ import com.example.ratbvkotlin.ui.common.navigationGraphs.BusLinesBottomNavigati
 import com.example.ratbvkotlin.ui.common.navigationGraphs.BusLinesNavigationGraph
 import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
 import com.example.ratbvkotlin.viewmodels.BusTransportSubtypes
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -72,9 +72,9 @@ fun BusLinesScreen(
 
 @Composable
 fun BusLinesTopBarComponent(
-    busTransportSubtypeLiveData: LiveData<BusTransportSubtypes>
+    busTransportSubtypeFlow: StateFlow<BusTransportSubtypes>
 ) {
-    val busTransportSubtype by busTransportSubtypeLiveData.observeAsState(initial = BusTransportSubtypes.Bus)
+    val busTransportSubtype by busTransportSubtypeFlow.collectAsState(initial = BusTransportSubtypes.Bus)
 
     TopAppBar(
         title = {

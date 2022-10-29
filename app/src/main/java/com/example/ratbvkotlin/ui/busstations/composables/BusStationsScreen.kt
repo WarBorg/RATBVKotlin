@@ -8,8 +8,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,12 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import com.example.ratbvkotlin.R
 import com.example.ratbvkotlin.ui.common.composables.LastUpdateComposable
 import com.example.ratbvkotlin.ui.common.composables.LoadingComponent
 import com.example.ratbvkotlin.ui.resources.typography
 import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -125,19 +125,19 @@ fun BusStationsTopBarComponent(
 }
 
 @Composable
-fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewModel.BusStationItemViewModel>>,
-                            lastUpdateDateLiveData: LiveData<String>,
-                            isRefreshingLiveData: LiveData<Boolean>,
-                            isNormalDirectionLiveData: LiveData<Boolean>,
+fun BusStationBodyComponent(busStationsFlow: StateFlow<List<BusStationsViewModel.BusStationItemViewModel>>,
+                            lastUpdateDateFlow: StateFlow<String>,
+                            isRefreshingFlow: StateFlow<Boolean>,
+                            isNormalDirectionFlow: StateFlow<Boolean>,
                             busLineName: String,
                             onPullToRefresh: () -> Unit,
                             onBusStationClicked: (String, Int , String) -> Unit,
                             modifier: Modifier = Modifier) {
 
-    val busStations by busStationsLiveData.observeAsState(initial = emptyList())
-    val lastUpdateDate by lastUpdateDateLiveData.observeAsState(initial = "Never")
-    val isRefreshing by isRefreshingLiveData.observeAsState(initial = true)
-    val isNormalDirection by isNormalDirectionLiveData.observeAsState(initial = true)
+    val busStations by busStationsFlow.collectAsState(initial = emptyList())
+    val lastUpdateDate by lastUpdateDateFlow.collectAsState(initial = "Never")
+    val isRefreshing by isRefreshingFlow.collectAsState(initial = true)
+    val isNormalDirection by isNormalDirectionFlow.collectAsState(initial = true)
 
     Column(
         modifier = modifier.padding(
@@ -174,7 +174,7 @@ fun BusStationBodyComponent(busStationsLiveData: LiveData<List<BusStationsViewMo
         } else {
             BusStationListComponent(
                 busStations,
-                isRefreshingLiveData,
+                isRefreshingFlow,
                 onPullToRefresh,
                 onBusStationClicked
             )

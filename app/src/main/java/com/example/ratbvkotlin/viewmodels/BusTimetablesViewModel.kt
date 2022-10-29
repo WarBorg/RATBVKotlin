@@ -3,6 +3,8 @@ package com.example.ratbvkotlin.viewmodels
 import androidx.lifecycle.*
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusTimetableModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 
 enum class TimetableTypes {
     WeekDays, Saturday, Sunday
@@ -14,21 +16,26 @@ class BusTimetablesViewModel(private val _repository: BusRepository,
                              val busStationName: String)
     : ViewModel() {
 
-    private val _isRefreshing = MutableLiveData(false)
-    private val _timeOfWeek = MutableLiveData<TimetableTypes>()
-    private val _busTimetables = MutableLiveData<List<BusTimetableItemViewModel>>()
+    private val _isRefreshing = MutableStateFlow(false)
+    private val _timeOfWeek = MutableStateFlow(TimetableTypes.WeekDays)
+    private val _busTimetables = MutableStateFlow<List<BusTimetableItemViewModel>>(emptyList())
 
-    val isRefreshing: LiveData<Boolean> = _isRefreshing
-    val timeOfWeek: LiveData<TimetableTypes> = _timeOfWeek
-    val busTimetables: LiveData<List<BusTimetableItemViewModel>> = _busTimetables
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+    val timeOfWeek: StateFlow<TimetableTypes> = _timeOfWeek
+    val busTimetables: StateFlow<List<BusTimetableItemViewModel>> = _busTimetables
 
     // Sets the lastUpdated value based on the first item of the list since all will have the same value
-    val lastUpdated: LiveData<String> = Transformations.map(_busTimetables) { busTimetables ->
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val lastUpdated: StateFlow<String> = _busTimetables.mapLatest { busTimetables ->
         busTimetables.firstOrNull()?.lastUpdateDate ?: "Never"
-    }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+        initialValue = "Never"
+    )
 
     /**
-     * Gets the bus stations data from the repository as LiveData
+     * Gets the bus stations data from the repository as Flow
      */
     suspend fun getBusTimetables(timetableType: TimetableTypes,
                                  isForcedRefresh: Boolean = false) {

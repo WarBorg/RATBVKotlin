@@ -3,22 +3,22 @@ package com.example.ratbvkotlin.ui.buslines.composables
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.lifecycle.LiveData
 import com.example.ratbvkotlin.ui.common.composables.ListItemDivider
 import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun BusLineListComponent(
     busLines: List<BusLinesViewModel.BusLineItemViewModel>,
-    isRefreshingLiveData: LiveData<Boolean>,
+    isRefreshingFlow: StateFlow<Boolean>,
     onPullToRefresh: () -> Unit,
     onBusLineClicked: (String, String, Int , String) -> Unit
 ) {
-    val isRefreshing by isRefreshingLiveData.observeAsState(initial = false)
+    val isRefreshing by isRefreshingFlow.collectAsState(initial = false)
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),

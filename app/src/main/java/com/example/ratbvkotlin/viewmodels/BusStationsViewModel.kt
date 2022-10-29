@@ -3,6 +3,8 @@ package com.example.ratbvkotlin.viewmodels
 import androidx.lifecycle.*
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusStationModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class BusStationsViewModel(private val _repository: BusRepository,
@@ -12,18 +14,23 @@ class BusStationsViewModel(private val _repository: BusRepository,
                            val busLineName: String)
     : ViewModel() {
 
-    private val _isNormalDirection = MutableLiveData(true)
-    private val _isRefreshing = MutableLiveData(false)
-    private val _busStations = MutableLiveData<List<BusStationItemViewModel>>()
+    private val _isNormalDirection = MutableStateFlow(true)
+    private val _isRefreshing = MutableStateFlow(false)
+    private val _busStations = MutableStateFlow<List<BusStationItemViewModel>>(emptyList())
 
-    val isRefreshing: LiveData<Boolean> = _isRefreshing
-    val isNormalDirection: LiveData<Boolean> = _isNormalDirection
-    val busStations: LiveData<List<BusStationItemViewModel>> = _busStations
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+    val isNormalDirection: StateFlow<Boolean> = _isNormalDirection
+    val busStations: StateFlow<List<BusStationItemViewModel>> = _busStations
 
     // Sets the lastUpdated value based on the first item of the list since all will have the same value
-    val lastUpdated: LiveData<String> = Transformations.map(_busStations) { busStations ->
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val lastUpdated: StateFlow<String> = _busStations.mapLatest { busStations ->
         busStations.firstOrNull()?.lastUpdateDate ?: "Never"
-    }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+        initialValue = "Never"
+    )
 
     init {
         viewModelScope.launch {
@@ -32,7 +39,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
     }
 
     /**
-     * Gets the bus stations data from the repository as LiveData
+     * Gets the bus stations data from the repository as Flow
      */
     suspend fun getBusStations(isForcedRefresh: Boolean = false) {
 
@@ -41,7 +48,6 @@ class BusStationsViewModel(private val _repository: BusRepository,
         val (directionLink, direction) = when (_isNormalDirection.value) {
             true -> Pair(_directionLinkNormal, "normal")
             false -> Pair(_directionLinkReverse, "reverse")
-            else -> Pair(_directionLinkNormal, "normal")
         }
 
         _busStations.value = _repository.getBusStations(
@@ -59,7 +65,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
      */
     suspend fun reverseStations() {
 
-        _isNormalDirection.value = !_isNormalDirection.value!!
+        _isNormalDirection.value = !_isNormalDirection.value
 
         getBusStations()
     }

@@ -6,35 +6,35 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import com.example.ratbvkotlin.ui.common.composables.LastUpdateComposable
 import com.example.ratbvkotlin.ui.common.composables.LoadingComponent
 import com.example.ratbvkotlin.ui.resources.typography
 import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
 import com.example.ratbvkotlin.viewmodels.TimetableTypes
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun BusTimetableTabComponent(
-    busTimetablesLiveData: LiveData<List<BusTimetablesViewModel.BusTimetableItemViewModel>>,
-    lastUpdateDateLiveData: LiveData<String>,
-    isRefreshingLiveData: LiveData<Boolean>,
-    timeOfWeekLiveData: LiveData<TimetableTypes>,
+    busTimetablesFlow: StateFlow<List<BusTimetablesViewModel.BusTimetableItemViewModel>>,
+    lastUpdateDateFlow: StateFlow<String>,
+    isRefreshingFlow: StateFlow<Boolean>,
+    timeOfWeekFlow: StateFlow<TimetableTypes>,
     busStationName: String,
     onPullToRefresh: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
-    val busTimetables by busTimetablesLiveData.observeAsState(initial = emptyList())
-    val lastUpdateDate by lastUpdateDateLiveData.observeAsState(initial = "Never")
-    val isRefreshing by isRefreshingLiveData.observeAsState(initial = true)
-    val timeOfWeek by timeOfWeekLiveData.observeAsState(initial = TimetableTypes.WeekDays)
+    val busTimetables by busTimetablesFlow.collectAsState(initial = emptyList())
+    val lastUpdateDate by lastUpdateDateFlow.collectAsState(initial = "Never")
+    val isRefreshing by isRefreshingFlow.collectAsState(initial = true)
+    val timeOfWeek by timeOfWeekFlow.collectAsState(initial = TimetableTypes.WeekDays)
 
     Column(
             modifier = modifier.padding(
@@ -68,7 +68,7 @@ fun BusTimetableTabComponent(
         } else {
             BusTimetableListComponent(
                 busTimetables,
-                isRefreshingLiveData,
+                isRefreshingFlow,
                 onPullToRefresh
             )
         }

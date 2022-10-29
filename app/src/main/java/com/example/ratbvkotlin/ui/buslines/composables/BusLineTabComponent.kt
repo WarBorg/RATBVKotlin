@@ -2,29 +2,31 @@ package com.example.ratbvkotlin.ui.buslines.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import com.example.ratbvkotlin.ui.common.composables.LastUpdateComposable
 import com.example.ratbvkotlin.ui.common.composables.LoadingComponent
 import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun BusLinesTabComponent(
-    busLinesLiveData: LiveData<List<BusLinesViewModel.BusLineItemViewModel>>,
-    lastUpdateDateLiveData: LiveData<String>,
-    isRefreshingLiveData: LiveData<Boolean>,
+    busLinesFlow: StateFlow<List<BusLinesViewModel.BusLineItemViewModel>>,
+    lastUpdateDateFlow: StateFlow<String>,
+    isRefreshingFlow: StateFlow<Boolean>,
     onPullToRefresh: () -> Unit,
     onBusLineClicked: (String, String, Int , String) -> Unit
 ) {
 
-    val busLines by busLinesLiveData.observeAsState(initial = emptyList())
-    val lastUpdateDate by lastUpdateDateLiveData.observeAsState(initial = "Never")
-    val isRefreshing by isRefreshingLiveData.observeAsState(initial = true)
+    val busLines by busLinesFlow.collectAsState(initial = emptyList())
+    val lastUpdateDate by lastUpdateDateFlow.collectAsState(initial = "Never")
+    val isRefreshing by isRefreshingFlow.collectAsState(initial = true)
 
     Column(
         modifier = Modifier.padding(
@@ -41,10 +43,18 @@ fun BusLinesTabComponent(
 
         if (isRefreshing) {
             LoadingComponent()
+        } 
+        else if (busLines.isEmpty()) {
+            Button(
+                onClick = onPullToRefresh,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(text = "REFRESH")
+            }
         } else {
             BusLineListComponent(
                 busLines,
-                isRefreshingLiveData,
+                isRefreshingFlow,
                 onPullToRefresh,
                 onBusLineClicked
             )
