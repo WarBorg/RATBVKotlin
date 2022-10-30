@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun BusLinesScreen(
     viewModel: BusLinesViewModel,
-    onBusLineClicked: (String, String, Int , String) -> Unit
+    onBusLineClicked: (String, String, Long, String) -> Unit
 ) {
     val internalNavHostController = rememberNavController()
     val coroutineScope = rememberCoroutineScope()

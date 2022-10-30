@@ -22,7 +22,7 @@ fun BusLinesTabComponent(
     lastUpdateDateFlow: StateFlow<String>,
     isRefreshingFlow: StateFlow<Boolean>,
     onPullToRefresh: () -> Unit,
-    onBusLineClicked: (String, String, Int , String) -> Unit
+    onBusLineClicked: (String, String, Long, String) -> Unit
 ) {
 
     val busLines by busLinesFlow.collectAsState(initial = emptyList())

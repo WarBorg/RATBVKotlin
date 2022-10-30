@@ -25,7 +25,7 @@ class BusRepository(
                 busLineEntities
                     .map { busLineEntity ->
                         BusLineModel(
-                            busLineEntity.id.toInt(),
+                            busLineEntity.id,
                             busLineEntity.name,
                             busLineEntity.route,
                             busLineEntity.type,

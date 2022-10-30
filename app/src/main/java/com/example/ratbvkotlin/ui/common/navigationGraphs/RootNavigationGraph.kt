@@ -25,7 +25,7 @@ fun RootNavigationGraph(navController: NavHostController) {
         composable(route = Graph.BUS_LINES) {
             val viewModel = getViewModel<BusLinesViewModel>()
 
-            val onBusStationClicked: (String, String, Int , String) -> Unit =
+            val onBusStationClicked: (String, String, Long, String) -> Unit =
                 { linkNormalWay, linkReverseWay, busLineId, busLineName ->
                     navController.navigate(
                         "${Graph.BUS_STATIONS}/${linkNormalWay}/${linkReverseWay}/${busLineId}/${busLineName}"

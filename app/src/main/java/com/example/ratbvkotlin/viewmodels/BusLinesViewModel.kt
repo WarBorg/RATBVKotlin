@@ -86,7 +86,7 @@ class BusLinesViewModel(private val _repository: BusRepository)
         val lastUpdateDate: String = busLine.lastUpdateDate
 
         // Navigation parameters
-        val id: Int = busLine.id
+        val id: Long = busLine.id
         val linkNormalWay: String = busLine.linkNormalWay
         val linkReverseWay: String = busLine.linkReverseWay
     }

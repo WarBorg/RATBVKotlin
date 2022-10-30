@@ -19,7 +19,7 @@ fun BusLinesNavigationGraph(navHostController: NavHostController,
                             bottomNavigationTabs: List<BusBottomNavigationScreens>,
                             onLoadData: (BusTransportSubtypes) -> Unit,
                             onPullToRefresh: () -> Unit,
-                            onBusLineClicked: (String, String, Int , String) -> Unit,
+                            onBusLineClicked: (String, String, Long, String) -> Unit,
                             modifier: Modifier = Modifier,
 ) {
     NavHost(

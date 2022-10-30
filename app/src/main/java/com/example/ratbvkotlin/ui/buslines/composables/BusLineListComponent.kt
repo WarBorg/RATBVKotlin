@@ -16,7 +16,7 @@ fun BusLineListComponent(
     busLines: List<BusLinesViewModel.BusLineItemViewModel>,
     isRefreshingFlow: StateFlow<Boolean>,
     onPullToRefresh: () -> Unit,
-    onBusLineClicked: (String, String, Int , String) -> Unit
+    onBusLineClicked: (String, String, Long, String) -> Unit
 ) {
     val isRefreshing by isRefreshingFlow.collectAsState(initial = false)
 

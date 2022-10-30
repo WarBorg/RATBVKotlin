@@ -12,7 +12,7 @@ data class BusLineModel(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "Id")
-    val id: Int,
+    val id: Long,
 
     @ColumnInfo(name = "Name")
     val name: String,
