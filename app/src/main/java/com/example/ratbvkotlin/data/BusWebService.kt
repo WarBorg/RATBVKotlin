@@ -1,5 +1,6 @@
 package com.example.ratbvkotlin.data
 
+import com.example.ratbvkotlin.data.dtos.BusLineDto
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
 import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.data.models.BusStationModel
@@ -36,7 +37,7 @@ class BusWebService : IBusWebservice {
             .create(BusApi::class.java)
     }
 
-    override suspend fun getBusLines(): List<BusLineModel> = api.getBusLines()
+    override suspend fun getBusLines(): List<BusLineDto> = api.getBusLines()
     override suspend fun getBusStations(lineNumberLink: String): List<BusStationModel> = api.getBusStations(lineNumberLink)
     override suspend fun getBusTimetables(scheduleLink: String): List<BusTimetableModel> = api.getBusTimetables(scheduleLink)
 
@@ -49,7 +50,7 @@ class BusWebService : IBusWebservice {
          * Resulting URL: https://ratbvwebapi.azurewebsites.net/api/buslines
          */
         @GET("buslines")
-        suspend fun getBusLines(): List<BusLineModel>
+        suspend fun getBusLines(): List<BusLineDto>
 
         /**
          * Resulting URL: https://ratbvwebapi.azurewebsites.net/api/busstations/afisaje___5-dus.html

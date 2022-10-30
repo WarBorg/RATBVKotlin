@@ -44,16 +44,11 @@ fun BusLinesScreen(
                 viewModel,
                 bottomNavigationItems,
                 onLoadData = { transportSubtype ->
-                    coroutineScope.launch {
-                        viewModel.getBusLines(transportSubtype)
-                    }
+                    viewModel.updateViewedBusLineSubtype(transportSubtype)
                 },
-                onPullToRefresh = { transportSubtype ->
+                onPullToRefresh = {
                     coroutineScope.launch {
-                        viewModel.getBusLines(
-                            transportSubtype,
-                            isForcedRefresh = true
-                        )
+                        viewModel.forceUpdateBusLines()
                     }
                 },
                 onBusLineClicked,

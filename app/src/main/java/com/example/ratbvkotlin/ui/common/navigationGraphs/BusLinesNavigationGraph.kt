@@ -18,7 +18,7 @@ fun BusLinesNavigationGraph(navHostController: NavHostController,
                             viewModel: BusLinesViewModel,
                             bottomNavigationTabs: List<BusBottomNavigationScreens>,
                             onLoadData: (BusTransportSubtypes) -> Unit,
-                            onPullToRefresh: (BusTransportSubtypes) -> Unit,
+                            onPullToRefresh: () -> Unit,
                             onBusLineClicked: (String, String, Int , String) -> Unit,
                             modifier: Modifier = Modifier,
 ) {
@@ -38,7 +38,7 @@ fun BusLinesNavigationGraph(navHostController: NavHostController,
                     viewModel.busLines,
                     viewModel.lastUpdated,
                     viewModel.isRefreshing,
-                    onPullToRefresh = { onPullToRefresh(busTransportSubtype) },
+                    onPullToRefresh = { onPullToRefresh() },
                     onBusLineClicked
                 )
             }

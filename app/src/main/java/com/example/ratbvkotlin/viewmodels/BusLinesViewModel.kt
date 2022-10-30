@@ -4,11 +4,9 @@ import androidx.lifecycle.*
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusLineModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 enum class BusTransportSubtypes {
     Bus, Electricbus, Trolleybus
@@ -19,15 +17,34 @@ class BusLinesViewModel(private val _repository: BusRepository)
 
     private val _isRefreshing = MutableStateFlow(false)
     private val _busTransportSubtype = MutableStateFlow(BusTransportSubtypes.Bus)
-    private val _busLines = MutableStateFlow<List<BusLineItemViewModel>>(emptyList())
 
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
     val busTransportSubtype: StateFlow<BusTransportSubtypes> = _busTransportSubtype
-    val busLines: StateFlow<List<BusLineItemViewModel>> = _busLines
+
+    /**
+     * Observes the bus lines data from the repository as a Flow
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val busLines: SharedFlow<List<BusLineItemViewModel>> =
+        busTransportSubtype.flatMapLatest { busTransportSubtype ->
+            _repository.observeBusLines()
+                .map { busLineModels ->
+                    busLineModels
+                        .filter { busLineModel ->
+                            busLineModel.type == busTransportSubtype.name
+                        }
+                        .map { busLineModel ->
+                            BusLineItemViewModel(busLineModel)
+                        }
+                }
+        }.shareIn(
+            scope = viewModelScope,
+            started = WhileSubscribed(stopTimeoutMillis = 5000)
+        )
 
     // Sets the lastUpdated value based on the first item of the list since all will have the same value
     @OptIn(ExperimentalCoroutinesApi::class)
-    val lastUpdated: StateFlow<String> = _busLines.mapLatest { busLines ->
+    val lastUpdated: StateFlow<String> = busLines.mapLatest { busLines ->
         busLines.firstOrNull()?.lastUpdateDate ?: "Never"
     }.stateIn(
         scope = viewModelScope,
@@ -35,21 +52,28 @@ class BusLinesViewModel(private val _repository: BusRepository)
         initialValue = "Never"
     )
 
-    /**
-     * Gets the bus lines data from the repository as Flow
-     */
-    suspend fun getBusLines(busTransportSubtype: BusTransportSubtypes,
-                            isForcedRefresh: Boolean = false) {
+    init {
+        viewModelScope.launch {
+            forceUpdateBusLines()
+        }
+    }
 
+    /**
+     * Forces a refresh of the data in the database by doing a web fetch
+     */
+    suspend fun forceUpdateBusLines() {
         _isRefreshing.value = true
 
-        _busTransportSubtype.value = busTransportSubtype
-
-        _busLines.value = _repository.getBusLines(isForcedRefresh)
-            .filter { busLineModel -> busLineModel.type == busTransportSubtype.name }
-            .map { busLineModel -> BusLineItemViewModel(busLineModel) }
+        _repository.forceUpdateBusLines()
 
         _isRefreshing.value = false
+    }
+
+    /**
+     * Updates the bus type based on the bottom tab being viewed
+     */
+    fun updateViewedBusLineSubtype(busTransportSubtype: BusTransportSubtypes) {
+        _busTransportSubtype.value = busTransportSubtype
     }
 
     /**

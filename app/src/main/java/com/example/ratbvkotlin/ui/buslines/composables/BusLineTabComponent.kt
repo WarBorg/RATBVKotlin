@@ -13,11 +13,12 @@ import androidx.compose.ui.unit.dp
 import com.example.ratbvkotlin.ui.common.composables.LastUpdateComposable
 import com.example.ratbvkotlin.ui.common.composables.LoadingComponent
 import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun BusLinesTabComponent(
-    busLinesFlow: StateFlow<List<BusLinesViewModel.BusLineItemViewModel>>,
+    busLinesFlow: SharedFlow<List<BusLinesViewModel.BusLineItemViewModel>>,
     lastUpdateDateFlow: StateFlow<String>,
     isRefreshingFlow: StateFlow<Boolean>,
     onPullToRefresh: () -> Unit,

@@ -1,35 +1,50 @@
 package com.example.ratbvkotlin.data
 
+import com.example.ratbvkotlin.data.dtos.BusLineDto
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
 import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.data.models.BusStationModel
 import com.example.ratbvkotlin.data.models.BusTimetableModel
+import com.example.ratbvkotlin.data.persistency.BusLinesDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
 import java.util.*
 
 class BusRepository(
     // TODO Maybe I should send the whole database class here instead of individual DAO's
-    private val _busLinesDao: BusLinesDao,
+    private val _busLinesDataSource: BusLinesDataSource,
     private val _busStationsDao: BusStationsDao,
     private val _busTimetablesDao: BusTimetablesDao,
     private val _busWebService: IBusWebservice
 ) {
 
-    suspend fun getBusLines(isForcedRefresh: Boolean): List<BusLineModel> {
+    fun observeBusLines(): Flow<List<BusLineModel>> {
+        return _busLinesDataSource.getBusLines()
+            .map { busLineEntities ->
+                busLineEntities
+                    .map { busLineEntity ->
+                        BusLineModel(
+                            busLineEntity.id.toInt(),
+                            busLineEntity.name,
+                            busLineEntity.route,
+                            busLineEntity.type,
+                            busLineEntity.linkNormalWay,
+                            busLineEntity.linkReverseWay,
+                            busLineEntity.lastUpdateDate
+                        )
+                    }
+            }
+    }
 
-        val busLinesCount = _busLinesDao.countBusLines()
+    suspend fun forceUpdateBusLines() {
 
-        if (isForcedRefresh || busLinesCount == 0) {
+        val busLines = _busWebService.getBusLines()
+        val current = Calendar.getInstance().time
+        val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
+        val lastUpdated = formatter.format(current)
 
-            val busLines = _busWebService.getBusLines()
-            val current = Calendar.getInstance().time
-            val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
-            val lastUpdated = formatter.format(current)
-
-            insertBusLinesInDatabase(busLines, lastUpdated)
-        }
-
-        return _busLinesDao.getBusLines()
+        insertBusLinesInDatabase(busLines, lastUpdated)
     }
 
     suspend fun getBusStations(directionLink: String,
@@ -104,19 +119,27 @@ class BusRepository(
         }
     }
 
-    private suspend fun insertBusLinesInDatabase(busLines: List<BusLineModel>,
+    private suspend fun insertBusLinesInDatabase(busLineDtos: List<BusLineDto>,
                                                  lastUpdated: String) {
-        busLines.forEach { busLineModel ->
-            busLineModel.lastUpdateDate = lastUpdated
-            // TODO change API to replace midibus with electric bus
-            busLineModel.type = when (busLineModel.type) {
-                "Midibus" -> "Electricbus"
-                else -> busLineModel.type
-            }
-        }
+        _busLinesDataSource.clearBusLines()
 
-        _busLinesDao.clearBusLines()
-        _busLinesDao.saveBusLines(busLines)
+        busLineDtos.forEach { busLineDto ->
+            // TODO change API to replace midibus with electric bus
+            val busLineType = when (busLineDto.type) {
+                "Midibus" -> "Electricbus"
+                else -> busLineDto.type
+            }
+
+            _busLinesDataSource.saveBusLines(
+                busLineDto.name,
+                busLineDto.route,
+                busLineType,
+                busLineDto.linkNormalWay,
+                busLineDto.linkReverseWay,
+                lastUpdated,
+                id = null
+            )
+        }
     }
 
     private suspend fun insertBusStationsInDatabase(busStations: List<BusStationModel>,
