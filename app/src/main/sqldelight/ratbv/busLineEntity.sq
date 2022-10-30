@@ -1,0 +1,25 @@
+CREATE TABLE busLineEntity (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    route TEXT NOT NULL,
+    type TEXT NOT NULL,
+    linkNormalWay TEXT NOT NULL,
+    linkReverseWay TEXT NOT NULL,
+    lastUpdateDate TEXT NOT NULL
+);
+
+countBusLines:
+SELECT COUNT(*)
+FROM busLineEntity;
+
+getBusLines:
+SELECT id, name, route, type, linkNormalWay, linkReverseWay, lastUpdateDate
+FROM busLineEntity;
+
+saveBusLines:
+INSERT OR REPLACE INTO busLineEntity(id, name, route, type, linkNormalWay, linkReverseWay, lastUpdateDate)
+VALUES (?,?,?,?,?,?,?);
+
+clearBusLines:
+DELETE
+FROM busLineEntity;
