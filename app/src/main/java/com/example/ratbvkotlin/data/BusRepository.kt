@@ -38,7 +38,15 @@ class BusRepository(
             }
     }
 
-    suspend fun forceUpdateBusLines() {
+    suspend fun refreshBusLines(
+        isForcedRefresh: Boolean
+    ) {
+
+        if (!isForcedRefresh &&
+            _busLinesDataSource
+                .countBusLines() > 0L) {
+            return
+        }
 
         val busLines = _busWebService.getBusLines()
         val current = Calendar.getInstance().time

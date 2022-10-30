@@ -19,6 +19,11 @@ class BusLinesDataSourceImpl(databaseDriverFactory: DatabaseDriverFactory)
 
     private val queries = database.busLineEntityQueries
 
+    override suspend fun countBusLines(): Long {
+        return  queries.countBusLines()
+            .executeAsOne()
+    }
+
     override fun getBusLines(): Flow<List<BusLineEntity>> {
         return queries.getBusLines().asFlow().mapToList()
     }

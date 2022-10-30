@@ -54,17 +54,17 @@ class BusLinesViewModel(private val _repository: BusRepository)
 
     init {
         viewModelScope.launch {
-            forceUpdateBusLines()
+            refreshBusLines(isForcedRefresh = false)
         }
     }
 
     /**
      * Forces a refresh of the data in the database by doing a web fetch
      */
-    suspend fun forceUpdateBusLines() {
+    suspend fun refreshBusLines(isForcedRefresh: Boolean) {
         _isRefreshing.value = true
 
-        _repository.forceUpdateBusLines()
+        _repository.refreshBusLines(isForcedRefresh)
 
         _isRefreshing.value = false
     }

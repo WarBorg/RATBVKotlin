@@ -48,7 +48,7 @@ fun BusLinesScreen(
                 },
                 onPullToRefresh = {
                     coroutineScope.launch {
-                        viewModel.forceUpdateBusLines()
+                        viewModel.refreshBusLines(isForcedRefresh = true)
                     }
                 },
                 onBusLineClicked,

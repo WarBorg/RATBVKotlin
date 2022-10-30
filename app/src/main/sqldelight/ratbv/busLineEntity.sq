@@ -8,6 +8,10 @@ CREATE TABLE busLineEntity (
     lastUpdateDate TEXT NOT NULL
 );
 
+countBusLines:
+SELECT COUNT(*)
+FROM busLineEntity;
+
 getBusLines:
 SELECT id, name, route, type, linkNormalWay, linkReverseWay, lastUpdateDate
 FROM busLineEntity;
