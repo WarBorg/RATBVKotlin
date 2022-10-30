@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.squareup.sqldelight'
 }
 
 android {
@@ -46,7 +47,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Lifecycle
-    def lifecycle_version = "2.5.1"
+    def lifecycle_version = '2.5.1'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
     // Navigation
@@ -65,16 +66,26 @@ dependencies {
     implementation "androidx.compose.material:material-icons-core:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
+    // Coroutines // Are this really needed ?
+    def coroutines_version = '1.5.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
     // Accompanist
-    def accompanist_version = "0.25.1"
+    def accompanist_version = '0.25.1'
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
 
     // Room
-    def room_version = "2.4.3"
+    def room_version = '2.4.3'
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
+
+    // SQL Delight
+    def sql_delight_version = '1.5.2'
+    implementation "com.squareup.sqldelight:android-driver:$sql_delight_version"
+    implementation "com.squareup.sqldelight:coroutines-extensions-jvm:$sql_delight_version"
 
     // Retrofit
     def retrofit_version = '2.9.0'
@@ -82,7 +93,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
     // Koin
-    def koin_version = "3.2.2"
+    def koin_version = '3.2.2'
     implementation "io.insert-koin:koin-android:$koin_version"
     def koin_android_compose_version= "3.2.1"
     implementation "io.insert-koin:koin-androidx-compose:$koin_android_compose_version"
@@ -95,4 +106,10 @@ dependencies {
     // SQLite debug
     //def sqlite_debug_version = "1.0.6"
     //debugImplementation "com.amitshekhar.android:debug-db:$sqlite_debug_version"
+}
+
+sqldelight {
+    RatbvDatabase {
+        packageName = "com.example.ratbvkotlin"
+    }
 }
