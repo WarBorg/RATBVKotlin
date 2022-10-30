@@ -8,6 +8,7 @@ import com.example.ratbvkotlin.data.models.BusTimetableModel
 import com.example.ratbvkotlin.data.persistency.BusLinesDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import ratbv.BusLineEntity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -121,25 +122,27 @@ class BusRepository(
 
     private suspend fun insertBusLinesInDatabase(busLineDtos: List<BusLineDto>,
                                                  lastUpdated: String) {
-        _busLinesDataSource.clearBusLines()
 
-        busLineDtos.forEach { busLineDto ->
+        val busLines = busLineDtos.map { busLineDto ->
             // TODO change API to replace midibus with electric bus
             val busLineType = when (busLineDto.type) {
                 "Midibus" -> "Electricbus"
                 else -> busLineDto.type
             }
 
-            _busLinesDataSource.saveBusLines(
+            BusLineEntity(
+                busLineDto.id.toLong(),
                 busLineDto.name,
                 busLineDto.route,
                 busLineType,
                 busLineDto.linkNormalWay,
                 busLineDto.linkReverseWay,
-                lastUpdated,
-                id = null
+                lastUpdated
             )
         }
+
+        _busLinesDataSource.clearBusLines()
+        _busLinesDataSource.saveBusLines(busLines)
     }
 
     private suspend fun insertBusStationsInDatabase(busStations: List<BusStationModel>,

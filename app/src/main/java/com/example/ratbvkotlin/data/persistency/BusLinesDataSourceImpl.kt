@@ -1,6 +1,7 @@
 package com.example.ratbvkotlin.data.persistency
 
 import com.example.ratbvkotlin.RatbvDatabase
+import com.example.ratbvkotlin.data.models.BusLineModel
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import kotlinx.coroutines.Dispatchers
@@ -18,25 +19,18 @@ class BusLinesDataSourceImpl(databaseDriverFactory: DatabaseDriverFactory)
 
     private val queries = database.busLineEntityQueries
 
-    override suspend fun countBusLines(): Long {
-        return queries.countBusLines().executeAsOne()
-    }
-
     override fun getBusLines(): Flow<List<BusLineEntity>> {
         return queries.getBusLines().asFlow().mapToList()
     }
 
-    override suspend fun saveBusLines(
-        name: String,
-        route: String,
-        type: String,
-        linkNormalWay: String,
-        linkReverseWay: String,
-        lastUpdateDate: String,
-        id: Long?
-    ) {
+    override suspend fun saveBusLines(busLines: List<BusLineEntity>) {
+
         return withContext(Dispatchers.IO) {
-            queries.saveBusLines(id, name, route, type, linkNormalWay, linkReverseWay, lastUpdateDate)
+            queries.transaction {
+                busLines.forEach { busLine ->
+                    queries.saveBusLine(busLine)
+                }
+            }
         }
     }
 
