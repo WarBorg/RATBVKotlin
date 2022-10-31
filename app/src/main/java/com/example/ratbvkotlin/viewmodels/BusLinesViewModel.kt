@@ -25,7 +25,7 @@ class BusLinesViewModel(private val _repository: BusRepository)
      * Observes the bus lines data from the repository as a Flow
      */
     @OptIn(ExperimentalCoroutinesApi::class)
-    val busLines: SharedFlow<List<BusLineItemViewModel>> =
+    val busLines: StateFlow<List<BusLineItemViewModel>> =
         busTransportSubtype.flatMapLatest { busTransportSubtype ->
             _repository.observeBusLines()
                 .map { busLineModels ->
@@ -37,9 +37,10 @@ class BusLinesViewModel(private val _repository: BusRepository)
                             BusLineItemViewModel(busLineModel)
                         }
                 }
-        }.shareIn(
+        }.stateIn(
             scope = viewModelScope,
-            started = WhileSubscribed(stopTimeoutMillis = 5000)
+            started = WhileSubscribed(stopTimeoutMillis = 5000),
+            initialValue = emptyList()
         )
 
     // Sets the lastUpdated value based on the first item of the list since all will have the same value
