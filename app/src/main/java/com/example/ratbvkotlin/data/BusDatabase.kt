@@ -6,12 +6,11 @@ import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.data.models.BusStationModel
 import com.example.ratbvkotlin.data.models.BusTimetableModel
 
-@Database(entities = [BusLineModel::class, BusStationModel::class, BusTimetableModel::class],
+@Database(entities = [BusStationModel::class, BusTimetableModel::class],
           version = 1,
           exportSchema = false)
 abstract class BusDatabase : RoomDatabase() {
 
-    abstract fun busLinesDao(): BusLinesDao?
     abstract fun busStationsDao(): BusStationsDao?
     abstract fun busTimetablesDao(): BusTimetablesDao?
 

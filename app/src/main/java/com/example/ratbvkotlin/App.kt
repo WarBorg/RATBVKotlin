@@ -44,9 +44,7 @@ class App : Application() {
                 DATABASE_NAME
             ).build()
         }
-        single {
-            get<BusDatabase>().busLinesDao()
-        }
+
         single {
             get<BusDatabase>().busStationsDao()
         }
