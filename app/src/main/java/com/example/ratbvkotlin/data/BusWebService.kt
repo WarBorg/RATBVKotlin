@@ -1,8 +1,8 @@
 package com.example.ratbvkotlin.data
 
 import com.example.ratbvkotlin.data.dtos.BusLineDto
+import com.example.ratbvkotlin.data.dtos.BusStationDto
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
-import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.data.models.BusStationModel
 import com.example.ratbvkotlin.data.models.BusTimetableModel
 import com.google.gson.GsonBuilder
@@ -38,7 +38,7 @@ class BusWebService : IBusWebservice {
     }
 
     override suspend fun getBusLines(): List<BusLineDto> = api.getBusLines()
-    override suspend fun getBusStations(lineNumberLink: String): List<BusStationModel> = api.getBusStations(lineNumberLink)
+    override suspend fun getBusStations(lineNumberLink: String): List<BusStationDto> = api.getBusStations(lineNumberLink)
     override suspend fun getBusTimetables(scheduleLink: String): List<BusTimetableModel> = api.getBusTimetables(scheduleLink)
 
     /**
@@ -58,7 +58,7 @@ class BusWebService : IBusWebservice {
         @GET("busstations/{lineNumberLink}")
         suspend fun getBusStations(
             @Path("lineNumberLink") lineNumberLink: String
-        ): List<BusStationModel>
+        ): List<BusStationDto>
 
         /**
          * Resulting URL: https://ratbvwebapi.azurewebsites.net/api/bustimetables/5-intors___line_5_11_cl1_ro.html

@@ -16,15 +16,37 @@ class BusStationsViewModel(private val _repository: BusRepository,
 
     private val _isNormalDirection = MutableStateFlow(true)
     private val _isRefreshing = MutableStateFlow(false)
-    private val _busStations = MutableStateFlow<List<BusStationItemViewModel>>(emptyList())
 
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
     val isNormalDirection: StateFlow<Boolean> = _isNormalDirection
-    val busStations: StateFlow<List<BusStationItemViewModel>> = _busStations
+
+    /**
+     * Observes the bus station data from the repository as a Flow
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val busStations: StateFlow<List<BusStationItemViewModel>> =
+        isNormalDirection.flatMapLatest { isNormalDirection ->
+            _repository.observeBusStations(_busLineId.toLong(), )
+                .map { busStationModels ->
+                    busStationModels
+                        .filter { busStationModel ->
+                            busStationModel.direction ==
+                                    if (isNormalDirection) "normal"
+                                    else "reverse"
+                        }
+                        .map { busLineModel ->
+                            BusStationItemViewModel(busLineModel)
+                        }
+                }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+            initialValue = emptyList()
+        )
 
     // Sets the lastUpdated value based on the first item of the list since all will have the same value
     @OptIn(ExperimentalCoroutinesApi::class)
-    val lastUpdated: StateFlow<String> = _busStations.mapLatest { busStations ->
+    val lastUpdated: StateFlow<String> = busStations.mapLatest { busStations ->
         busStations.firstOrNull()?.lastUpdateDate ?: "Never"
     }.stateIn(
         scope = viewModelScope,
@@ -34,28 +56,22 @@ class BusStationsViewModel(private val _repository: BusRepository,
 
     init {
         viewModelScope.launch {
-            getBusStations()
+            refreshBusStations(isForcedRefresh = false)
         }
     }
 
     /**
-     * Gets the bus stations data from the repository as Flow
+     * Forces a refresh of the data in the database by doing a web fetch
      */
-    suspend fun getBusStations(isForcedRefresh: Boolean = false) {
+    suspend fun refreshBusStations(isForcedRefresh: Boolean) {
 
         _isRefreshing.value = true
 
-        val (directionLink, direction) = when (_isNormalDirection.value) {
-            true -> Pair(_directionLinkNormal, "normal")
-            false -> Pair(_directionLinkReverse, "reverse")
-        }
-
-        _busStations.value = _repository.getBusStations(
-            directionLink,
-            direction,
-            _busLineId,
+        _repository.refreshBusStations(
+            _busLineId.toLong(),
+            _directionLinkNormal,
+            _directionLinkReverse,
             isForcedRefresh)
-            .map { busStationModel -> BusStationItemViewModel(busStationModel) }
 
         _isRefreshing.value = false
     }
@@ -63,11 +79,9 @@ class BusStationsViewModel(private val _repository: BusRepository,
     /**
      * Reverses the bus stations
      */
-    suspend fun reverseStations() {
+    fun reverseBusStationsDirection() {
 
         _isNormalDirection.value = !_isNormalDirection.value
-
-        getBusStations()
     }
 
     /**
@@ -83,7 +97,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
             _busLineId)
 
         // Refreshes the list with the new inserted stations
-        getBusStations()
+        //getBusStations()
 
         _isRefreshing.value = false
     }

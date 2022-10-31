@@ -42,9 +42,7 @@ fun BusStationsScreen(
             BusStationsTopBarComponent(
                 onBackNavigation,
                 onReverseStations = {
-                    coroutineScope.launch {
-                        viewModel.reverseStations()
-                    }
+                    viewModel.reverseBusStationsDirection()
                 },
                 onDownloadAllTimetableData = {
                     coroutineScope.launch {
@@ -70,7 +68,7 @@ fun BusStationsScreen(
                 viewModel.busLineName,
                 onPullToRefresh = {
                     coroutineScope.launch {
-                        viewModel.getBusStations(isForcedRefresh = true)
+                        viewModel.refreshBusStations(isForcedRefresh = true)
                     }
                 },
                 onBusStationClicked,

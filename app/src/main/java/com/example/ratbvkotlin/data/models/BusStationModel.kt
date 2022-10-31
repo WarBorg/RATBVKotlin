@@ -11,12 +11,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Model used to describe the bus station in the DataBase as well as in the Web API
  */
-@Entity(tableName = "BusStations",
-        foreignKeys = [ForeignKey(entity = BusLineModel::class,
-                                  parentColumns = ["Id"],
-                                  childColumns = ["BusLineId"],
-                                  onDelete = CASCADE)]
-)
+@Entity(tableName = "BusStations")
 data class BusStationModel(
 
     @PrimaryKey(autoGenerate = true)
