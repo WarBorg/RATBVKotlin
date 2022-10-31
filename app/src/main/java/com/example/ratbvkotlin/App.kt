@@ -7,9 +7,7 @@ import com.example.ratbvkotlin.data.BusDatabase.Companion.DATABASE_NAME
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.BusWebService
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
-import com.example.ratbvkotlin.data.persistency.BusLinesDataSource
-import com.example.ratbvkotlin.data.persistency.BusLinesDataSourceImpl
-import com.example.ratbvkotlin.data.persistency.DatabaseDriverFactory
+import com.example.ratbvkotlin.data.persistency.*
 import com.example.ratbvkotlin.viewmodels.BusLinesViewModel
 import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
 import com.example.ratbvkotlin.viewmodels.BusTimetablesViewModel
@@ -55,6 +53,10 @@ class App : Application() {
         // SQLDelight Database dependencies
         single<BusLinesDataSource> {
             BusLinesDataSourceImpl(DatabaseDriverFactory(androidContext()))
+        }
+
+        single<BusStationsDataSource> {
+            BusStationsDataSourceImpl(DatabaseDriverFactory(androidContext()))
         }
     }
 

@@ -1,0 +1,29 @@
+CREATE TABLE busStationEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    busLineId INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    direction TEXT NOT NULL,
+    scheduleLink TEXT NOT NULL,
+    lastUpdateDate TEXT NOT NULL,
+    FOREIGN KEY (busLineId) REFERENCES busLineEntity(id) ON DELETE CASCADE
+);
+
+countBusStationsByBusLineId:
+SELECT COUNT(*)
+FROM busStationEntity
+WHERE busLineId = :busLineId;
+
+getBusStationsByBusLineId:
+SELECT id, busLineId, name, direction, scheduleLink, lastUpdateDate
+FROM busStationEntity
+WHERE busLineId = :busLineId;
+
+saveBusStation:
+INSERT OR REPLACE
+INTO busStationEntity(id, busLineId, name, direction, scheduleLink, lastUpdateDate)
+VALUES (?,?,?,?,?,?);
+
+clearBusStationsByBusLineId:
+DELETE
+FROM busStationEntity
+WHERE busLineId = :busLineId;
