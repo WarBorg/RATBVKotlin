@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 class BusStationsViewModel(private val _repository: BusRepository,
                            private val _directionLinkNormal: String,
                            private val _directionLinkReverse: String,
-                           private val _busLineId: Int,
+                           private val _busLineId: Long,
                            val busLineName: String)
     : ViewModel() {
 
@@ -26,7 +26,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
     @OptIn(ExperimentalCoroutinesApi::class)
     val busStations: StateFlow<List<BusStationItemViewModel>> =
         isNormalDirection.flatMapLatest { isNormalDirection ->
-            _repository.observeBusStations(_busLineId.toLong(), )
+            _repository.observeBusStations(_busLineId)
                 .map { busStationModels ->
                     busStationModels
                         .filter { busStationModel ->
@@ -68,7 +68,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
         _isRefreshing.value = true
 
         _repository.refreshBusStations(
-            _busLineId.toLong(),
+            _busLineId,
             _directionLinkNormal,
             _directionLinkReverse,
             isForcedRefresh)
@@ -111,7 +111,7 @@ class BusStationsViewModel(private val _repository: BusRepository,
         val lastUpdateDate: String = busStation.lastUpdateDate
 
         // Navigation parameters
+        val id: Long = busStation.id
         val scheduleLink: String = busStation.scheduleLink
-        val id: Int = busStation.id
     }
 }

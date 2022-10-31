@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 fun BusStationsScreen(
     viewModel: BusStationsViewModel,
     onBackNavigation: () -> Unit,
-    onBusStationClicked: (String, Int, String) -> Unit
+    onBusStationClicked: (String, Long, String) -> Unit
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -129,7 +129,7 @@ fun BusStationBodyComponent(busStationsFlow: StateFlow<List<BusStationsViewModel
                             isNormalDirectionFlow: StateFlow<Boolean>,
                             busLineName: String,
                             onPullToRefresh: () -> Unit,
-                            onBusStationClicked: (String, Int , String) -> Unit,
+                            onBusStationClicked: (String, Long , String) -> Unit,
                             modifier: Modifier = Modifier) {
 
     val busStations by busStationsFlow.collectAsState(initial = emptyList())

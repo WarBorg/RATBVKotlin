@@ -16,10 +16,10 @@ data class BusStationModel(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "Id")
-    val id: Int,
+    val id: Long,
 
     @ColumnInfo(name = "BusLineId", index = true)
-    var busLineId: Int,
+    var busLineId: Long,
 
     @Expose
     @SerializedName("name")

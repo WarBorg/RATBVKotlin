@@ -9,6 +9,7 @@ import com.example.ratbvkotlin.data.models.BusTimetableModel
 import com.example.ratbvkotlin.data.persistency.BusLinesDataSource
 import com.example.ratbvkotlin.data.persistency.BusStationsDataSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import ratbv.BusLineEntity
 import ratbv.BusStationEntity
@@ -16,7 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class BusRepository(
-    // TODO Maybe I should send the whole database class here instead of individual DAO's
+    // TODO Maybe I should send the whole database class here instead of individual Data Sources
     private val _busLinesDataSource: BusLinesDataSource,
     private val _busStationsDataSource: BusStationsDataSource,
     private val _busStationsDao: BusStationsDao,
@@ -53,9 +54,8 @@ class BusRepository(
         }
 
         val busLines = _busWebService.getBusLines()
-        val current = Calendar.getInstance().time
-        val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
-        val lastUpdated = formatter.format(current)
+
+        val lastUpdated = getCurrentDateAsString()
 
         insertBusLinesInDatabase(busLines, lastUpdated)
     }
@@ -69,8 +69,8 @@ class BusRepository(
                 busStationEntities
                     .map { busStationEntity ->
                         BusStationModel(
-                            busStationEntity.id.toInt(),
-                            busStationEntity.busLineId.toInt(),
+                            busStationEntity.id,
+                            busStationEntity.busLineId,
                             busStationEntity.name,
                             busStationEntity.direction,
                             busStationEntity.scheduleLink,
@@ -97,9 +97,7 @@ class BusRepository(
         val busStationsReverseDirection = _busWebService.getBusStations(reverseDirectionLink)
         val busStations = busStationsNormalDirection + busStationsReverseDirection
 
-        val current = Calendar.getInstance().time
-        val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
-        val lastUpdated = formatter.format(current)
+        val lastUpdated = getCurrentDateAsString()
 
         insertBusStationsInDatabase(busStations, busLineId, lastUpdated)
     }
@@ -114,9 +112,8 @@ class BusRepository(
         if (isForcedRefresh || busTimetablesCount == 0) {
 
             val busTimetables = _busWebService.getBusTimetables(scheduleLink)
-            val current = Calendar.getInstance().time
-            val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
-            val lastUpdated = formatter.format(current)
+
+            val lastUpdated = getCurrentDateAsString()
 
             insertBusTimetablesInDatabase(busTimetables, busStationId, lastUpdated)
         }
@@ -126,25 +123,25 @@ class BusRepository(
 
     suspend fun downloadAllStationsTimetables(normalDirectionLink: String,
                                               reverseDirectionLink: String,
-                                              busLineId: Int) {
+                                              busLineId: Long) {
 
-        val current = Calendar.getInstance().time
-        val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
-        val lastUpdated = formatter.format(current)
+        val lastUpdated = getCurrentDateAsString()
 
         val busStationsNormalDirection = _busWebService.getBusStations(normalDirectionLink)
         val busStationsReverseDirection = _busWebService.getBusStations(reverseDirectionLink)
 
         val busStations = busStationsNormalDirection + busStationsReverseDirection
 
-        insertBusStationsInDatabase(busStations, busLineId.toLong(), lastUpdated)
+        insertBusStationsInDatabase(busStations, busLineId, lastUpdated)
 
-        val insertedBusStations = _busStationsDao.getBusStationsByBusLineId(busLineId)
+        val insertedBusStations =
+            _busStationsDataSource.getBusStationsByBusLineId(busLineId)
+                .last()
 
         insertedBusStations.forEach { busStationModel ->
             val busTimetables = _busWebService.getBusTimetables(busStationModel.scheduleLink)
 
-            insertBusTimetablesInDatabase(busTimetables, busStationModel.id, lastUpdated)
+            insertBusTimetablesInDatabase(busTimetables, busStationModel.id.toInt(), lastUpdated)
         }
     }
 
@@ -203,5 +200,12 @@ class BusRepository(
 
         _busTimetablesDao.clearBusTimetablesByBusStationId(busStationId)
         _busTimetablesDao.saveBusTimetables(busTimetables)
+    }
+
+    private fun getCurrentDateAsString() : String {
+        val current = Calendar.getInstance().time
+        val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
+
+        return formatter.format(current)
     }
 }

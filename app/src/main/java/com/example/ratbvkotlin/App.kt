@@ -87,7 +87,7 @@ class App : Application() {
         viewModel { (
                     directionLinkNormal: String,
                     directionLinkReverse: String,
-                    busLineId: Int, busLineName: String
+                    busLineId: Long, busLineName: String
                 ) ->
             BusStationsViewModel(
                 get(),

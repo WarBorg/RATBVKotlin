@@ -72,7 +72,7 @@ fun RootNavigationGraph(navController: NavHostController) {
                 navController.popBackStack()
             }
 
-            val onBusStationClicked: (String, Int , String) -> Unit =
+            val onBusStationClicked: (String, Long , String) -> Unit =
                 { scheduleLink, stationId, stationName ->
                     navController.navigate(
                         "${Graph.BUS_TIMETABLES}/${scheduleLink}/${stationId}/${stationName}"

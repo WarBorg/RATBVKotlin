@@ -15,7 +15,7 @@ import com.example.ratbvkotlin.viewmodels.BusStationsViewModel
 @Composable
 fun BusStationItemComponent(
     station: BusStationsViewModel.BusStationItemViewModel,
-    onBusStationClicked: (String, Int, String) -> Unit
+    onBusStationClicked: (String, Long, String) -> Unit
 ) {
     Text(
         text = station.name,
