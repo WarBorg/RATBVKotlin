@@ -1,0 +1,29 @@
+CREATE TABLE busTimetableEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    busStationId INTEGER NOT NULL,
+    hour TEXT NOT NULL,
+    minutes TEXT NOT NULL,
+    timeOfWeek TEXT NOT NULL,
+    lastUpdateDate TEXT NOT NULL,
+    FOREIGN KEY (busStationId) REFERENCES busStationEntity(id) ON DELETE CASCADE
+);
+
+countBusTimetablesByBusStationId:
+SELECT COUNT(*)
+FROM busTimetableEntity
+WHERE busStationId = :busStationId;
+
+getBusTimetablesByBusStationId:
+SELECT id, busStationId, hour, minutes, timeOfWeek, lastUpdateDate
+FROM busTimetableEntity
+WHERE busStationId = :busStationId;
+
+saveBusTimetable:
+INSERT OR REPLACE
+INTO busTimetableEntity(id, busStationId, hour, minutes, timeOfWeek, lastUpdateDate)
+VALUES (?,?,?,?,?,?);
+
+clearBusTimetablesByBusStationId:
+DELETE
+FROM busTimetableEntity
+WHERE busStationId = :busStationId;
