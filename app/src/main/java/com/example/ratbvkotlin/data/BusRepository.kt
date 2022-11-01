@@ -113,8 +113,8 @@ class BusRepository(
                 busTimetableEntities
                     .map { busTimetableEntity ->
                         BusTimetableModel(
-                            busTimetableEntity.id.toInt(),
-                            busTimetableEntity.busStationId.toInt(),
+                            busTimetableEntity.id,
+                            busTimetableEntity.busStationId,
                             busTimetableEntity.hour,
                             busTimetableEntity.minutes,
                             busTimetableEntity.timeOfWeek,
@@ -180,7 +180,7 @@ class BusRepository(
             }
 
             BusLineEntity(
-                busLineDto.id.toLong(),
+                busLineDto.id,
                 busLineDto.name,
                 busLineDto.route,
                 busLineType,

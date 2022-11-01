@@ -13,17 +13,15 @@ enum class TimetableTypes {
 
 class BusTimetablesViewModel(private val _repository: BusRepository,
                              private val _scheduleLink: String,
-                             private val _busStationId: Int,
+                             private val _busStationId: Long,
                              val busStationName: String)
     : ViewModel() {
 
     private val _isRefreshing = MutableStateFlow(false)
     private val _timeOfWeek = MutableStateFlow(TimetableTypes.WeekDays)
-    private val _busTimetables = MutableStateFlow<List<BusTimetableItemViewModel>>(emptyList())
 
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
     val timeOfWeek: StateFlow<TimetableTypes> = _timeOfWeek
-    //val busTimetables: StateFlow<List<BusTimetableItemViewModel>> = _busTimetables
 
     /**
      * Observes the bus station data from the repository as a Flow
@@ -31,7 +29,7 @@ class BusTimetablesViewModel(private val _repository: BusRepository,
     @OptIn(ExperimentalCoroutinesApi::class)
     val busTimetables: StateFlow<List<BusTimetableItemViewModel>> =
         timeOfWeek.flatMapLatest { timeOfWeek ->
-            _repository.observeBusTimetables(_busStationId.toLong())
+            _repository.observeBusTimetables(_busStationId)
                 .map { busTimetableModels ->
                     busTimetableModels
                         .filter { busTimetableModel ->
@@ -71,7 +69,7 @@ class BusTimetablesViewModel(private val _repository: BusRepository,
         _isRefreshing.value = true
 
         _repository.refreshBusTimetables(
-            _busStationId.toLong(),
+            _busStationId,
             _scheduleLink,
             isForcedRefresh)
 

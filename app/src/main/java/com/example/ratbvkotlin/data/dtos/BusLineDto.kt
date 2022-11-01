@@ -7,7 +7,7 @@ data class BusLineDto(
 
     @Expose
     @SerializedName("id")
-    val id: Int,
+    val id: Long,
 
     @Expose
     @SerializedName("name")

@@ -102,7 +102,7 @@ class App : Application() {
         }
         viewModel { (
                     scheduleLink: String,
-                    busStationId: Int,
+                    busStationId: Long,
                     busStationName: String
                 ) ->
             BusTimetablesViewModel(

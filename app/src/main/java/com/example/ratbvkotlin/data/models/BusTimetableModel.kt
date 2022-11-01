@@ -20,10 +20,10 @@ data class BusTimetableModel(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "Id")
-    val id: Int,
+    val id: Long,
 
     @ColumnInfo(name = "BusStationId", index = true)
-    var busStationId: Int,
+    var busStationId: Long,
 
     @Expose
     @SerializedName("hour")
