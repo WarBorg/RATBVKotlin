@@ -2,17 +2,20 @@ package com.example.ratbvkotlin.data
 
 import com.example.ratbvkotlin.data.dtos.BusLineDto
 import com.example.ratbvkotlin.data.dtos.BusStationDto
+import com.example.ratbvkotlin.data.dtos.BusTimetableDto
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
 import com.example.ratbvkotlin.data.models.BusLineModel
 import com.example.ratbvkotlin.data.models.BusStationModel
 import com.example.ratbvkotlin.data.models.BusTimetableModel
 import com.example.ratbvkotlin.data.persistency.BusLinesDataSource
 import com.example.ratbvkotlin.data.persistency.BusStationsDataSource
+import com.example.ratbvkotlin.data.persistency.BusTimetablesDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import ratbv.BusLineEntity
 import ratbv.BusStationEntity
+import ratbv.BusTimetableEntity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,8 +23,7 @@ class BusRepository(
     // TODO Maybe I should send the whole database class here instead of individual Data Sources
     private val _busLinesDataSource: BusLinesDataSource,
     private val _busStationsDataSource: BusStationsDataSource,
-    private val _busStationsDao: BusStationsDao,
-    private val _busTimetablesDao: BusTimetablesDao,
+    private val _busTimetablesDataSource: BusTimetablesDataSource,
     private val _busWebService: IBusWebservice
 ) {
 
@@ -102,29 +104,50 @@ class BusRepository(
         insertBusStationsInDatabase(busStations, busLineId, lastUpdated)
     }
 
-    suspend fun getBusTimetables(scheduleLink: String,
-                                 busStationId: Int,
-                                 isForcedRefresh: Boolean)
-            : List<BusTimetableModel> {
+    fun observeBusTimetables(
+        busStationId: Long
+    ): Flow<List<BusTimetableModel>> {
 
-        val busTimetablesCount = _busTimetablesDao.countBusTimetablesByBusStationId(busStationId)
-
-        if (isForcedRefresh || busTimetablesCount == 0) {
-
-            val busTimetables = _busWebService.getBusTimetables(scheduleLink)
-
-            val lastUpdated = getCurrentDateAsString()
-
-            insertBusTimetablesInDatabase(busTimetables, busStationId, lastUpdated)
-        }
-
-        return _busTimetablesDao.getBusTimetablesByBusStationId(busStationId)
+        return _busTimetablesDataSource.getBusTimetablesByBusStationId(busStationId)
+            .map { busTimetableEntities ->
+                busTimetableEntities
+                    .map { busTimetableEntity ->
+                        BusTimetableModel(
+                            busTimetableEntity.id.toInt(),
+                            busTimetableEntity.busStationId.toInt(),
+                            busTimetableEntity.hour,
+                            busTimetableEntity.minutes,
+                            busTimetableEntity.timeOfWeek,
+                            busTimetableEntity.lastUpdateDate
+                        )
+                    }
+            }
     }
 
-    suspend fun downloadAllStationsTimetables(normalDirectionLink: String,
-                                              reverseDirectionLink: String,
-                                              busLineId: Long) {
+    suspend fun refreshBusTimetables(
+        busStationId: Long,
+        scheduleLink: String,
+        isForcedRefresh: Boolean
+    ) {
 
+        if (!isForcedRefresh &&
+            _busTimetablesDataSource
+                .countBusTimetablesByBusStationId(busStationId) > 0L) {
+            return
+        }
+
+        val busTimetables = _busWebService.getBusTimetables(scheduleLink)
+
+        val lastUpdated = getCurrentDateAsString()
+
+        insertBusTimetablesInDatabase(busTimetables, busStationId, lastUpdated)
+    }
+
+    suspend fun downloadAllStationsTimetables(
+        normalDirectionLink: String,
+        reverseDirectionLink: String,
+        busLineId: Long
+    ) {
         val lastUpdated = getCurrentDateAsString()
 
         val busStationsNormalDirection = _busWebService.getBusStations(normalDirectionLink)
@@ -141,13 +164,14 @@ class BusRepository(
         insertedBusStations.forEach { busStationModel ->
             val busTimetables = _busWebService.getBusTimetables(busStationModel.scheduleLink)
 
-            insertBusTimetablesInDatabase(busTimetables, busStationModel.id.toInt(), lastUpdated)
+            insertBusTimetablesInDatabase(busTimetables, busStationModel.id, lastUpdated)
         }
     }
 
-    private suspend fun insertBusLinesInDatabase(busLineDtos: List<BusLineDto>,
-                                                 lastUpdated: String) {
-
+    private suspend fun insertBusLinesInDatabase(
+        busLineDtos: List<BusLineDto>,
+        lastUpdated: String
+    ) {
         val busLines = busLineDtos.map { busLineDto ->
             // TODO change API to replace midibus with electric bus
             val busLineType = when (busLineDto.type) {
@@ -190,16 +214,24 @@ class BusRepository(
         _busStationsDataSource.saveBusStations(busStations)
     }
 
-    private suspend fun insertBusTimetablesInDatabase(busTimetables: List<BusTimetableModel>,
-                                                      busStationId: Int,
-                                                      lastUpdated: String) {
-        busTimetables.forEach { busTimetableModel ->
-            busTimetableModel.busStationId = busStationId
-            busTimetableModel.lastUpdateDate = lastUpdated
+    private suspend fun insertBusTimetablesInDatabase(
+        busTimetableDtos: List<BusTimetableDto>,
+        busStationId: Long,
+        lastUpdated: String
+    ) {
+        val busTimetables =  busTimetableDtos.map { busTimetableDto ->
+            BusTimetableEntity(
+                id = -1,
+                busStationId,
+                busTimetableDto.hour,
+                busTimetableDto.minutes,
+                busTimetableDto.timeOfWeek,
+                lastUpdated
+            )
         }
 
-        _busTimetablesDao.clearBusTimetablesByBusStationId(busStationId)
-        _busTimetablesDao.saveBusTimetables(busTimetables)
+        _busTimetablesDataSource.clearBusTimetablesByBusStationId(busStationId)
+        _busTimetablesDataSource.saveBusTimetables(busTimetables)
     }
 
     private fun getCurrentDateAsString() : String {

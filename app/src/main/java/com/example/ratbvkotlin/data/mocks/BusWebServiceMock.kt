@@ -2,8 +2,8 @@ package com.example.ratbvkotlin.data.mocks
 
 import com.example.ratbvkotlin.data.dtos.BusLineDto
 import com.example.ratbvkotlin.data.dtos.BusStationDto
+import com.example.ratbvkotlin.data.dtos.BusTimetableDto
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
-import com.example.ratbvkotlin.data.models.BusTimetableModel
 
 class BusWebServiceMock : IBusWebservice {
 
@@ -18,7 +18,7 @@ class BusWebServiceMock : IBusWebservice {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getBusTimetables(scheduleLink: String): List<BusTimetableModel> {
+    override suspend fun getBusTimetables(scheduleLink: String): List<BusTimetableDto> {
         TODO("Not yet implemented")
     }
 }

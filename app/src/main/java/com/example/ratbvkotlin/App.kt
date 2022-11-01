@@ -58,6 +58,10 @@ class App : Application() {
         single<BusStationsDataSource> {
             BusStationsDataSourceImpl(DatabaseDriverFactory(androidContext()))
         }
+
+        single<BusTimetablesDataSource> {
+            BusTimetablesDataSourceImpl(DatabaseDriverFactory(androidContext()))
+        }
     }
 
     private val servicesModule = module {
@@ -70,7 +74,6 @@ class App : Application() {
         // Repository dependencies
         single {
             BusRepository(
-                get(),
                 get(),
                 get(),
                 get(),

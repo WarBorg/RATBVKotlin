@@ -17,7 +17,7 @@ fun BusTimetablesNavigationGraph(navController: NavHostController,
                                  viewModel: BusTimetablesViewModel,
                                  bottomNavigationTabs: List<BusBottomNavigationScreens>,
                                  onLoadData: (TimetableTypes) -> Unit,
-                                 onPullToRefresh: (TimetableTypes) -> Unit,
+                                 onPullToRefresh: () -> Unit,
                                  modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -38,7 +38,7 @@ fun BusTimetablesNavigationGraph(navController: NavHostController,
                     viewModel.isRefreshing,
                     viewModel.timeOfWeek,
                     viewModel.busStationName,
-                    onPullToRefresh = { onPullToRefresh(timetableType) },
+                    onPullToRefresh,
                 )
             }
         }

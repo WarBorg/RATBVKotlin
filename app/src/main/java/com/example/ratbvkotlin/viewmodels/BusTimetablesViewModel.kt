@@ -5,6 +5,7 @@ import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.models.BusTimetableModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 enum class TimetableTypes {
     WeekDays, Saturday, Sunday
@@ -22,11 +23,33 @@ class BusTimetablesViewModel(private val _repository: BusRepository,
 
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
     val timeOfWeek: StateFlow<TimetableTypes> = _timeOfWeek
-    val busTimetables: StateFlow<List<BusTimetableItemViewModel>> = _busTimetables
+    //val busTimetables: StateFlow<List<BusTimetableItemViewModel>> = _busTimetables
+
+    /**
+     * Observes the bus station data from the repository as a Flow
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val busTimetables: StateFlow<List<BusTimetableItemViewModel>> =
+        timeOfWeek.flatMapLatest { timeOfWeek ->
+            _repository.observeBusTimetables(_busStationId.toLong())
+                .map { busTimetableModels ->
+                    busTimetableModels
+                        .filter { busTimetableModel ->
+                            busTimetableModel.timeOfWeek == timeOfWeek.name
+                        }
+                        .map { BusTimetableModel ->
+                            BusTimetableItemViewModel(BusTimetableModel)
+                        }
+                }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+            initialValue = emptyList()
+        )
 
     // Sets the lastUpdated value based on the first item of the list since all will have the same value
     @OptIn(ExperimentalCoroutinesApi::class)
-    val lastUpdated: StateFlow<String> = _busTimetables.mapLatest { busTimetables ->
+    val lastUpdated: StateFlow<String> = busTimetables.mapLatest { busTimetables ->
         busTimetables.firstOrNull()?.lastUpdateDate ?: "Never"
     }.stateIn(
         scope = viewModelScope,
@@ -34,23 +57,32 @@ class BusTimetablesViewModel(private val _repository: BusRepository,
         initialValue = "Never"
     )
 
+    init {
+        viewModelScope.launch {
+            refreshBusTimetables(isForcedRefresh = false)
+        }
+    }
+
     /**
-     * Gets the bus stations data from the repository as Flow
+     * Forces a refresh of the data in the database by doing a web fetch
      */
-    suspend fun getBusTimetables(timetableType: TimetableTypes,
-                                 isForcedRefresh: Boolean = false) {
+    suspend fun refreshBusTimetables(isForcedRefresh: Boolean) {
 
         _isRefreshing.value = true
 
-        _timeOfWeek.value = timetableType
-
-        _busTimetables.value = _repository.getBusTimetables(_scheduleLink,
-            _busStationId,
+        _repository.refreshBusTimetables(
+            _busStationId.toLong(),
+            _scheduleLink,
             isForcedRefresh)
-            .filter { busTimetableModel -> busTimetableModel.timeOfWeek == timetableType.name }
-            .map { busTimetableModel -> BusTimetableItemViewModel(busTimetableModel) }
 
         _isRefreshing.value = false
+    }
+
+    /**
+     * Updates the bus type based on the bottom tab being viewed
+     */
+    fun updateViewedTimeOfWeek(timetableType: TimetableTypes) {
+        _timeOfWeek.value = timetableType
     }
 
     /**

@@ -2,9 +2,8 @@ package com.example.ratbvkotlin.data
 
 import com.example.ratbvkotlin.data.dtos.BusLineDto
 import com.example.ratbvkotlin.data.dtos.BusStationDto
+import com.example.ratbvkotlin.data.dtos.BusTimetableDto
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
-import com.example.ratbvkotlin.data.models.BusStationModel
-import com.example.ratbvkotlin.data.models.BusTimetableModel
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -39,7 +38,7 @@ class BusWebService : IBusWebservice {
 
     override suspend fun getBusLines(): List<BusLineDto> = api.getBusLines()
     override suspend fun getBusStations(lineNumberLink: String): List<BusStationDto> = api.getBusStations(lineNumberLink)
-    override suspend fun getBusTimetables(scheduleLink: String): List<BusTimetableModel> = api.getBusTimetables(scheduleLink)
+    override suspend fun getBusTimetables(scheduleLink: String): List<BusTimetableDto> = api.getBusTimetables(scheduleLink)
 
     /**
      * Retrofit instance which holds details about the API calls.
@@ -66,7 +65,7 @@ class BusWebService : IBusWebservice {
         @GET("bustimetables/{scheduleLink}")
         suspend fun getBusTimetables(
             @Path("scheduleLink") scheduleLink: String
-        ): List<BusTimetableModel>
+        ): List<BusTimetableDto>
     }
 
     companion object {

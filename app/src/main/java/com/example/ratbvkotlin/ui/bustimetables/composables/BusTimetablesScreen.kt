@@ -41,13 +41,12 @@ fun BusTimetablesScreen(viewModel: BusTimetablesViewModel,
                 bottomNavigationItems,
                 onLoadData = { timetableType ->
                     coroutineScope.launch {
-                        viewModel.getBusTimetables(timetableType)
+                        viewModel.updateViewedTimeOfWeek(timetableType)
                     }
                 },
-                onPullToRefresh = { timetableType ->
+                onPullToRefresh = {
                     coroutineScope.launch {
-                        viewModel.getBusTimetables(
-                            timetableType,
+                        viewModel.refreshBusTimetables(
                             isForcedRefresh = true
                         )
                     }

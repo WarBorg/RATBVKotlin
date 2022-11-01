@@ -38,7 +38,7 @@ fun BusLinesNavigationGraph(navHostController: NavHostController,
                     viewModel.busLines,
                     viewModel.lastUpdated,
                     viewModel.isRefreshing,
-                    onPullToRefresh = { onPullToRefresh() },
+                    onPullToRefresh,
                     onBusLineClicked
                 )
             }

@@ -34,8 +34,8 @@ class BusStationsViewModel(private val _repository: BusRepository,
                                     if (isNormalDirection) "normal"
                                     else "reverse"
                         }
-                        .map { busLineModel ->
-                            BusStationItemViewModel(busLineModel)
+                        .map { busStationModel ->
+                            BusStationItemViewModel(busStationModel)
                         }
                 }
         }.stateIn(
@@ -95,9 +95,6 @@ class BusStationsViewModel(private val _repository: BusRepository,
             _directionLinkNormal,
             _directionLinkReverse,
             _busLineId)
-
-        // Refreshes the list with the new inserted stations
-        //getBusStations()
 
         _isRefreshing.value = false
     }

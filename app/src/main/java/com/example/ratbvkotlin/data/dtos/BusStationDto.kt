@@ -3,7 +3,8 @@ package com.example.ratbvkotlin.data.dtos
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class BusStationDto (
+data class BusStationDto (
+
     @Expose
     @SerializedName("name")
     val name: String,

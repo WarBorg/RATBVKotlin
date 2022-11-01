@@ -18,14 +18,15 @@ class BusStationsDataSourceImpl(databaseDriverFactory: DatabaseDriverFactory)
 
     private val queries = database.busStationEntityQueries
 
-    override suspend fun countBusStationsByBusLineId(
-        busLineId: Long
-    ): Long {
-        return queries.countBusStationsByBusLineId(busLineId)
-            .executeAsOne()
+    override suspend fun countBusStationsByBusLineId(busLineId: Long): Long {
+        return withContext(Dispatchers.IO) {
+            queries.countBusStationsByBusLineId(busLineId)
+                .executeAsOne()
+        }
     }
 
-    override fun getBusStationsByBusLineId(busLineId: Long): Flow<List<BusStationEntity>> {
+    override fun getBusStationsByBusLineId(busLineId: Long)
+    : Flow<List<BusStationEntity>> {
         return queries.getBusStationsByBusLineId(busLineId)
             .asFlow()
             .mapToList()
