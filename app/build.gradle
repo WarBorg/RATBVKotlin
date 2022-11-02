@@ -75,13 +75,6 @@ dependencies {
     def accompanist_version = '0.25.1'
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
 
-    // Room
-    def room_version = '2.4.3'
-    implementation "androidx.room:room-ktx:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:$room_version"
-
     // SQL Delight
     def sql_delight_version = '1.5.2'
     implementation "com.squareup.sqldelight:android-driver:$sql_delight_version"

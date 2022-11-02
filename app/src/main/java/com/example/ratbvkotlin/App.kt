@@ -1,9 +1,6 @@
 package com.example.ratbvkotlin
 
 import android.app.Application
-import androidx.room.Room
-import com.example.ratbvkotlin.data.BusDatabase
-import com.example.ratbvkotlin.data.BusDatabase.Companion.DATABASE_NAME
 import com.example.ratbvkotlin.data.BusRepository
 import com.example.ratbvkotlin.data.BusWebService
 import com.example.ratbvkotlin.data.interfaces.IBusWebservice
@@ -33,22 +30,6 @@ class App : Application() {
     }
     
     private val persistencyModule = module {
-
-        // Room Database dependencies
-        single {
-            Room.databaseBuilder(
-                get(),
-                BusDatabase::class.java,
-                DATABASE_NAME
-            ).build()
-        }
-
-        single {
-            get<BusDatabase>().busStationsDao()
-        }
-        single {
-            get<BusDatabase>().busTimetablesDao()
-        }
 
         // SQLDelight Database dependencies
         single<BusLinesDataSource> {
