@@ -1,19 +1,17 @@
 package com.example.ratbvkotlin.data.dtos
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BusStationDto (
 
-    @Expose
-    @SerializedName("name")
+    @SerialName("name")
     val name: String,
 
-    @Expose
-    @SerializedName("direction")
+    @SerialName("direction")
     var direction: String,
 
-    @Expose
-    @SerializedName("scheduleLink")
+    @SerialName("scheduleLink")
     val scheduleLink: String,
 )

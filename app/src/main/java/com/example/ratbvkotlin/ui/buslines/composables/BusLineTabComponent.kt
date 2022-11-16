@@ -24,7 +24,7 @@ fun BusLinesTabComponent(
     onBusLineClicked: (String, String, Long, String) -> Unit
 ) {
 
-    val busLines by busLinesFlow.collectAsState()
+    val busLines by busLinesFlow.collectAsState(initial = emptyList())
     val lastUpdateDate by lastUpdateDateFlow.collectAsState(initial = "Never")
     val isRefreshing by isRefreshingFlow.collectAsState(initial = true)
 

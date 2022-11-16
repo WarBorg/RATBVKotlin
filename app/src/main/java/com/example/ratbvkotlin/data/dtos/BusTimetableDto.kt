@@ -1,19 +1,17 @@
 package com.example.ratbvkotlin.data.dtos
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BusTimetableDto (
 
-    @Expose
-    @SerializedName("hour")
+    @SerialName("hour")
     val hour: String,
 
-    @Expose
-    @SerializedName("minutes")
+    @SerialName("minutes")
     val minutes: String,
 
-    @Expose
-    @SerializedName("timeOfWeek")
+    @SerialName("timeOfWeek")
     val timeOfWeek: String,
 )

@@ -1,32 +1,27 @@
 package com.example.ratbvkotlin.data.dtos
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BusLineDto(
 
-    @Expose
-    @SerializedName("id")
+    @SerialName("id")
     val id: Long,
 
-    @Expose
-    @SerializedName("name")
+    @SerialName("name")
     val name: String,
 
-    @Expose
-    @SerializedName("route")
+    @SerialName("route")
     val route: String,
 
-    @Expose
-    @SerializedName("type")
+    @SerialName("type")
     // TODO change API to replace midibus with electric bus
     var type: String,
 
-    @Expose
-    @SerializedName("linkNormalWay")
+    @SerialName("linkNormalWay")
     val linkNormalWay: String,
 
-    @Expose
-    @SerializedName("linkReverseWay")
+    @SerialName("linkReverseWay")
     val linkReverseWay: String,
 )
